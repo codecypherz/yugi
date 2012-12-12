@@ -1,0 +1,21 @@
+
+{namespace yugi.ui.menu.soy}
+
+/**
+ * The HTML for a menu.
+ * @param ids The DOM IDs used in this template.
+ */
+{template .HTML}
+  <div id="{$ids.ICON|id}" class="{css yugi-menu-icon}">
+  </div>
+{/template}
+
+/**
+ * The HTML for an action in a menu.
+ * @param text The text of the action.
+ */
+{template .ACTION}
+  <div class="{css yugi-menu-action}">
+    {$text}
+  </div>
+{/template}

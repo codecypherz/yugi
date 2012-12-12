@@ -1,0 +1,23 @@
+/**
+ * Styles for card counters.
+ */
+
+.yugi-counters {
+	position: absolute;
+}
+
+.yugi-counter {
+	background-color: #add8e6;
+	border: 1px solid #000;
+	color: #333;
+	cursor: pointer;
+	height: 16px;
+	line-height: 16px;
+	margin: 5px;
+	width: 16px;
+	@mixin border_radius(10px);
+}
+
+.yugi-counter:hover {
+	font-weight: bold;
+}

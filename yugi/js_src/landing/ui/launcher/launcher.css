@@ -1,0 +1,54 @@
+/**
+ * Styles for the launcher.
+ */
+
+@def GAME_GRADIENT_FALLBACK        #ffd65e;
+@def GAME_GRADIENT                 top, GAME_GRADIENT_FALLBACK 0%, #febf04 100%;
+
+.yugi-launcher {
+	text-align: center;
+	width: 370px;
+}
+
+.yugi-game-starter {
+  margin: 20px;
+}
+
+.yugi-game-joiner {
+	margin: 15px;
+}
+
+.yugi-game-joiner {
+	height: 600px;
+	overflow: auto;
+	padding-top: 0;
+}
+
+.yugi-game-starter > button {
+	width: 100%;
+}
+
+.yugi-game-container {
+	border: 1px solid #333;
+	height: 32px;
+	margin-bottom: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+	padding: 5px;
+	text-align: left;
+	@mixin linear_gradient(GAME_GRADIENT, GAME_GRADIENT_FALLBACK);
+}
+
+.yugi-game-container > button {
+	float: right;
+}
+
+.yugi-game-name {
+	color: #333;
+	font-weight: bold;
+	overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
+  white-space: nowrap;
+	width: 251px;
+}

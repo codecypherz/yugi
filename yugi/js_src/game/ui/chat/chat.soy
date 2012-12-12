@@ -1,0 +1,29 @@
+
+{namespace yugi.game.ui.chat.soy}
+
+
+/**
+ * The HTML for the chat window.
+ * @param ids The DOM IDs used in this widget.
+ */
+{template .WINDOW}
+  <div id="{$ids.CHAT_AREA|id}" class="{css yugi-chat-area}">
+  </div>
+  <input id="{$ids.CHAT_INPUT|id}" class="{css yugi-chat-input}">
+  </input>
+{/template}
+
+
+/**
+ * The HTML for a single chat message.
+ * @param sender The user that sent the message.
+ * @param text The text message.
+ */
+{template .MESSAGE}
+  <span class="{css yugi-chat-sender}">
+    &lt;{$sender}&gt;
+  </span>
+  <span class="{css yugi-chat-text}">
+    {$text|noAutoescape}
+  </span>
+{/template}

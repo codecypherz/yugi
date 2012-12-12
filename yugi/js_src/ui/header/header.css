@@ -1,0 +1,90 @@
+/**
+ * Styles for the header.
+ */
+
+.yugi-header {
+	display: inline-block;
+	height: 133px;
+  position: relative;
+  text-align: center;
+}
+
+.yugi-header > img {
+	position: absolute;
+}
+
+.yugi-link-banner {
+	background-color: #000;
+  height: 35px;
+  opacity: 0.8;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.yugi-link-container {
+  height: 35px;
+  left: 50%;
+  margin-left: -458px;
+  position: absolute;
+  top: 0;
+	width: 916px;
+}
+
+.yugi-links {
+	margin-top: 6px;
+	vertical-align: top;
+}
+
+.yugi-links.yugi-left {
+	float: left;
+	margin-left: 8px;
+	text-align: left;
+}
+
+.yugi-links.yugi-right {
+	float: right;
+	margin-right: 20px;
+	text-align: right;
+}
+
+.yugi-links > a,
+.yugi-link-disabled {
+  font-size: 14px;
+  margin-left: 12px;
+}
+
+.yugi-links > a {
+	color: #cbcbcb;
+}
+
+.yugi-links > a:hover {
+  color: #fff;
+}
+
+.yugi-link-disabled {
+	cursor: pointer;
+	color: #cbcbcb;
+	text-decoration: underline;
+}
+
+.yugi-notice-banner {
+  position: absolute;
+  top: 125px;
+  width: 100%;
+}
+
+.yugi-notice-container {
+  background-color: #F9EDBE;
+  border: 1px solid #F0C36D;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  color: #333;
+  padding: 2px 8px;
+  overflow: hidden;
+}
+
+.yugi-notice-container.yugi-notice-error {
+  background-color: #F55;
+  border-color: #8B0000;
+}

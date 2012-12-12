@@ -1,0 +1,194 @@
+
+{namespace yugi.admin.card.ui.soy}
+
+/**
+ * The HTML for the editor.
+ * @param formAction The path for the form action.
+ * @param ids The DOM IDs used in this widget.
+ */
+{template .EDITOR}
+  <form id="{$ids.FORM|id}" method="POST" enctype="multipart/form-data"
+      action="{$formAction}">
+    <div class="{css yugi-admin-image-column}{sp}{css goog-inline-block}">
+
+      <input id="{$ids.HIDDEN_KEY_INPUT|id}" type="hidden" name="card_key">
+      </input>
+
+      <div id="{$ids.IMAGE_DIV|id}" class="{css yugi-admin-image}">
+        <div>
+          No Card Image
+        </div>
+      </div>
+      <input id="{$ids.IMAGE_INPUT|id}" type="file" name="image_file"
+          class="{css yugi-admin-file-input}">
+      </input>
+    </div>
+    <div id="{$ids.FIELDS_SECTION|id}"
+        class="{css yugi-admin-card-fields}{sp}{css goog-inline-block}">
+  
+      <!-- Name -->
+      <label id="{$ids.NAME_LABEL|id}" for="{$ids.NAME_INPUT|id}"
+          class="{css goog-inline-block}">
+        Name:
+      </label>
+      <input id="{$ids.NAME_INPUT|id}" name="name"
+          class="{css yugi-name-input}{sp}{css goog-inline-block}">
+      </input>
+      <div id="{$ids.NAME_CHECK_DIV|id}" class="{css yugi-name-check}{sp}
+          {css goog-inline-block}">
+      </div>
+  
+      <!-- Description -->
+      <label id="{$ids.DESCRIPTION_LABEL|id}" for="{$ids.DESCRIPTION_INPUT|id}"
+          class="{css goog-inline-block}">
+        Description:
+      </label>
+      <textarea id="{$ids.DESCRIPTION_INPUT|id}"
+          class="{css goog-inline-block}" name="description">
+      </textarea>
+  
+      <!-- Card Type -->
+      <label id="{$ids.CARD_TYPE_LABEL|id}" for="{$ids.CARD_TYPE_DIV|id}"
+          class="{css yugi-admin-combo-label}{sp}{css goog-inline-block}">
+        Card Type:
+      </label>
+      <div id="{$ids.CARD_TYPE_DIV|id}" class="{css yugi-admin-combo-container}
+          {sp}{css goog-inline-block}">
+      </div>
+    </div>
+  </form>
+  <div class="{css yugi-admin-buttons}">
+    <button id="{$ids.SAVE_BUTTON|id}"
+        class="{css yugi-call-to-action}{sp}{css goog-inline-block}">
+      Save
+    </button>
+    <button id="{$ids.CANCEL_BUTTON|id}" class="{css goog-inline-block}">
+      Cancel
+    </button>
+    <button id="{$ids.DELETE_BUTTON|id}" class="{css goog-inline-block}">
+      Delete
+    </button>
+  </div>
+{/template}
+
+
+/**
+ * The HTML for the spell section of the editor.
+ * @param ids The DOM IDs used in this widget.
+ */
+{template .SPELL_SECTION}
+  <div class="{css yugi-admin-card-fields}{sp}{css yugi-admin-card-subsection}
+      {sp}{css goog-inline-block}">
+
+    <!-- Spell Type -->
+    <label id="{$ids.SPELL_TYPE_LABEL|id}" for="{$ids.SPELL_TYPE_DIV|id}"
+        class="{css yugi-admin-combo-label}{sp}{css goog-inline-block}">
+      Spell Type:
+    </label>
+    <div id="{$ids.SPELL_TYPE_DIV|id}" class="{css yugi-admin-combo-container}
+        {sp}{css goog-inline-block}">
+    </div>
+  </div>
+{/template}
+
+
+/**
+ * The HTML for the trap section of the editor.
+ * @param ids The DOM IDs used in this widget.
+ */
+{template .TRAP_SECTION}
+  <div class="{css yugi-admin-card-fields}{sp}{css yugi-admin-card-subsection}
+      {sp}{css goog-inline-block}">
+
+    <!-- Trap Type -->
+    <label id="{$ids.TRAP_TYPE_LABEL|id}" for="{$ids.TRAP_TYPE_DIV|id}"
+        class="{css yugi-admin-combo-label}{sp}{css goog-inline-block}">
+      Trap Type:
+    </label>
+    <div id="{$ids.TRAP_TYPE_DIV|id}" class="{css yugi-admin-combo-container}
+        {sp}{css goog-inline-block}">
+    </div>
+  </div>
+{/template}
+
+
+/**
+ * The HTML for the monster section of the editor.
+ * @param ids The DOM IDs used in this widget.
+ */
+{template .MONSTER_SECTION}
+  <div class="{css yugi-admin-card-fields}{sp}{css yugi-admin-card-subsection}
+      {sp}{css goog-inline-block}">
+
+    <!-- Monster Level -->
+    <label id="{$ids.MONSTER_LEVEL_LABEL|id}"
+        for="{$ids.MONSTER_LEVEL_INPUT|id}"
+        class="{css goog-inline-block}{sp}{css yugi-admin-card-level}">
+      Level/Rank:
+    </label>
+    <input id="{$ids.MONSTER_LEVEL_INPUT|id}" class="{css goog-inline-block}
+        {sp}{css yugi-admin-card-level}" name="level">
+    </input>
+
+    <!-- Monster Effect -->
+    <label id="{$ids.MONSTER_EFFECT_LABEL|id}"
+        for="{$ids.MONSTER_EFFECT_CHECKBOX|id}"
+        class="{css goog-inline-block}{sp}{css yugi-admin-card-effect}">
+      Effect Monster:
+    </label>
+    <input type="checkbox" id="{$ids.MONSTER_EFFECT_CHECKBOX|id}"
+        class="{css goog-inline-block}{sp}{css yugi-admin-card-effect}"
+        name="effect">
+    </input>
+
+    <!-- Attribute -->
+    <label id="{$ids.MONSTER_ATTRIBUTE_LABEL|id}"
+        for="{$ids.MONSTER_ATTRIBUTE_DIV|id}"
+        class="{css yugi-admin-combo-label}{sp}{css goog-inline-block}">
+      Attribute:
+    </label>
+    <div id="{$ids.MONSTER_ATTRIBUTE_DIV|id}" class="{css yugi-admin-combo-container}
+        {sp}{css goog-inline-block}">
+    </div>
+
+    <!-- Monster Type -->
+    <label id="{$ids.MONSTER_TYPE_LABEL|id}" for="{$ids.MONSTER_TYPE_DIV|id}"
+        class="{css yugi-admin-combo-label}{sp}{css goog-inline-block}">
+      Monster Type:
+    </label>
+    <div id="{$ids.MONSTER_TYPE_DIV|id}" class="{css yugi-admin-combo-container}
+        {sp}{css goog-inline-block}">
+    </div>
+
+    <!-- Extra Type -->
+    <label id="{$ids.MONSTER_EXTRA_TYPE_LABEL|id}"
+        for="{$ids.MONSTER_EXTRA_TYPE_DIV|id}"
+        class="{css yugi-admin-combo-label}{sp}{css goog-inline-block}">
+      Extra Monster Type:
+    </label>
+    <div id="{$ids.MONSTER_EXTRA_TYPE_DIV|id}"
+        class="{css yugi-admin-combo-container}{sp}{css goog-inline-block}">
+    </div>
+
+    <!-- Monster Attack -->
+    <label id="{$ids.MONSTER_ATTACK_LABEL|id}"
+        for="{$ids.MONSTER_ATTACK_INPUT|id}"
+        class="{css goog-inline-block}{sp}{css yugi-admin-card-attack}">
+      Attack:
+    </label>
+    <input id="{$ids.MONSTER_ATTACK_INPUT|id}" class="{css goog-inline-block}
+        {sp}{css yugi-admin-card-attack}" name="attack">
+    </input>
+
+    <!-- Monster Defense -->
+    <label id="{$ids.MONSTER_DEFENSE_LABEL|id}"
+        for="{$ids.MONSTER_DEFENSE_INPUT|id}"
+        class="{css goog-inline-block}{sp}{css yugi-admin-card-defense}">
+      Defense:
+    </label>
+    <input id="{$ids.MONSTER_DEFENSE_INPUT|id}" class="{css goog-inline-block}
+        {sp}{css yugi-admin-card-defense}" name="defense">
+    </input>
+
+  </div>
+{/template}

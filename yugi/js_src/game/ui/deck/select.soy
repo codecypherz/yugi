@@ -1,0 +1,52 @@
+
+{namespace yugi.game.ui.deck.select.soy}
+
+
+/**
+ * The HTML for deck selection.
+ * @param ids The DOM IDs used in this widget.
+ */
+{template .HTML}
+  <div class="{css yugi-game-title}">
+    <div>
+      Choose a Deck
+    </div>
+  </div>
+  <div class="{css yugi-deck-select-text}">
+
+    <div class="{css yugi-game-sub-title}">
+      Your Decks
+    </div>
+    <div id="{$ids.PLAYER_DECKS|id}" class="{css yugi-decks}">
+      <div class="{css yugi-deck-select-sign-in}">
+        You must <a href="/make/this/link/work">sign in</a> if you want to
+        create your own set of decks.
+      </div>
+    </div>
+
+    <div class="{css yugi-game-sub-title}">
+      Structure Decks
+    </div>
+    <div id="{$ids.STRUCTURE_DECKS|id}" class="{css yugi-decks}">
+    </div>
+  </div>
+{/template}
+
+
+/**
+ * The HTML for a deck.
+ * @param name The name of the deck.
+ * @param imageSource The URL for the image of the deck.
+ * @param deckId The ID for the deck element.
+ * @param deckName The name of the deck.
+ */
+{template .DECK}
+  <div id="{$deckId|id}" class="{css yugi-deck}{sp}{css goog-inline-block}"
+      title="Click to choose {$deckName}">
+    <img src="{$imageSource}">
+    </img>
+    <div class="{css yugi-deck-name}">
+      {$name}
+    </div>
+  </div>
+{/template}

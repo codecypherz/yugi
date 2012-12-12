@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Card Editor (Raw Mode)</title>
+    <link href="{{ CSS_FILE_PATH }}" rel="stylesheet" type="text/css" />
+    <script src="/closure/goog/base.js"></script>
+    <script src="/dev/deps.js"></script>
+    <script>
+      goog.require('yugi.admin.card');
+    </script>
+  </head>
+  <body>
+    <script>
+      yugi.admin.card.bootstrap('{{ UPLOAD_URL }}', '{{ CARD_KEY }}');
+    </script>
+  </body>
+</html>

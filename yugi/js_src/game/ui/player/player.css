@@ -1,0 +1,59 @@
+/**
+ * CSS for the life points widget.
+ */
+
+@def LIFE_POINT_MARGIN                    10px;
+
+.yugi-life-points {
+	border: 1px solid #333;
+	font-size: 30px;
+	margin: 10px 0;
+	text-align: center;
+	@mixin border_radius(5px);
+}
+
+.yugi-life-points.high {
+  background-color: #90EE90;
+}
+
+.yugi-life-points.okay {
+  background-color: #FFA500;
+}
+
+.yugi-life-points.low {
+  background-color: #F08080;
+}
+
+.yugi-life-points-value {
+	font-weight: bold;
+}
+
+.yugi-player-controls button {
+	font-size: 9px;
+	margin-top: 7px;
+	width: 100%;
+}
+
+.yugi-die {
+	background-color: #fff;
+	border: 1px solid #333;
+	cursor: pointer;
+	height: 26px;
+	line-height: 5px;
+	width: 26px;
+	@mixin border_radius(3px);
+}
+
+.yugi-die-dot {
+	border: 3px solid #333;
+	margin: 0 3px;
+	@mixin border_radius(3px);
+}
+
+.yugi-coin {
+	cursor: pointer;
+	height: 28px;
+	margin-left: 4px;
+	vertical-align: top;
+	width: 28px;
+}

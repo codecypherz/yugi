@@ -1,0 +1,23 @@
+
+{namespace yugi.game.ui.browser.soy}
+
+
+/**
+ * The HTML for the browser container.
+ * @param ids The DOM IDs used in this widget.
+ */
+{template .BROWSER_CONTAINER}
+  <div class="{css yugi-game-title}">
+    <div id="{$ids.TITLE|id}">
+    </div>
+  </div>
+  <div id="{$ids.BROWSER|id}" class="{css yugi-game-card-browser}{sp}
+      {css goog-inline-block}">
+  </div>
+  <div class="{css yugi-game-browser-container-buttons}">
+    <button id="{$ids.RETURN_BUTTON|id}" class="{css yugi-call-to-action}{sp}
+        {css goog-inline-block}">
+      Return
+    </button>
+  </div>
+{/template}

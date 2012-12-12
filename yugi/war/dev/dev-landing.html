@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Yugioh (Raw Mode)</title>
+    <link href="{{ CSS_FILE_PATH }}" rel="stylesheet" type="text/css">
+    <script src="/closure/goog/base.js"></script>
+    <script src="/dev/deps.js"></script>
+    <script>
+      goog.require('yugi.landing');
+    </script>
+  </head>
+  <body>
+    <div id='centered-content'>
+      <div id='header'>
+      </div>
+      <div id='main'>
+      </div>
+    </div>
+    <script>
+	    yugi.landing.bootstrap(
+	        '{{ BASE_LOGIN_URL }}',
+	        '{{ SIGN_IN_URL }}',
+	        '{{ SIGN_OUT_URL }}',
+	        '{{ USER_JSON }}'
+	    );
+    </script>
+  </body>
+</html>

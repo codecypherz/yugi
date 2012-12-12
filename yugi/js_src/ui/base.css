@@ -1,0 +1,67 @@
+/**
+ * Classes and definitions that are used throughout the application.
+ */
+
+@def RADIUS                               3px;
+@def FONT_FAMILY                          arial;
+@def FONT_SIZE_NORMAL                     15px;
+
+@def NORMAL_COLOR                         #333;
+@def NORMAL_BORDER                        1px solid NORMAL_COLOR;
+@def ERROR_COLOR                          #d00;
+
+@def MONSTER_COLOR                        #f4dea9;
+@def SPELL_COLOR                          #c5dcd6;
+@def TRAP_COLOR                           #ebcfd9;
+
+@def CONTENT_BORDER                       1px solid #AEAEAE;
+
+/*
+ * Default rule; only Safari, Webkit, and Opera handle it without hacks.
+ */
+.goog-inline-block {
+  position: relative;
+  display: -moz-inline-box; /* Ignored by FF3 and later. */
+  display: inline-block;
+}
+
+/*
+ * Pre-IE7 IE hack.  On IE, "display: inline-block" only gives the element
+ * layout, but doesn't give it inline behavior.  Subsequently setting display
+ * to inline does the trick.
+ */
+* html .goog-inline-block {
+  display: inline;
+}
+
+/*
+ * IE7-only hack.  On IE, "display: inline-block" only gives the element
+ * layout, but doesn't give it inline behavior.  Subsequently setting display
+ * to inline does the trick.
+ */
+*:first-child+html .goog-inline-block {
+  display: inline;
+}
+
+body {
+	background: #fff url('/images/stripe-bg.png');
+	font-family: FONT_FAMILY;
+	margin: 0;
+}
+
+#centered-content {
+  background-color: #fff;
+  border-left: CONTENT_BORDER;
+  border-right: CONTENT_BORDER;
+  @mixin box_shadow(0 0 10px #555);
+  margin: auto;
+  width: 916px;
+}
+
+#main {
+  padding: 20px;
+}
+
+.yugi-selected {
+  outline: 4px solid #FFD54C;
+}

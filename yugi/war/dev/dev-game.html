@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Yugioh (Raw Mode)</title>
+    <link href="{{ CSS_FILE_PATH }}" rel="stylesheet" type="text/css" />
+    <script src="/_ah/channel/jsapi"></script>
+    <script>
+      var appengine = goog.appengine;
+    </script>
+    <script src="/closure/goog/base.js"></script>
+    <script src="/dev/deps.js"></script>
+    <script>
+      goog.require('yugi.game');
+    </script>
+  </head>
+  <body>
+    <script>
+      yugi.game.bootstrap('{{ GAME_KEY }}', '{{ CHANNEL_TOKEN }}', '{{ PLAYER_NAME }}');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,143 @@
+/**
+ * Styles for the card editor screen.
+ */
+
+.yugi-admin-image-column {
+  margin-right: 20px;
+  text-align: center;
+}
+
+.yugi-admin-image-column > label {
+  margin-right: 8px;
+}
+
+.yugi-admin-image {
+  background-color: #fff;
+  border: 1px solid black;
+  width: 300px;
+  height: 443px;
+}
+
+.yugi-admin-image img {
+  width: 300px;
+  height: 443px;
+}
+
+.yugi-admin-image.yugi-admin-invalid {
+  border: 1px solid ERROR_COLOR;
+}
+
+.yugi-admin-image > div {
+  font-size: 20px;
+  margin-top: 210px;
+  text-align: center;
+}
+
+.yugi-admin-file-input {
+  @mixin box_shadow(none);
+  border: none;
+  margin-top: 10px;
+  padding: 0;
+  width: 302px;
+}
+
+.yugi-admin-file-input:focus {
+  border: none;
+}
+
+.yugi-admin-card-fields {
+  vertical-align: top;
+  width: 558px;
+}
+
+.yugi-admin-card-fields > label {
+  margin-top: 7px;
+  text-align: right;
+  vertical-align: top;
+  width: 150px;
+}
+
+.yugi-admin-card-fields > input,
+.yugi-admin-card-fields > textarea {
+  margin-bottom: 5px;
+  margin-left: 10px;
+  width: 380px;
+}
+
+.yugi-admin-card-fields > .yugi-admin-combo-container {
+  margin-bottom: 8px;
+  margin-left: 10px;
+  margin-top: -7px;
+  width: 398px;
+}
+
+.yugi-admin-card-fields > textarea {
+  height: 85px;
+}
+
+.goog-combobox > input {
+  width: 380px;
+}
+
+label.yugi-admin-combo-label {
+  margin-top: 0;
+}
+
+input.yugi-name-input {
+	width: 300px;
+}
+
+.yugi-name-check {
+	font-size: 14px;
+	text-align: center;
+	width: 80px;
+}
+
+.yugi-card-does-not-exist {
+	color: green;
+}
+
+.yugi-card-exists a {
+	color: red;
+}
+
+.yugi-admin-card-fields.yugi-admin-card-subsection {
+  margin-top: 0;
+}
+
+label.yugi-admin-card-attack,
+label.yugi-admin-card-defense,
+label.yugi-admin-card-level {
+  margin-top: 0;
+}
+
+input.yugi-admin-card-attack,
+input.yugi-admin-card-defense,
+input.yugi-admin-card-level {
+  margin-bottom: 10px;
+  margin-right: 280px;
+  margin-top: -5px;
+  width: 100px;
+}
+
+input.yugi-admin-card-effect {
+  margin-bottom: 16px;
+  margin-left: 6px;
+  margin-right: 382px;
+  margin-top: 0;
+  width: 20px;
+}
+
+label.yugi-admin-card-effect {
+  margin-top: -2px;
+}
+
+.yugi-admin-buttons {
+  margin-right: 50px;
+  text-align: right;
+}
+
+.yugi-admin-buttons > button {
+  margin-left: 10px;
+  width: 100px;
+}

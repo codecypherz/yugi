@@ -1,0 +1,57 @@
+
+{namespace yugi.ui.header.soy}
+
+/**
+ * The HTML for the header.
+ * @param ids The DOM IDs used in the template.
+ */
+{template .HEADER}
+  <img src="/images/header.jpg">
+  </img>
+  <div class="{css yugi-notice-banner}">
+    <span id="{$ids.NOTICE_CONTAINER|id}"
+        class="{css yugi-notice-container}">
+    </span>
+  </div>
+{/template}
+
+
+/**
+ * The HTML for the links in the header.
+ * @param gamesUrl The games URL.
+ * @param deckManagerUrl The URL to use the deck manager.
+ * @param signInDeckManagerUrl The URL to visit to sign in and use the deck manager.
+ * @param structureDeckManagerUrl The URL for managing structure decks.
+ * @param cardSearchUrl The URL for searching for cards.
+ * @param cardUploadUrl The URL for uploading cards.
+ * @param signInUrl The URL to visit to sign in.
+ * @param signOutUrl The URL to visit to sign out.
+ * @param signedIn True if the user is currently signed in, false otherwise.
+ * @param isAdmin True if the user is an admin, false otherwise.
+ */
+{template .LINKS}
+  <div class="{css yugi-link-banner}">
+  </div>
+  <div class="{css yugi-link-container}">
+    <div class="{css yugi-links}{sp}{css yugi-left}{sp}{css goog-inline-block}">
+      <a href="{$gamesUrl}">Games</a>
+      {if $signedIn}
+        <a href="{$deckManagerUrl}">Deck Manager</a>
+      {else}
+        <a href="{$signInDeckManagerUrl}">Deck Manager</a>
+      {/if}
+      {if $isAdmin}
+        <a href="{$structureDeckManagerUrl}">Structure Deck Manager</a>
+        <a href="{$cardSearchUrl}">Card Search</a>
+        <a href="{$cardUploadUrl}">Upload Card</a>
+      {/if}
+    </div>
+    <div class="{css yugi-links}{sp}{css yugi-right}{sp}{css goog-inline-block}">
+      {if $signedIn}
+        <a href="{$signOutUrl}">Sign out</a>
+      {else}
+        <a href="{$signInUrl}">Sign in</a>
+      {/if}
+    </div>
+  </div>
+{/template}

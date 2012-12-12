@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+  <servlet>
+    <servlet-name>Landing</servlet-name>
+    <servlet-class>yugi.servlet.landing.LandingServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Landing</servlet-name>
+    <url-pattern>/landing</url-pattern>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Join Query</servlet-name>
+    <servlet-class>yugi.servlet.landing.JoinQueryServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Join Query</servlet-name>
+    <url-pattern>/game/join/query</url-pattern>
+  </servlet-mapping>
+
+	<servlet>
+		<servlet-name>Create Game</servlet-name>
+		<servlet-class>yugi.servlet.game.CreateGameServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Create Game</servlet-name>
+		<url-pattern>/game/create</url-pattern>
+	</servlet-mapping>
+
+  <servlet>
+    <servlet-name>Join Game</servlet-name>
+    <servlet-class>yugi.servlet.game.JoinGameServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Join Game</servlet-name>
+    <url-pattern>/game/join</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Message</servlet-name>
+    <servlet-class>yugi.servlet.game.MessageServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Message</servlet-name>
+    <url-pattern>/m</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Card Search</servlet-name>
+    <servlet-class>yugi.servlet.card.CardSearchServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Card Search</servlet-name>
+    <url-pattern>/card/search</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Card</servlet-name>
+    <servlet-class>yugi.servlet.card.CardServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Card</servlet-name>
+    <url-pattern>/card</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Deck Editor</servlet-name>
+    <servlet-class>yugi.servlet.deck.DeckEditorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Deck Editor</servlet-name>
+    <url-pattern>/deck/editor</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Deck Manager</servlet-name>
+    <servlet-class>yugi.servlet.deck.DeckManagerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Deck Manager</servlet-name>
+    <url-pattern>/deck/manager</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Deck Delete</servlet-name>
+    <servlet-class>yugi.servlet.deck.DeckDeleteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Deck Delete</servlet-name>
+    <url-pattern>/deck/delete</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Decks Servlet</servlet-name>
+    <servlet-class>yugi.servlet.deck.DecksServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Decks Servlet</servlet-name>
+    <url-pattern>/decks</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Deck Servlet</servlet-name>
+    <servlet-class>yugi.servlet.deck.DeckServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Deck Servlet</servlet-name>
+    <url-pattern>/deck</url-pattern>
+  </servlet-mapping>
+  
+  <!-- ===================================================== -->
+  <!-- ======================= ADMIN ======================= -->
+  <!-- ===================================================== -->
+  
+  <servlet>
+    <servlet-name>Card Search Screen</servlet-name>
+    <servlet-class>yugi.servlet.admin.CardSearchScreenServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Card Search Screen</servlet-name>
+    <url-pattern>/admin/card/search</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Card Delete</servlet-name>
+    <servlet-class>yugi.servlet.admin.CardDeleteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Card Delete</servlet-name>
+    <url-pattern>/admin/card/delete</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Card Editor</servlet-name>
+    <servlet-class>yugi.servlet.admin.CardEditorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Card Editor</servlet-name>
+    <url-pattern>/admin/card</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Card Exists</servlet-name>
+    <servlet-class>yugi.servlet.admin.CardExistsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Card Exists</servlet-name>
+    <url-pattern>/admin/card/exists</url-pattern>
+  </servlet-mapping>
+  
+  <!-- ===================================================== -->
+  <!-- ======================= TASKS ======================= -->
+  <!-- ===================================================== -->
+
+  <servlet>
+    <servlet-name>Card Index</servlet-name>
+    <servlet-class>yugi.servlet.admin.task.CardIndexServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Card Index</servlet-name>
+    <url-pattern>/admin/task/cardindex</url-pattern>
+  </servlet-mapping>
+
+  <!-- ===================================================== -->
+  <!-- ================ AppEngine Services ================= -->
+  <!-- ===================================================== -->
+
+  <servlet>
+    <servlet-name>Channel Connected Servlet</servlet-name>
+    <servlet-class>yugi.servlet.connection.ChannelConnectedServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>Channel Connected Servlet</servlet-name>
+	    <url-pattern>/_ah/channel/connected/</url-pattern>
+	</servlet-mapping>
+
+  <servlet>
+    <servlet-name>Channel Disconnected Servlet</servlet-name>
+    <servlet-class>yugi.servlet.connection.ChannelDisconnectedServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>Channel Disconnected Servlet</servlet-name>
+      <url-pattern>/_ah/channel/disconnected/</url-pattern>
+  </servlet-mapping>
+
+  <!-- ===================================================== -->
+  <!-- ===================== SECURITY ====================== -->
+  <!-- ===================================================== -->
+
+  <security-constraint>
+    <web-resource-collection>
+      <url-pattern>/admin/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+ <servlet>
+  <servlet-name>SystemServiceServlet</servlet-name>
+  <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+  <init-param>
+   <param-name>services</param-name>
+   <param-value/>
+  </init-param>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>SystemServiceServlet</servlet-name>
+  <url-pattern>/_ah/spi/*</url-pattern>
+ </servlet-mapping>
+</web-app>

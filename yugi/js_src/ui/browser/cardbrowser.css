@@ -1,0 +1,19 @@
+/**
+ * The CSS for the search related UI.
+ */
+
+@def CARD_BROWSER_HEIGHT                       128px;
+@def CARD_BROWSER_WIDTH                        88px;
+
+.yugi-card-browser-card-container {
+	height: CARD_BROWSER_HEIGHT;
+	margin: 6px 9px;
+	position: relative;
+	width: CARD_BROWSER_WIDTH;
+}
+
+.yugi-card-browser-card {
+	cursor: pointer;
+	height: CARD_BROWSER_HEIGHT;
+	width: CARD_BROWSER_WIDTH;
+}

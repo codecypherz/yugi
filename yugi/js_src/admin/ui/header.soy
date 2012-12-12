@@ -1,0 +1,29 @@
+
+{namespace yugi.admin.ui.soy}
+
+/**
+ * The HTML for the header.
+ * @param mainText The main text.
+ * @param ids The DOM IDs used in the template.
+ */
+{template .HEADER}
+  <div class="{css yugi-admin-title}{sp}{css goog-inline-block}">
+    <span class="{css yugi-admin-main-text}">
+      {$mainText}
+    </span>
+    <span class="{css yugi-admin-sub-text}">
+      (Administration)
+    </span>
+  </div>
+  <div class="{css yugi-admin-links}{sp}{css goog-inline-block}">
+    <a href="/admin/deck/manager">Deck Manager</a>
+    <a href="/admin/deck/editor">New Deck</a>
+    <a href="/admin/card/search">Card Search</a>
+    <a href="/admin/card">New Card</a>
+  </div>
+  <div class="{css yugi-admin-notice-banner}">
+    <span id="{$ids.NOTICE_CONTAINER|id}"
+        class="{css yugi-admin-notice-container}">
+    </span>
+  </div>
+{/template}

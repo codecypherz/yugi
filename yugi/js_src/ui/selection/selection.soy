@@ -1,0 +1,86 @@
+
+{namespace yugi.ui.selection.soy}
+
+/**
+ * The HTML for a generic selection.
+ * @param ids The DOM IDs used within this template.
+ */
+{template .SELECTION}
+  <img id="{$ids.IMAGE|id}" class="{css yugi-selection-image}">
+  </img>
+  <div id="{$ids.DETAIL|id}" class="{css yugi-selection-detail}">
+  </div>
+{/template}
+
+
+/**
+ * The HTML for a spell or trap card description.
+ * @param name The name of the card.
+ * @param spellTrapType The spell/trap type of the card.
+ * @param description The description of the card.
+ */
+{template .SPELL_TRAP_DESCRIPTION}
+  <div class="{css yugi-card-name}">
+    {$name}
+  </div>
+  <div class="{css yugi-card-stats}">
+    Type:{sp}{$spellTrapType}
+  </div>
+  <div class="{css yugi-card-description}">
+    {$description}
+  </div>
+{/template}
+
+
+/**
+ * The HTML for a monster card description.
+ * @param name The name of the card.
+ * @param description The description of the card.
+ * @param levelLabel The label to use for the level.
+ * @param level The level of the monster.
+ * @param attribute The attribute of the monster.
+ * @param typeString The type string for the monster.
+ * @param attack The attack of the monster.
+ * @param defense The defense of the monster.
+ */
+{template .MONSTER_DESCRIPTION}
+  <div class="{css yugi-card-name}">
+    {$name}
+  </div>
+  <div class="{css yugi-card-stats}">
+    <table class="{css yugi-card-stat-table}">
+      <tr>
+        <td class="{css yugi-card-stat-label}">ATK/DEF:</td>
+        <td class="{css yugi-att-def}">
+          {$attack}/{$defense}
+        </td>
+      </tr>
+      <tr>
+        <td class="{css yugi-card-stat-label}">Type:</td>
+        <td>{$typeString}</td>
+      </tr>
+      <tr>
+        <td class="{css yugi-card-stat-label}">Attribute:</td>
+        <td>{$attribute}</td>
+      </tr>
+      <tr>
+        <td class="{css yugi-card-stat-label}">{$levelLabel}:</td>
+        <td>{$level}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="{css yugi-card-description}">
+    {$description}
+  </div>
+{/template}
+
+
+/**
+ * The HTML for an information card.
+ * @param info The information about the card.
+ */
+{template .INFO_CARD}
+  <div class="{css yugi-card-description}">
+    {$info}
+  </div>
+{/template}

@@ -1,0 +1,21 @@
+
+{namespace yugi.game.ui.waiting.soy}
+
+
+/**
+ * The HTML for the waiting widget.
+ * @param joinLink The like to share that will join the game.
+ */
+{template .HTML}
+  <div class="{css yugi-game-title}">
+    <div>
+      Waiting for an Opponent
+    </div>
+  </div>
+  <div class="{css yugi-waiting-text}">
+    Don't want to wait for an opponent?&nbsp&nbspSend this link to your friend.
+    <div class="{css yugi-game-join-link}">
+      {$joinLink}
+    </div>
+  </div>
+{/template}

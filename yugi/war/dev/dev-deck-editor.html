@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Deck Editor (Raw Mode)</title>
+    <link href="{{ CSS_FILE_PATH }}" rel="stylesheet" type="text/css" />
+    <script src="/closure/goog/base.js"></script>
+    <script src="/dev/deps.js"></script>
+    <script>
+      goog.require('yugi.deck.editor');
+    </script>
+  </head>
+  <body>
+    <script>
+      yugi.deck.editor.bootstrap('{{ DECK_KEY }}');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+
+{namespace yugi.game.ui.soy}
+
+
+/**
+ * The HTML for the main screen.
+ * @param ids The DOM IDs used in this widget.
+ */
+{template .HTML}
+  <div id="{$ids.HEADER|id}" class="{css yugi-game-header}">
+  </div>
+  <div class="{css yugi-left-content}{sp}{css goog-inline-block}">
+    <div id="{$ids.OPPONENT_LIFE_POINTS|id}">
+    </div>
+    <div id="{$ids.SELECTION|id}">
+    </div>
+    <div id="{$ids.PLAYER_LIFE_POINTS|id}">
+    </div>
+  </div>
+  <div class="{css yugi-main-content}{sp}{css goog-inline-block}">
+    <div id="{$ids.MODE_SWAPPER|id}" class="{css yugi-mode-swapper}">
+    </div>
+    <div id="{$ids.CHAT|id}" class="{css yugi-main-chat}">
+    </div>
+  </div>
+{/template}

@@ -1,0 +1,40 @@
+/**
+ * The CSS for the deck manager screen.
+ */
+
+.yugi-deck-viewer {
+	margin-top: 20px;
+}
+
+.yugi-deck img {
+	height: 210px;
+	width: 150px;
+}
+
+.yugi-deck,
+.yugi-new-deck {
+	color: #333;
+	margin: 10px;
+	text-decoration: none;
+	vertical-align: top;
+}
+
+.yugi-deck-name {
+	overflow: hidden;
+	text-align: center;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 150px;
+}
+
+.yugi-new-deck {
+	border: 2px dashed #333;
+	height: 206px;
+	width: 146px;
+}
+
+.yugi-new-deck div {
+	font-size: 20px;
+	margin-top: 75px;
+	text-align: center;
+}

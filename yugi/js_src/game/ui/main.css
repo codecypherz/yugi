@@ -1,0 +1,57 @@
+/**
+ * Styles for the main portion of the game.
+ */
+
+@def CARD_Z_INDEX                         10;
+
+body {
+	margin: 0;
+	padding: 15px;
+	text-align: center;
+}
+
+#centered-content {
+	background: #fff;
+  margin: auto;
+  width: 1050px;
+}
+
+.yugi-game-header {
+	padding: 10px;
+	text-align: right;
+}
+
+.yugi-main-container {
+	border-spacing: 0;
+	margin: auto;
+	width: 900px;
+}
+
+.yugi-left-content {
+	margin: 0 10px;
+}
+
+.yugi-main-content {
+	vertical-align: top;
+	width: 810px;
+}
+
+.yugi-mode-swapper {
+	height: 570px;
+}
+
+.yugi-game-title {
+  font-size: 24px;
+}
+
+.yugi-game-title > div {
+  border-bottom: NORMAL_BORDER;
+  width: 500px;
+}
+
+/**
+ * Overridden selection CSS.
+ */
+.yugi-selection-detail {
+	height: 265px;
+}

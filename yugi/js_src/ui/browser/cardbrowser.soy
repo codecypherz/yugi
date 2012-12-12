@@ -1,0 +1,14 @@
+
+{namespace yugi.ui.browser.soy}
+
+/**
+ * The HTML for a card in the card browser.
+ * @param imageSource The source of the card image.
+ */
+{template .CARD}
+  <div class="{css yugi-card-browser-card-container}{sp}
+      {css goog-inline-block}">
+    <img src="{$imageSource}" class="{css yugi-card-browser-card}">
+    </img>
+  </div>
+{/template}

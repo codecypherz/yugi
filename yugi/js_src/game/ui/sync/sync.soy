@@ -1,0 +1,17 @@
+
+{namespace yugi.game.ui.sync.soy}
+
+
+/**
+ * The HTML for the sync widget.
+ * @param ids The DOM IDs for this template.
+ */
+{template .HTML}
+  <div class="{css yugi-game-title}">
+    <div>
+      Synchronizing...
+    </div>
+  </div>
+  <div id="{$ids.TEXT|id}" class="{css yugi-sync-text}">
+  </div>
+{/template}

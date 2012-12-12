@@ -1,0 +1,53 @@
+/**
+ * CSS for the selection widget.
+ */
+
+@def MAX_CARD_HEIGHT                      321px;
+@def MAX_CARD_WIDTH                       220px;
+
+.yugi-selection {
+	display: inline-block;
+}
+
+.yugi-selection-image {
+	height: MAX_CARD_HEIGHT;
+	width: MAX_CARD_WIDTH;
+}
+
+.yugi-selection-detail {
+	background-color: #fff;
+	border: 1px solid #333;
+	font-size: 12px;
+	height: 370px;
+	margin-top: 5px;
+	overflow: auto;
+	text-align: left;
+	width: 218px;
+	@mixin border_radius(5px);
+}
+
+.yugi-card-name {
+	font-size: 16px;
+	font-weight: bold;
+	padding: 5px;
+}
+
+.yugi-card-stats {
+	padding: 5px;
+}
+
+.yugi-card-stat-table {
+  margin-left: -3px;
+}
+
+.yugi-card-stat-label {
+	width: 60px;
+}
+
+.yugi-card-description {
+	padding: 5px;
+}
+
+.yugi-att-def {
+	font-weight: bold;
+}

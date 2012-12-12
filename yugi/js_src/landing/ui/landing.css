@@ -1,0 +1,19 @@
+/*
+ * CSS for the landing page.
+ */
+
+.yugi-landing-heading {
+	border-bottom: NORMAL_BORDER;
+	font-size: 24px;
+	text-align: left;
+}
+
+.yugi-landing-heading > button {
+  float: right;
+}
+
+.yugi-landing-heading-waiting {
+	float: right;
+	margin-top: 6px;
+	margin-right: 30px;
+}

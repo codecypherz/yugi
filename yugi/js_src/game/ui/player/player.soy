@@ -1,0 +1,47 @@
+
+{namespace yugi.game.ui.player.soy}
+
+
+/**
+ * The HTML for the life points widget.
+ * @param ids The DOM IDs for this template.
+ */
+{template .LIFE_POINTS}
+  <div id="{$ids.LIFE_POINTS|id}" class="{css yugi-life-points-value}">
+  </div>
+{/template}
+
+
+/**
+ * The HTML for the player controls.
+ * @param ids The DOM IDs for this template.
+ */
+{template .CONTROLS}
+  <div>
+    <div id="{$ids.DIE|id}" class="{css yugi-die}{sp}{css goog-inline-block}"
+        title="Click to roll the die.">
+      <div class="{css yugi-die-dot}{sp}{css goog-inline-block}">
+      </div>
+      <div class="{css yugi-die-dot}{sp}{css goog-inline-block}">
+      </div>
+      <div class="{css yugi-die-dot}{sp}{css goog-inline-block}">
+      </div>
+      <div class="{css yugi-die-dot}{sp}{css goog-inline-block}">
+      </div>
+      <div class="{css yugi-die-dot}{sp}{css goog-inline-block}">
+      </div>
+      <div class="{css yugi-die-dot}{sp}{css goog-inline-block}">
+      </div>
+    </div>
+    <img id="{$ids.COIN|id}" class="{css yugi-coin}{sp}{css goog-inline-block}"
+        src="/images/coin.png" title="Click to flip the coin.">
+    </img>
+  </div>
+  <button id="{$ids.END_TURN_BUTTON|id}"
+      title="Tell your opponent you are ending your turn.">
+    End Turn
+  </button>
+  <button id="{$ids.MORE_BUTTON|id}" title="Click here to see more actions.">
+    More...
+  </button>
+{/template}

@@ -1,0 +1,79 @@
+/**
+ * The CSS for the search related UI.
+ */
+
+@def SEARCH_RESULTS_BORDER                1px solid #333;
+
+.yugi-search-form {
+	margin-bottom: 15px;
+}
+
+.yugi-search-form label {
+	margin-right: 5px;
+}
+
+.yugi-search-form button {
+  margin-left: 5px;
+  vertical-align: top;
+}
+
+.yugi-search-name-input {
+	width: 350px;
+}
+
+.yugi-search-help {
+	color: #555;
+	font-size: 10px;
+	margin-top: 2px;
+	vertical-align: top;
+}
+
+.yugi-search-results {
+	border-collapse: collapse;
+	font-size: 12px;
+  width: 100%;
+}
+
+.yugi-search-results tr {
+	cursor: pointer;
+}
+
+.yugi-search-results td {
+	border-bottom: SEARCH_RESULTS_BORDER;
+	border-left: SEARCH_RESULTS_BORDER;
+	padding: 3px 8px;
+}
+
+.yugi-search-results td:first-child {
+	border-left: none;
+}
+
+tr.yugi-monster-card {
+	background-color: MONSTER_COLOR;
+}
+
+tr.yugi-spell-card {
+  background-color: SPELL_COLOR;
+}
+
+tr.yugi-trap-card {
+  background-color: TRAP_COLOR;
+}
+
+.yugi-search-results-action-button {
+  font-size: 10px;
+}
+
+tr.yugi-selected {
+	font-weight: bold;
+	outline: none;
+}
+
+.yugi-search-results-empty {
+	color: #333;
+	font-size: 20px;
+	position: absolute;
+	text-align: center;
+	top: 200px;
+	width: 100%;
+}

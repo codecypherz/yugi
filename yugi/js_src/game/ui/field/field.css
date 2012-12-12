@@ -1,0 +1,120 @@
+/**
+ * Styles for the field.
+ */
+
+@def CARD_WIDTH                           60px;
+@def CARD_HEIGHT                          88px;
+
+.yugi-field {
+	position: relative;
+}
+
+.yugi-field-image-container {
+	bottom: 0;
+	left: 0;
+	position: absolute;
+	right: 9px;
+	top: 0;
+	overflow: hidden;
+}
+
+.yugi-field-image-container > img {
+	margin-left: -163px;
+	margin-top: -365px;
+}
+
+.yugi-empty-zone,
+.yugi-card-zone {
+	height: CARD_HEIGHT;
+  margin: 10px 14px;
+  vertical-align: top;
+  width: CARD_WIDTH;
+}
+
+.yugi-card-zone {
+	background-color: #fff;
+	border: 1px solid black;
+	font-size: 12px;
+	text-align: center;
+}
+
+/** TODO Get rid of this in favor of yugi-card-zone-label. */
+.yugi-card-zone .yugi-label {
+	margin-top: 35px;
+}
+
+.yugi-card-zone-label {
+	background-color: #fff;
+	bottom: -14px;
+	color: #000;
+	font-size: 10px;
+	opacity: 0.7;
+	position: absolute;
+	top: 89px;
+	width: 100%;
+}
+
+.yugi-card-zone-label.opponent {
+	bottom: 89px;
+  top: -14px;
+}
+
+.yugi-card-zone-label > div {
+	margin-top: 1px;
+}
+
+.yugi-hand-container {
+	height: 61px;
+	margin-top: 4px;
+	overflow: hidden;
+}
+
+.yugi-hand-container.opponent {
+	margin-bottom: 4px;
+  margin-top: 0px;
+}
+
+.yugi-monster-card,
+.yugi-monster-card > img,
+.yugi-spell-trap-card,
+.yugi-spell-trap-card > img,
+.yugi-field-card,
+.yugi-field-card > img {
+  height: CARD_HEIGHT;
+  width: CARD_WIDTH;
+  z-index: CARD_Z_INDEX;
+}
+
+.yugi-monster-card > img,
+.yugi-spell-trap-card > img,
+.yugi-field-card > img {
+  cursor: pointer;
+  z-index: CARD_Z_INDEX;
+}
+
+.yugi-monster-card > img.face-down-defense,
+.yugi-monster-card > img.face-up-defense {
+	@mixin transform(rotate(-90deg));
+}
+
+.yugi-field-card.opponent > img,
+.yugi-monster-card.opponent > img.face-up-attack,
+.yugi-spell-trap-card.opponent > img.face-up {
+	@mixin transform(rotate(180deg));
+}
+
+.yugi-card-stack {
+	position: relative;
+}
+
+.yugi-card-stack > .yugi-card {
+	cursor: pointer;
+	height: CARD_HEIGHT;
+	position: absolute;
+	width: CARD_WIDTH;
+	z-index: CARD_Z_INDEX;
+}
+
+.yugi-card-stack.opponent > img {
+  @mixin transform(rotate(180deg));
+}

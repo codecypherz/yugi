@@ -1,0 +1,15 @@
+/*
+ * The CSS for the sync widget.
+ */
+
+.yugi-sync {
+  color: NORMAL_COLOR;
+  margin: 0 10px;
+  text-align: left;
+}
+
+.yugi-sync-text {
+  margin-left: 60px;
+  margin-right: 60px;
+  margin-top: 140px;
+}

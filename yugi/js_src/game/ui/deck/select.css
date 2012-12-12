@@ -1,0 +1,49 @@
+/**
+ * The CSS for deck selection.
+ */
+
+.yugi-deck-select {
+	color: NORMAL_COLOR;
+	margin: 0 10px;
+	text-align: left;
+}
+
+.yugi-deck-select-text {
+	font-size: 12px;
+	margin-top: 10px;
+}
+
+.yugi-game-sub-title {
+	font-size: 16px;
+	font-style: italic;
+	margin: 10px 0;
+}
+
+.yugi-deck-select-sign-in {
+	margin-left: 20px;
+}
+
+.yugi-decks {
+	overflow: auto;
+	height: 231px;
+}
+
+.yugi-deck > img {
+  height: 146px;
+  width: 100px;
+}
+
+.yugi-deck {
+  color: NORMAL_COLOR;
+  cursor: pointer;
+  margin: 9px;
+  vertical-align: top;
+}
+
+.yugi-deck-name {
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100px;
+}

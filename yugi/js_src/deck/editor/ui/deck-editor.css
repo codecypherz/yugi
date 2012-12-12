@@ -1,0 +1,80 @@
+/**
+ * The CSS for the deck editor.
+ */
+
+.yugi-deck-editor-swapper {
+	display: inline-block;
+	margin-left: 20px;
+	vertical-align: top;
+	width: 660px;
+}
+
+.yugi-deck-browser-container {
+	border: 1px solid #333;
+	height: 674px;
+	margin-top: -3px;
+}
+
+.yugi-deck-name {
+	cursor: pointer;
+	display: inline-block;
+	font-size: 22px;
+	font-weight: bold;
+	margin: 0 10px 10px 10px;
+}
+
+.yugi-deck-status {
+	color: #555;
+	display: inline-block;
+}
+
+.yugi-deck-status.yugi-error {
+	color: ERROR_COLOR;
+}
+
+.yugi-deck-browser button {
+	margin-bottom: 10px;
+	margin-left: 15px;
+	margin-top: 15px;
+}
+
+.yugi-deck-tab {
+	border-bottom: none;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	font-weight: normal;
+	margin-left: 5px;
+	margin-right: 5px;
+	text-shadow: none;
+	width: 150px;
+}
+
+.yugi-deck-tab.yugi-deck-tab-selected {
+	background-color: #eee;
+	color: #333;
+	font-weight: bold;
+}
+
+.yugi-card-browser {
+	border-top: 1px solid #333;
+	height: 621px;
+	overflow: auto;
+}
+
+.yugi-deck-editor-search-results {
+	border: 1px solid #333;
+	height: 655px;
+	overflow: auto;
+	position: relative;
+}
+
+.yugi-deck-editor-buttons {
+	margin-top: 10px;
+	text-align: right;
+	width: 100%;
+}
+
+.yugi-deck-editor-buttons > button {
+	margin-left: 10px;
+	width: 120px;
+}

@@ -1,0 +1,103 @@
+
+{namespace yugi.landing.ui.launcher.soy}
+
+
+/**
+ * The HTML for the launcher component.
+ * @param ids The DOM IDs to use in this template.
+ */
+{template .LAUNCHER}
+  <div class="{css yugi-landing-heading}">
+    <span>
+      GAMES TO JOIN
+    </span>
+    <img id="{$ids.WAITING_IMAGE|id}" src="/images/waiting.gif"
+        class="{css yugi-landing-heading-waiting}">
+    </img>
+    <button id="{$ids.REFRESH_LINK|id}" class="{css yugi-link}">
+      Refresh
+    </button>
+  </div>
+  <div id="{$ids.GAME_STARTER|id}">
+  </div>
+  <div id="{$ids.GAME_JOINER|id}">
+  </div>
+{/template}
+
+
+/**
+ * The HTML for a game starter component.
+ * @param ids The DOM IDs to use in this template.
+ */
+{template .GAME_STARTER}
+  <div class="{css yugi-game-starter}">
+    <button id="{$ids.NEW_GAME_BUTTON|id}" class="{css yugi-call-to-action}">
+      Start a New Game
+    </button>
+  </div>
+{/template}
+
+
+/**
+ * The HTML for a game joiner component.
+ */
+{template .GAME_JOINER}
+  <div class="{css yugi-game-joiner}">
+    /* TODO Have some sort of "fetching data..." text. */
+  </div>
+{/template}
+
+
+/**
+ * The HTML for a game join component.
+ * @param ids The DOM IDs to use in this template.
+ * @param gameName The name of the game.
+ */
+{template .GAME_JOIN}
+  <div class="{css yugi-game-container}">
+    <div class="{css yugi-game-name}{sp}{css goog-inline-block}">
+      {$gameName}
+    </div>
+    <button id="{$ids.JOIN_BUTTON|id}">
+      Join
+    </button>
+  </div>
+{/template}
+
+
+/**
+ * The HTML for the new game prompt.
+ * @param ids The DOM IDs to use in this template.
+ */
+{template .NEW_GAME_PROMPT}
+  <table>
+    <tr>
+      <td>Player Name:</td>
+      <td>
+        <input id="{$ids.PLAYER_NAME_INPUT|id}"></input>
+      </td>
+    </tr>
+    <tr>
+      <td>Game Name:</td>
+      <td>
+        <input id="{$ids.GAME_NAME_INPUT|id}"></input>
+      </td>
+    </tr>
+  </table>
+{/template}
+
+
+/**
+ * The HTML for the join game prompt.
+ * @param ids The DOM IDs to use in this template.
+ */
+{template .GAME_JOIN_PROMPT}
+  <table>
+    <tr>
+      <td>Player Name:</td>
+      <td>
+        <input id="{$ids.PLAYER_NAME_INPUT|id}"></input>
+      </td>
+    </tr>
+  </table>
+{/template}

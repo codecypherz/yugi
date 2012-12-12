@@ -1,0 +1,19 @@
+/**
+ * Styles for connection status.
+ */
+
+.yugi-connection {
+	border: 1px solid #333;
+	padding: 4px 8px;
+	@mixin border_radius(3px);
+}
+
+.yugi-connection-open {
+	background-color: #eeffee;
+	color: #008000;
+}
+
+.yugi-connection-closed {
+	background-color: #ffeeee;
+  color: #ff0000;
+}

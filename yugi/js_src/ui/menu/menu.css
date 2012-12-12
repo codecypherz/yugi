@@ -1,0 +1,43 @@
+/**
+ * The CSS for menus.
+ */
+
+.yugi-menu-icon {
+	background-color: #aaa;
+	border: 1px solid #fff;
+	cursor: pointer;
+	height: 14px;
+	outline: none;
+	position: absolute;
+	width: 14px;
+	z-index: 99;
+	@mixin border_radius(3px);
+}
+
+.yugi-menu-icon:hover {
+	background-color: #ccc;
+}
+
+.yugi-menu-actions {
+	background-color: #fff;
+	border: 3px solid #aaa;
+	border-radius: 2px;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+	cursor: pointer;
+	outline: none;
+  position: absolute;
+  text-align: left;
+  z-index: 100;
+}
+
+.yugi-menu-action {
+	border-bottom: 1px solid #ddd;
+	cursor: pointer;
+	padding: 2px 10px;
+	white-space: nowrap;
+	z-index: 100;
+}
+
+.yugi-menu-action:hover {
+	background-color: #eee;
+}

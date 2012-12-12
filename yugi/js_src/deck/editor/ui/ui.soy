@@ -1,0 +1,60 @@
+
+{namespace yugi.deck.editor.ui.soy}
+
+
+/**
+ * The HTML for the deck editor.
+ * @param ids The DOM IDs used in the template.
+ */
+{template .EDITOR}
+  <div class="{css yugi-deck-tabs}">
+    <button id="{$ids.MAIN_BUTTON|id}" class="{css yugi-deck-tab}">
+    </button>
+    <button id="{$ids.EXTRA_BUTTON|id}" class="{css yugi-deck-tab}">
+    </button>
+    <button id="{$ids.SIDE_BUTTON|id}" class="{css yugi-deck-tab}">
+    </button>
+  </div>
+  <div id="{$ids.BROWSER_CONTAINER|id}"
+      class="{css yugi-deck-browser-container}">
+  </div>
+{/template}
+
+
+/**
+ * The HTML for the deck browser.
+ * @param ids The DOM IDs used in the template.
+ */
+{template .DECK_BROWSER}
+  <button id="{$ids.ADD_CARDS_BUTTON|id}">
+    Add Cards
+  </button>
+  <div id="{$ids.CARD_BROWSER|id}">
+  </div>
+{/template}
+
+
+/**
+ * The HTML for the search UI.
+ * @param ids The DOM IDs used in the template.
+ */
+{template .SEARCH}
+  <div id="{$ids.FORM|id}">
+  </div>
+  <div id="{$ids.RESULTS|id}" class="{css yugi-deck-editor-search-results}">
+  </div>
+  <div class="{css yugi-deck-editor-buttons}">
+    <button id="{$ids.BACK_BUTTON|id}" class="{css yugi-call-to-action}">
+      Back to Deck
+    </button>
+  </div>
+{/template}
+
+
+/**
+ * The HTML for the deck name dialog.
+ * @param ids The DOM IDs to use in this template.
+ */
+{template .NAME_DIALOG}
+  <input id="{$ids.NAME_INPUT|id}"></input>
+{/template}

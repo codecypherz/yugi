@@ -1,0 +1,33 @@
+
+{namespace yugi.ui.search.soy}
+
+
+/**
+ * The HTML for the search form.
+ * @param ids The DOM IDs used in the template.
+ */
+{template .FORM}
+  <div class="{css goog-inline-block}">
+    <label for="{$ids.NAME_INPUT|id}">
+      Name:
+    </label>
+    <input id="{$ids.NAME_INPUT|id}" class="{css yugi-search-name-input}">
+    </input>
+  </div>
+  <button id="{$ids.SEARCH_BUTTON|id}" class="{css goog-inline-block}">
+    Search
+  </button>
+{/template}
+
+
+/**
+ * The HTML for the search result section.
+ * @param ids The DOM IDs used in the template.
+ */
+{template .RESULTS}
+  <div id="{$ids.EMPTY_CONTENT|id}" class="{css yugi-search-results-empty}">
+    No Results
+  </div>
+  <table id="{$ids.TABLE|id}" class="{css yugi-search-results}">
+  </table>
+{/template}
