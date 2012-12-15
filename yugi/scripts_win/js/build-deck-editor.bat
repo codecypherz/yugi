@@ -4,7 +4,7 @@
 echo ==========================
 echo Building deck-editor.js...
 echo ==========================
-..\\closure\bin\build\closurebuilder.py ^
+..\..\closure\bin\build\closurebuilder.py ^
   --root ..\..\closure\ ^
   --root ..\..\js_src\ ^
   --root ..\..\js_generated\ ^

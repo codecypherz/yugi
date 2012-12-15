@@ -351,7 +351,10 @@ yugi.game.model.Field.prototype.removeCard = function(cardToRemove) {
 
   // Search the monster zones first.
   var removed = goog.array.removeIf(this.monsterZone_, function(card) {
-    return card && card.equals(cardToRemove);
+    if (card) {
+      return card.equals(cardToRemove);
+    }
+    return false;
   });
 
   // If the monster card was removed, then dispatch and be done.
@@ -360,7 +363,10 @@ yugi.game.model.Field.prototype.removeCard = function(cardToRemove) {
   } else {
     // Not removed, so check the spell/trap zones.
     removed = goog.array.removeIf(this.spellTrapZone_, function(card) {
-      return card && card.equals(cardToRemove);
+      if (card) {
+        return card.equals(cardToRemove);
+      }
+      return false;
     });
   }
 
