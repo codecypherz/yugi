@@ -1,7 +1,9 @@
 .metadata
 js_generated
 war/css
+war/dev/deps.js
 war/js
+war/WEB-INF/appengine-generated/local_db.bin
 war/WEB-INF/classes/yugi
 war/closure
 war/js_externs
