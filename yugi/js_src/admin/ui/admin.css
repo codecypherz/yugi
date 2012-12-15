@@ -2,47 +2,6 @@
  * Styles for administration.
  */
 
-body {
-	margin-top: 25px;
-}
-
-#centered-content {
-	margin: auto;
-	width: 900px;
-}
-
-.yugi-admin-header {
-	margin-bottom: 30px;
-	position: relative;
-}
-
-.yugi-admin-title {
-  width: 450px;
-  border-bottom: 1px solid black;
-}
-
-.yugi-admin-main-text {
-	font-size: 32px;
-	font-style: italic;
-	margin-bottom: 5px;
-}
-
-.yugi-admin-sub-text {
-	color: ERROR_COLOR;
-	font-size: 20px;
-	margin-left: 10px;
-}
-
-.yugi-admin-links {
-	text-align: right;
-	width: 450px;
-}
-
-.yugi-admin-links a {
-	font-size: 12px;
-	margin-left: 12px;
-}
-
 .yugi-admin-notice-banner {
 	position: absolute;
 	text-align: center;

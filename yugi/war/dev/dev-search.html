@@ -10,8 +10,19 @@
     </script>
   </head>
   <body>
+    <div id='centered-content'>
+      <div id='header'>
+      </div>
+      <div id='main'>
+      </div>
+    </div>
     <script>
-      yugi.admin.search.bootstrap();
+      yugi.admin.search.bootstrap(
+          '{{ BASE_LOGIN_URL }}',
+          '{{ SIGN_IN_URL }}',
+          '{{ SIGN_OUT_URL }}',
+          '{{ USER_JSON }}'
+      );
     </script>
   </body>
 </html>

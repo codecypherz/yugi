@@ -10,8 +10,21 @@
     </script>
   </head>
   <body>
+    <div id='centered-content'>
+      <div id='header'>
+      </div>
+      <div id='main'>
+      </div>
+    </div>
     <script>
-      yugi.admin.card.bootstrap('{{ UPLOAD_URL }}', '{{ CARD_KEY }}');
+      yugi.admin.card.bootstrap(
+          '{{ BASE_LOGIN_URL }}',
+          '{{ SIGN_IN_URL }}',
+          '{{ SIGN_OUT_URL }}',
+          '{{ USER_JSON }}',
+          '{{ UPLOAD_URL }}',
+          '{{ CARD_KEY }}'
+      );
     </script>
   </body>
 </html>

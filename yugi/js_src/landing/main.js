@@ -64,6 +64,7 @@ yugi.landing.Main = function(baseLoginUrl, signInUrl, signOutUrl, userJson) {
   this.registerDisposable(games);
   this.registerDisposable(notifier);
   this.registerDisposable(user);
+  this.registerDisposable(authService);
 
   // Handle any error messages.
   this.handleErrorMessages_();

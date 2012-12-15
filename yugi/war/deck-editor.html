@@ -19,8 +19,22 @@
     </script>
   </head>
   <body>
+    <div id='centered-content'>
+      <div id='header'>
+      </div>
+      <div id='main'>
+        <div id='name-status'>
+        </div>
+      </div>
+    </div>
     <script>
-      yugi.deck.editor.bootstrap('{{ DECK_KEY }}');
+      yugi.deck.editor.bootstrap(
+          '{{ BASE_LOGIN_URL }}',
+          '{{ SIGN_IN_URL }}',
+          '{{ SIGN_OUT_URL }}',
+          '{{ USER_JSON }}',
+          '{{ DECK_KEY }}'
+      );
     </script>
   </body>
 </html>

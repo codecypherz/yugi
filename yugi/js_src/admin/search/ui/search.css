@@ -2,16 +2,17 @@
  * The CSS for the admin card search screen.
  */
 
+.yugi-selection {
+	float: left;
+}
+
 .yugi-admin-search {
-	display: inline-block;
-  margin-left: 20px;
-  vertical-align: top;
-  width: 660px;
+  margin-left: 240px;
 }
 
 .yugi-admin-search-results {
 	border: SEARCH_RESULTS_BORDER;
-  height: 655px;
+  height: 653px;
   overflow: auto;
   position: relative;
 }

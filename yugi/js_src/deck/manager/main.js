@@ -63,6 +63,8 @@ yugi.deck.manager.Main =
   this.registerDisposable(deckService);
   this.registerDisposable(decks);
   this.registerDisposable(notifier);
+  this.registerDisposable(user);
+  this.registerDisposable(authService);
 
   // Load the decks.
   decksService.load();

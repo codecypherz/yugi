@@ -4,6 +4,7 @@
 
 goog.provide('yugi.service.AuthService');
 
+goog.require('goog.Disposable');
 goog.require('goog.Uri');
 goog.require('yugi.Config');
 
@@ -13,8 +14,10 @@ goog.require('yugi.Config');
  * Service for things related to authentication.
  * @param {string} baseLoginUrl The base URL for login.
  * @constructor
+ * @extends {goog.Disposable}
  */
 yugi.service.AuthService = function(baseLoginUrl) {
+  goog.base(this);
 
   /**
    * The base URL used for logging in a user.
@@ -27,6 +30,7 @@ yugi.service.AuthService = function(baseLoginUrl) {
   this.baseLoginUri_.setParameterValue(
       yugi.service.AuthService.CONTINUE_PARAM_, '');
 };
+goog.inherits(yugi.service.AuthService, goog.Disposable);
 
 
 /**

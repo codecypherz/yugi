@@ -2,11 +2,6 @@
  * Styles for the card editor screen.
  */
 
-.yugi-admin-image-column {
-  margin-right: 20px;
-  text-align: center;
-}
-
 .yugi-admin-image-column > label {
   margin-right: 8px;
 }
