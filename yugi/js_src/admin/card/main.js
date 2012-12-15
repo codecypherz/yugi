@@ -13,6 +13,7 @@ goog.require('yugi.admin.card.ui.Editor');
 goog.require('yugi.model.Notifier');
 goog.require('yugi.model.User');
 goog.require('yugi.service.AuthService');
+goog.require('yugi.ui.footer.Footer');
 goog.require('yugi.ui.header.Header');
 
 
@@ -49,6 +50,10 @@ yugi.admin.card.Main = function(
   // Header
   var header = new yugi.ui.header.Header(signInUrl, signOutUrl);
   header.render(dom.getElement('header'));
+
+  // Footer
+  var footer = new yugi.ui.footer.Footer();
+  footer.render(dom.getElement('footer'));
 
   // Main content
   var editor = new yugi.admin.card.ui.Editor(uploadUrl);

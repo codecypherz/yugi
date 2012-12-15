@@ -9,6 +9,7 @@ java -jar ..\..\closure\gss\closure-stylesheets-20111230.jar ^
   ..\..\js_src\ui\input.css ^
   ..\..\js_src\ui\dialog.css ^
   ..\..\js_src\ui\header\header.css ^
+  ..\..\js_src\ui\footer\footer.css ^
   ..\..\js_src\ui\selection\selection.css ^
   ..\..\js_src\ui\search\search.css ^
   ..\..\js_src\admin\ui\admin.css ^

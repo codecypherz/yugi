@@ -50,13 +50,13 @@ yugi.landing.Main = function(baseLoginUrl, signInUrl, signOutUrl, userJson) {
   var header = new yugi.ui.header.Header(signInUrl, signOutUrl);
   header.render(dom.getElement('header'));
 
+  // Footer
+  var footer = new yugi.ui.footer.Footer();
+  footer.render(dom.getElement('footer'));
+
   // Main content
   var launcher = new yugi.landing.ui.launcher.Launcher();
   launcher.render(dom.getElement('main'));
-
-  // Footer
-  var footer = new yugi.ui.footer.Footer();
-  footer.render();
 
   // Register all the disposables.
   this.registerDisposable(header);

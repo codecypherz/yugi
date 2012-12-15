@@ -54,7 +54,7 @@ yugi.deck.manager.Main =
 
   // Footer
   var footer = new yugi.ui.footer.Footer();
-  footer.render();
+  footer.render(dom.getElement('footer'));
 
   // Register all the disposables.
   this.registerDisposable(header);

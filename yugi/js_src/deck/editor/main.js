@@ -19,6 +19,7 @@ goog.require('yugi.model.Selection');
 goog.require('yugi.model.User');
 goog.require('yugi.service.AuthService');
 goog.require('yugi.service.DeckService');
+goog.require('yugi.ui.footer.Footer');
 goog.require('yugi.ui.header.Header');
 goog.require('yugi.ui.selection.Selection');
 
@@ -57,6 +58,10 @@ yugi.deck.editor.Main = function(
   // Header
   var header = new yugi.ui.header.Header(signInUrl, signOutUrl);
   header.render(dom.getElement('header'));
+
+  // Footer
+  var footer = new yugi.ui.footer.Footer();
+  footer.render(dom.getElement('footer'));
 
   // Name and State components
   var nameAndStatusElement = dom.getElement('name-status');
