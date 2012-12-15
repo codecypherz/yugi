@@ -17,7 +17,7 @@ echo Running Yugioh locally...
 echo.
 
 "C:\Program Files\eclipse\plugins\com.google.appengine.eclipse.sdkbundle_1.7.3\appengine-java-sdk-1.7.3\bin\dev_appserver.cmd" ^
-   --port=8888 C:\Users\james\git\yugi\yugi\war\
+   --port=8888 C:\Users\james\workspaces\yugi\yugi\war\
 
 echo ___________________________________________
 echo Server shut down successfully.
