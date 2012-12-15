@@ -66,6 +66,7 @@ public class ServletUtil {
 		FileReader reader = new FileReader(htmlPath);
 	    CharBuffer buffer = CharBuffer.allocate(16384);
 	    reader.read(buffer);
+	    reader.close();
 		String html = new String(buffer.array());
 
 		// Maybe replace the JS file path.

@@ -14,11 +14,13 @@ echo Generating the CSS...
 call gss.bat
 
 echo Build all JS...
-call js\build-card.bat
-call js\build-deck-editor.bat
-call js\build-deck-manager.bat
-call js\build-game.bat
-call js\build-landing.bat
-call js\build-search.bat
+cd js
+call build-card.bat
+call build-deck-editor.bat
+call build-deck-manager.bat
+call build-game.bat
+call build-landing.bat
+call build-search.bat
+cd ..
 
 echo Finished building everything.
