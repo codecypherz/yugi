@@ -2,4 +2,8 @@
 js_generated
 war/css
 war/js
-war/WEB-INF/classes
+war/WEB-INF/classes/yugi
+war/closure
+war/js_externs
+war/js_generated
+war/js_src
