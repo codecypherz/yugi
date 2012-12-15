@@ -1,5 +1,5 @@
 /**
- * Utilities for building a URL.
+ * Utilities for URLs.
  */
 
 goog.provide('yugi.service.url');

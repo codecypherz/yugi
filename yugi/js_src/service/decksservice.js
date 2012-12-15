@@ -17,6 +17,7 @@ goog.require('goog.net.EventType');
 goog.require('goog.net.XhrIo');
 goog.require('yugi.Config');
 goog.require('yugi.model.Deck');
+goog.require('yugi.util.deck');
 
 
 
@@ -98,14 +99,21 @@ yugi.service.DecksService.get = function() {
 
 
 /**
- * Queries the server for all the decks.
+ * Queries the server for the decks according to the current URL.
  */
 yugi.service.DecksService.prototype.load = function() {
-  this.logger.info('Fetching decks');
 
   // Send the query and wait for the response.
   var uri = new goog.Uri();
   uri.setPath(yugi.Config.ServletPath.DECKS);
+
+  if (yugi.util.deck.isStructureDeckRequest(window.location.href)) {
+    this.logger.info('Requesting structure decks.');
+    yugi.util.deck.setStructureDeckRequest(uri, true);
+  } else {
+    this.logger.info('Requesting user decks.');
+  }
+
   this.loadXhrIo_.send(uri);
 };
 
