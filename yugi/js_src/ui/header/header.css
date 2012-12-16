@@ -3,14 +3,8 @@
  */
 
 .yugi-header {
-	display: inline-block;
-	height: 133px;
   position: relative;
   text-align: center;
-}
-
-.yugi-header > img {
-	position: absolute;
 }
 
 .yugi-link-banner {
@@ -23,8 +17,11 @@
 }
 
 .yugi-link-container {
+	color: #cbcbcb;
+	font-size: 14px;
   height: 35px;
   left: 50%;
+  line-height: 35px;
   margin-left: -458px;
   position: absolute;
   top: 0;
@@ -32,8 +29,11 @@
 }
 
 .yugi-links {
-	margin-top: 6px;
 	vertical-align: top;
+}
+
+.yugi-links > a {
+	color: #cbcbcb;
 }
 
 .yugi-links.yugi-left {
@@ -50,12 +50,7 @@
 
 .yugi-links > a,
 .yugi-link-disabled {
-  font-size: 14px;
   margin-left: 12px;
-}
-
-.yugi-links > a {
-	color: #cbcbcb;
 }
 
 .yugi-links > a:hover {
@@ -68,10 +63,15 @@
 	text-decoration: underline;
 }
 
+.yugi-username {
+	color: #cbcbcb;
+}
+
 .yugi-notice-banner {
+	left: 0;
   position: absolute;
+  right: 0;
   top: 125px;
-  width: 100%;
 }
 
 .yugi-notice-container {

@@ -164,7 +164,8 @@ yugi.ui.header.Header.prototype.enterDocument = function() {
     signInUrl: this.signInUrl_,
     signOutUrl: this.signOutUrl_,
     signedIn: this.user_.isSignedIn(),
-    isAdmin: this.user_.isAdmin()
+    isAdmin: this.user_.isAdmin(),
+    userName: this.user_.getName()
   });
   goog.dom.getDocument().body.appendChild(this.linkContainer_);
 

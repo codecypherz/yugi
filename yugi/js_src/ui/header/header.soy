@@ -28,6 +28,7 @@
  * @param signOutUrl The URL to visit to sign out.
  * @param signedIn True if the user is currently signed in, false otherwise.
  * @param isAdmin True if the user is an admin, false otherwise.
+ * @param userName The text to display as the user's name.
  */
 {template .LINKS}
   <div class="{css yugi-link-banner}">
@@ -48,6 +49,9 @@
     </div>
     <div class="{css yugi-links}{sp}{css yugi-right}{sp}{css goog-inline-block}">
       {if $signedIn}
+        <span>
+          Welcome, {$userName}
+        </span>
         <a href="{$signOutUrl}">Sign out</a>
       {else}
         <a href="{$signInUrl}">Sign in</a>
