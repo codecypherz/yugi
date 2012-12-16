@@ -17,6 +17,7 @@ goog.require('yugi.service.DeckService');
 goog.require('yugi.service.DecksService');
 goog.require('yugi.ui.footer.Footer');
 goog.require('yugi.ui.header.Header');
+goog.require('yugi.util.deck');
 
 
 
@@ -67,7 +68,11 @@ yugi.deck.manager.Main =
   this.registerDisposable(authService);
 
   // Load the decks.
-  decksService.load();
+  if (yugi.util.deck.isStructureDeckRequest(window.location.href)) {
+    decksService.loadStructureDecks();
+  } else {
+    decksService.loadUserDecks();
+  }
 };
 goog.inherits(yugi.deck.manager.Main, yugi.Main);
 

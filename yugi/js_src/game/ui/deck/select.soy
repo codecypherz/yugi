@@ -5,6 +5,7 @@
 /**
  * The HTML for deck selection.
  * @param ids The DOM IDs used in this widget.
+ * @param signedIn True if the user is signed in.
  */
 {template .HTML}
   <div class="{css yugi-game-title}">
@@ -18,16 +19,20 @@
       Your Decks
     </div>
     <div id="{$ids.PLAYER_DECKS|id}" class="{css yugi-decks}">
-      <div class="{css yugi-deck-select-sign-in}">
-        You must <a href="/make/this/link/work">sign in</a> if you want to
-        create your own set of decks.
-      </div>
+      {if $signedIn}
+        Loading...
+      {else}
+        <div class="{css yugi-deck-select-sign-in}">
+          You must be signed in if you want to use your own set of decks.<br>
+        </div>
+      {/if}
     </div>
 
     <div class="{css yugi-game-sub-title}">
       Structure Decks
     </div>
     <div id="{$ids.STRUCTURE_DECKS|id}" class="{css yugi-decks}">
+      Loading...
     </div>
   </div>
 {/template}

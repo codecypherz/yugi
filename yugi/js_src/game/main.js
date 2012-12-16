@@ -21,6 +21,7 @@ goog.require('yugi.game.handler.WaitForSync');
 goog.require('yugi.game.model.Browser');
 goog.require('yugi.game.model.Chat');
 goog.require('yugi.game.model.ChatInterceptor');
+goog.require('yugi.game.model.Decks');
 goog.require('yugi.game.model.Game');
 goog.require('yugi.game.model.Synchronization');
 goog.require('yugi.game.net.Channel');
@@ -30,6 +31,8 @@ goog.require('yugi.game.ui.State');
 goog.require('yugi.model.CardCache');
 goog.require('yugi.model.Notifier');
 goog.require('yugi.model.Selection');
+goog.require('yugi.model.User');
+goog.require('yugi.service.AuthService');
 goog.require('yugi.service.DeckService');
 goog.require('yugi.service.DecksService');
 
@@ -37,6 +40,10 @@ goog.require('yugi.service.DecksService');
 
 /**
  * The container for all the main components of the application.
+ * @param {string} baseLoginUrl The base URL for login.
+ * @param {string} signInUrl The URL to visit to sign in.
+ * @param {string} signOutUrl The URL to visit to sign out.
+ * @param {string} userJson The user object as raw JSON.
  * @param {string} gameKey The key identifying the game session.
  * @param {string} channelToken The token for this clients access to the
  *     appengine channel.
@@ -44,7 +51,8 @@ goog.require('yugi.service.DecksService');
  * @constructor
  * @extends {yugi.Main}
  */
-yugi.game.Main = function(gameKey, channelToken, playerName) {
+yugi.game.Main = function(baseLoginUrl, signInUrl, signOutUrl, userJson,
+    gameKey, channelToken, playerName) {
   goog.base(this);
 
   this.logger.info('Game key = ' + gameKey);
@@ -62,6 +70,8 @@ yugi.game.Main = function(gameKey, channelToken, playerName) {
       playerName);
 
   // Register generic models.
+  var authService = yugi.service.AuthService.register(baseLoginUrl);
+  var user = yugi.model.User.register(userJson);
   var cardCache = yugi.model.CardCache.register();
   var selectionModel = yugi.model.Selection.register();
   var notifier = yugi.model.Notifier.register();
@@ -74,6 +84,7 @@ yugi.game.Main = function(gameKey, channelToken, playerName) {
   var game = yugi.game.model.Game.register(gameKey, playerName, deckService,
       cardCache);
   var syncService = yugi.game.service.Sync.register(this.channel_, game);
+  var decksModel = yugi.game.model.Decks.register(decksService, user);
 
   var chatInterceptor = new yugi.game.model.ChatInterceptor(game,
       this.channel_, syncService);
@@ -125,17 +136,20 @@ yugi.game.Main = function(gameKey, channelToken, playerName) {
   this.registerDisposable(chatInterceptor);
   this.registerDisposable(state);
   this.registerDisposable(game);
+  this.registerDisposable(decksModel);
   this.registerDisposable(synchronization);
   this.registerDisposable(browser);
   this.registerDisposable(deckService);
   this.registerDisposable(decksService);
   this.registerDisposable(syncService);
+  this.registerDisposable(user);
+  this.registerDisposable(authService);
   goog.array.forEach(handlers, function(handler) {
     this.registerDisposable(handler);
   }, this);
 
   // Start loading the player decks and structure decks.
-  decksService.load();
+  decksModel.load();
 };
 goog.inherits(yugi.game.Main, yugi.Main);
 
@@ -149,13 +163,19 @@ yugi.game.Main.prototype.logger = goog.debug.Logger.getLogger('yugi.game.Main');
 
 /**
  * Main entry point to the program.  All bootstrapping happens here.
+ * @param {string} baseLoginUrl The base URL for login.
+ * @param {string} signInUrl The URL to visit to sign in.
+ * @param {string} signOutUrl The URL to visit to sign out.
+ * @param {string} userJson The user object as raw JSON.
  * @param {string} gameKey The key identifying the game session.
  * @param {string} channelToken The token for this clients access to the
  *     appengine channel.
  * @param {string} playerName The name of the player.
  */
-yugi.game.bootstrap = function(gameKey, channelToken, playerName) {
-  new yugi.game.Main(gameKey, channelToken, playerName);
+yugi.game.bootstrap = function(baseLoginUrl, signInUrl, signOutUrl, userJson,
+    gameKey, channelToken, playerName) {
+  new yugi.game.Main(baseLoginUrl, signInUrl, signOutUrl, userJson, gameKey,
+      channelToken, playerName);
 };
 
 

@@ -15,7 +15,15 @@
   </head>
   <body>
     <script>
-      yugi.game.bootstrap('{{ GAME_KEY }}', '{{ CHANNEL_TOKEN }}', '{{ PLAYER_NAME }}');
+      yugi.game.bootstrap(
+          '{{ BASE_LOGIN_URL }}',
+          '{{ SIGN_IN_URL }}',
+          '{{ SIGN_OUT_URL }}',
+          '{{ USER_JSON }}',
+          '{{ GAME_KEY }}',
+          '{{ CHANNEL_TOKEN }}',
+          '{{ PLAYER_NAME }}'
+      );
     </script>
   </body>
 </html>

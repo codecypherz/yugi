@@ -5,6 +5,7 @@
 goog.provide('yugi.game.ui.deck.Select');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.classes');
 goog.require('goog.events.EventType');
@@ -12,10 +13,11 @@ goog.require('goog.soy');
 goog.require('goog.ui.Component');
 goog.require('yugi.game.message.DeckSelected');
 goog.require('yugi.game.model.Chat');
+goog.require('yugi.game.model.Decks');
 goog.require('yugi.game.model.Game');
 goog.require('yugi.game.net.Channel');
 goog.require('yugi.game.ui.deck.select.soy');
-goog.require('yugi.service.DecksService');
+goog.require('yugi.model.User');
 
 
 
@@ -34,13 +36,16 @@ yugi.game.ui.deck.Select = function() {
   this.channel_ = yugi.game.net.Channel.get();
 
   /**
-   * This will be used to fetch a set of decks a player can choose from, but the
-   * fetch will be shallow.  Once a player has chosen a deck, the full deck will
-   * be fecthed from the server.
-   * @type {!yugi.service.DecksService}
+   * @type {!yugi.game.model.Decks}
    * @private
    */
-  this.decksService_ = yugi.service.DecksService.get();
+  this.decksModel_ = yugi.game.model.Decks.get();
+
+  /**
+   * @type {!yugi.model.User}
+   * @private
+   */
+  this.user_ = yugi.model.User.get();
 
   /**
    * @type {!yugi.game.model.Game}
@@ -82,7 +87,8 @@ yugi.game.ui.deck.Select.Css_ = {
 yugi.game.ui.deck.Select.prototype.createDom = function() {
   this.setElementInternal(goog.soy.renderAsElement(
       yugi.game.ui.deck.select.soy.HTML, {
-        ids: this.makeIds(yugi.game.ui.deck.Select.Id_)
+        ids: this.makeIds(yugi.game.ui.deck.Select.Id_),
+        signedIn: this.user_.isSignedIn()
       }));
   goog.dom.classes.add(this.getElement(), yugi.game.ui.deck.Select.Css_.ROOT);
 };
@@ -93,40 +99,95 @@ yugi.game.ui.deck.Select.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
 
   // Listen for when the full set of decks return from the server.
-  this.getHandler().listen(this.decksService_,
-      yugi.service.DecksService.EventType.LOADED,
-      this.onDecksLoaded_);
+  this.getHandler().listen(this.decksModel_,
+      yugi.game.model.Decks.EventType.STRUCTURE_DECKS_LOADED,
+      this.renderStructureDecks_);
+  this.getHandler().listen(this.decksModel_,
+      yugi.game.model.Decks.EventType.USER_DECKS_LOADED,
+      this.renderUserDecks_);
+
+  this.maybeRenderDecks_();
 };
 
 
 /**
- * Called when the decks have been loaded.
- * @param {!yugi.service.DecksService.LoadEvent} e The load event.
+ * Renders decks if the data is already there.
  * @private
  */
-yugi.game.ui.deck.Select.prototype.onDecksLoaded_ = function(e) {
+yugi.game.ui.deck.Select.prototype.maybeRenderDecks_ = function() {
+  if (this.decksModel_.getStructureDecks()) {
+    this.renderStructureDecks_();
+  }
+  if (this.decksModel_.getUserDecks()) {
+    this.renderUserDecks_();
+  }
+};
 
+
+/**
+ * Renders the structure decks.
+ * @private
+ */
+yugi.game.ui.deck.Select.prototype.renderStructureDecks_ = function() {
   var element = this.getElementByFragment(
       yugi.game.ui.deck.Select.Id_.STRUCTURE_DECKS);
+  element = goog.asserts.assert(element);
+  var decks = goog.asserts.assert(this.decksModel_.getStructureDecks());
+  this.renderDecks_(element, decks);
+};
 
-  // Render each deck.
-  goog.array.forEach(e.decks, function(deck) {
 
-    var deckElement = goog.soy.renderAsElement(
-        yugi.game.ui.deck.select.soy.DECK, {
-          name: deck.getName(),
-          imageSource: deck.getImageSource(210),
-          deckId: deck.getKey(),
-          deckName: deck.getName()
-        });
-    goog.dom.appendChild(element, deckElement);
+/**
+ * Renders the user decks.
+ * @private
+ */
+yugi.game.ui.deck.Select.prototype.renderUserDecks_ = function() {
+  var element = this.getElementByFragment(
+      yugi.game.ui.deck.Select.Id_.PLAYER_DECKS);
+  element = goog.asserts.assert(element);
+  var decks = goog.asserts.assert(this.decksModel_.getUserDecks());
+  this.renderDecks_(element, decks);
+};
 
-    // Listen for when the deck is clicked.
-    this.getHandler().listen(deckElement,
-        goog.events.EventType.CLICK,
-        goog.bind(this.onDeckClick_, this, deck));
 
-  }, this);
+/**
+ * Render all the decks into the given element.
+ * @param {!Element} element The element into which to render the decks.
+ * @param {!Array.<!yugi.model.Deck>} decks The decks to render.
+ * @private
+ */
+yugi.game.ui.deck.Select.prototype.renderDecks_ = function(element, decks) {
+
+  // Clear the children, then render.
+  goog.dom.removeChildren(element);
+
+  // Render differently if no decks were found.
+  if (decks.length == 0) {
+    // The assumption here is that there is always at least one structure deck,
+    // so the message is aimed at the absence of player decks for the signed in
+    // user.
+    goog.dom.setTextContent(element, 'You have not created any decks yet.');
+  } else {
+
+    // Render each deck.
+    goog.array.forEach(decks, function(deck) {
+
+      var deckElement = goog.soy.renderAsElement(
+          yugi.game.ui.deck.select.soy.DECK, {
+            name: deck.getName(),
+            imageSource: deck.getImageSource(210),
+            deckId: deck.getKey(),
+            deckName: deck.getName()
+          });
+      goog.dom.appendChild(element, deckElement);
+
+      // Listen for when the deck is clicked.
+      this.getHandler().listen(deckElement,
+          goog.events.EventType.CLICK,
+          goog.bind(this.onDeckClick_, this, deck));
+
+    }, this);
+  }
 };
 
 
