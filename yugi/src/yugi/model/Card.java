@@ -580,11 +580,18 @@ public class Card {
 			return false;
 		}
 		Card other = (Card) object;
-		return key.equals(other.key);
+		if (key == null || other.key == null) {
+			return false;
+		} else {
+			return key.equals(other.key);
+		}
 	}
 	
 	@Override
 	public int hashCode() {
+		if (key == null) {
+			return super.hashCode();
+		}
 		return key.hashCode();
 	}
 }

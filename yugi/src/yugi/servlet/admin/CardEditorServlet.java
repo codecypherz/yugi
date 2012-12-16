@@ -30,6 +30,7 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
 
 public class CardEditorServlet extends HttpServlet {
 
@@ -180,7 +181,8 @@ public class CardEditorServlet extends HttpServlet {
 			// Try to get the image serving URL.
 			String imageServingUrl = null;
 			try {
-				imageServingUrl = imagesService.getServingUrl(blobKey);
+				ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
+				imageServingUrl = imagesService.getServingUrl(options);
 			} catch (IllegalArgumentException iae) {
 				// This exception is expected when there is no image being
 				// uploaded.  This is allowed to happen on an edit, so business
