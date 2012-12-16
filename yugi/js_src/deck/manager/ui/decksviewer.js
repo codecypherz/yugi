@@ -84,7 +84,7 @@ yugi.deck.manager.ui.DecksViewer.Css_ = {
 /** @override */
 yugi.deck.manager.ui.DecksViewer.prototype.createDom = function() {
   goog.base(this, 'createDom');
-  this.getElement().innerHTML = 'Loading...';
+  goog.dom.setTextContent(this.getElement(), 'Loading...');
   goog.dom.classes.add(this.getElement(),
       yugi.deck.manager.ui.DecksViewer.Css_.VIEWER);
 };
@@ -154,13 +154,13 @@ yugi.deck.manager.ui.DecksViewer.prototype.renderDecks_ = function() {
 
   // Render each deck.
   goog.array.forEach(this.decks_.getDecks(), function(deck) {
-    var uri = new goog.Uri();
-    uri.setPath(yugi.Config.ServletPath.DECK_EDITOR);
-    uri.setParameterValue(yugi.Config.UrlParameter.DECK_KEY, deck.getKey());
+    var editPath = yugi.service.url.build(
+        yugi.Config.ServletPath.DECK_EDITOR,
+        yugi.Config.UrlParameter.DECK_KEY, deck.getKey());
 
     var deckElement = goog.soy.renderAsElement(
         yugi.deck.manager.ui.deck.soy.DECK, {
-          editPath: uri.toString(),
+          editPath: editPath,
           name: deck.getName(),
           imageSource: deck.getImageSource(210)
         });
@@ -178,7 +178,7 @@ yugi.deck.manager.ui.DecksViewer.prototype.renderDecks_ = function() {
   // Render the area for creating a new deck.
   goog.dom.appendChild(element, goog.soy.renderAsElement(
       yugi.deck.manager.ui.deck.soy.NEW_DECK, {
-        newDeckPath: yugi.Config.ServletPath.DECK_EDITOR
+        newDeckPath: yugi.service.url.build(yugi.Config.ServletPath.DECK_EDITOR)
       }));
 };
 

@@ -2,11 +2,12 @@
  * The CSS for the deck editor.
  */
 
+.yugi-selection {
+	float: left;
+}
+
 .yugi-deck-editor-swapper {
-	display: inline-block;
-	margin-left: 20px;
-	vertical-align: top;
-	width: 660px;
+	margin-left: 240px;
 }
 
 .yugi-deck-browser-container {

@@ -57,7 +57,7 @@ public class CardService {
 	public Card getCard(PersistenceManager pm, String cardKey) {
 		if (cardKey != null && !cardKey.isEmpty()) {
 			try {
-				pm.getObjectById(Card.class, KeyFactory.stringToKey(cardKey));
+				return pm.getObjectById(Card.class, KeyFactory.stringToKey(cardKey));
 			} catch (JDOObjectNotFoundException e) {
 				logger.severe("Failed to find a card with this key: " + cardKey);
 				return null;

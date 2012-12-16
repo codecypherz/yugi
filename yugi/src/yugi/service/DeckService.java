@@ -59,7 +59,7 @@ public class DeckService {
 	public Deck getDeck(PersistenceManager pm, String deckKey) {
 		if (deckKey != null && !deckKey.isEmpty()) {
 			try {
-				pm.getObjectById(Deck.class, KeyFactory.stringToKey(deckKey));
+				return pm.getObjectById(Deck.class, KeyFactory.stringToKey(deckKey));
 			} catch (JDOObjectNotFoundException e) {
 				logger.severe("Failed to find a deck with this key: " + deckKey);
 				return null;
