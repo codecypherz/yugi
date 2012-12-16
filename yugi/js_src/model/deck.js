@@ -10,6 +10,7 @@ goog.require('goog.array');
 goog.require('goog.debug.Logger');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
+goog.require('goog.string');
 goog.require('yugi.model.CardList');
 goog.require('yugi.model.Serializable');
 goog.require('yugi.model.util');
@@ -45,6 +46,13 @@ yugi.model.Deck = function() {
    * @private
    */
   this.mainCard_ = null;
+
+  /**
+   * True if the deck is a structure deck or not.
+   * @type {boolean}
+   * @private
+   */
+  this.isStructure_ = false;
 
   /**
    * The list of main cards in this deck.  The official rules at the time of
@@ -182,6 +190,22 @@ yugi.model.Deck.prototype.getMainCard = function() {
  */
 yugi.model.Deck.prototype.setMainCard = function(card) {
   this.mainCard_ = card;
+};
+
+
+/**
+ * @param {boolean} structure True if this deck is a structure deck.
+ */
+yugi.model.Deck.prototype.setStructure = function(structure) {
+  this.isStructure_ = structure;
+};
+
+
+/**
+ * @return {boolean} True if this deck is a structure deck.
+ */
+yugi.model.Deck.prototype.isStructure = function() {
+  return this.isStructure_;
 };
 
 
@@ -436,6 +460,7 @@ yugi.model.Deck.prototype.toJson = function() {
   return {
     'key': this.getKey(),
     'name': this.getName(),
+    'is-structure': this.isStructure(),
     'main-card': mainCardJson,
     'main-cards': mainCards,
     'extra-cards': extraCards,
@@ -448,6 +473,9 @@ yugi.model.Deck.prototype.toJson = function() {
 yugi.model.Deck.prototype.setFromJson = function(json) {
   this.setKey(json['key']);
   this.setName(json['name']);
+
+  this.setStructure(
+      goog.string.caseInsensitiveCompare(json['is-structure'], 'true') == 0);
 
   this.mainCardList_ = new yugi.model.CardList();
   this.extraCardList_ = new yugi.model.CardList();

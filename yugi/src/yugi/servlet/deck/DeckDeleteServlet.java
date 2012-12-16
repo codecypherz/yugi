@@ -13,6 +13,7 @@ import yugi.PMF;
 import yugi.model.Deck;
 import yugi.service.DeckService;
 import yugi.servlet.ResponseStatusCode;
+import yugi.servlet.ServletUtil;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -30,14 +31,21 @@ public class DeckDeleteServlet extends HttpServlet {
 	 * Just deletes decks with the given key.
 	 */
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
+	public void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws IOException {
+		
+		// The user must be signed in to delete anything.
+		User user = userService.getCurrentUser();
+		if (user == null) {
+			ServletUtil.writeLoginScreen(req, res, userService);
+			return;
+		}
 
 		// Get the deck key from the request.
 		String deckKey = Config.getDeckKey(req);
 		if (deckKey == null) {
 			logger.severe("No deck key specified.");
-    		resp.setStatus(ResponseStatusCode.BAD_REQUEST.getCode());
+			res.setStatus(ResponseStatusCode.BAD_REQUEST.getCode());
 			return;
 		}
 
@@ -48,7 +56,7 @@ public class DeckDeleteServlet extends HttpServlet {
 				// This should happen if there's a programming error or an evil
 				// client.
 				logger.severe("Invalid deck key when deleting: " + deckKey);
-				resp.setStatus(ResponseStatusCode.BAD_REQUEST.getCode());
+				res.setStatus(ResponseStatusCode.BAD_REQUEST.getCode());
 				return;
 			}
 
@@ -57,10 +65,9 @@ public class DeckDeleteServlet extends HttpServlet {
 				logger.info("Deleting " + deck.getName() + " (" + deckKey + ")");
 				pm.deletePersistent(deck);
 			} else {
-				User user = userService.getCurrentUser();
 				logger.warning("This user tried to delete a deck that they didn't have access to.  " +
 						"User: " + user.getUserId() + ", Deck: " + deckKey);
-				resp.setStatus(ResponseStatusCode.BAD_REQUEST.getCode());
+				res.setStatus(ResponseStatusCode.BAD_REQUEST.getCode());
 			}
 
 		} finally {

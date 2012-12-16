@@ -18,7 +18,9 @@ goog.require('yugi.deck.manager.ui.deck.soy');
 goog.require('yugi.model.Notifier');
 goog.require('yugi.service.DeckService');
 goog.require('yugi.service.DecksService');
+goog.require('yugi.service.url');
 goog.require('yugi.ui.menu.Menu');
+goog.require('yugi.util.deck');
 
 
 
@@ -175,10 +177,18 @@ yugi.deck.manager.ui.DecksViewer.prototype.renderDecks_ = function() {
 
   }, this);
 
+  // Figure out the request to make to build a new deck.
+  var newDeckRequestStr = yugi.service.url.build(
+      yugi.Config.ServletPath.DECK_EDITOR);
+  var newDeckRequestUri = goog.Uri.parse(newDeckRequestStr);
+  // Forward the structure deck aspect.
+  yugi.util.deck.setStructureDeckRequest(newDeckRequestUri,
+      yugi.util.deck.isStructureDeckRequest(window.location.href));
+
   // Render the area for creating a new deck.
   goog.dom.appendChild(element, goog.soy.renderAsElement(
       yugi.deck.manager.ui.deck.soy.NEW_DECK, {
-        newDeckPath: yugi.service.url.build(yugi.Config.ServletPath.DECK_EDITOR)
+        newDeckPath: newDeckRequestUri.toString()
       }));
 };
 

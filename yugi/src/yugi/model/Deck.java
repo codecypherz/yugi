@@ -126,7 +126,12 @@ public class Deck {
 		JSONObject json = new JSONObject();
 		json.put("key", KeyFactory.keyToString(key));
 		json.put("user-id", userId);
-		json.put("is-structure", isStructure);
+		// TODO: Remove this once all decks have this flag set.
+		if (isStructure == null) {
+			json.put("is-structure", false);
+		} else {
+			json.put("is-structure", isStructure);
+		}
 		json.put("name", name);
 		
 		if (mainCard != null) {

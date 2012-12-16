@@ -20,7 +20,9 @@ import yugi.model.Deck;
 import yugi.service.CardService;
 import yugi.service.DeckService;
 import yugi.servlet.ResponseStatusCode;
+import yugi.servlet.ServletUtil;
 
+import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
@@ -36,7 +38,7 @@ public class DecksServlet extends HttpServlet {
 	/**
 	 * This is the request for decks.
 	 */
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
+	public void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws IOException {
 
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -45,11 +47,19 @@ public class DecksServlet extends HttpServlet {
 
 			List<Deck> decks = null;
 			if (Config.isStructureRequest(req)) {
-				// Get the structure decks.
+				// Get the structure decks.  Anyone should be allowed to view
+				// structure decks, even anonymously.
 				decks = deckService.getStructureDecks(pm);
 			} else {
+				// Make sure the user is logged in.
+				User user = userService.getCurrentUser();
+				if (user == null) {
+					ServletUtil.writeLoginScreen(req, res, userService);
+					return;
+				}
+				
 				// Get the decks for the current user.
-				decks = deckService.getDecks(pm, userService.getCurrentUser());
+				decks = deckService.getDecks(pm, user);
 			}
 
 			// Convert the list of decks into JSON.
@@ -65,12 +75,12 @@ public class DecksServlet extends HttpServlet {
 
 			JSONObject json = new JSONObject();
 			json.put("decks", new JSONArray(jsonDecks));
-			resp.setContentType("text/json");
-			resp.getWriter().write(json.toString());
+			res.setContentType("text/json");
+			res.getWriter().write(json.toString());
 
 		} catch (Exception e) {
 			logger.severe("Failed to fetch the decks.");
-			resp.setStatus(ResponseStatusCode.INTERNAL_SERVER_ERROR.getCode());
+			res.setStatus(ResponseStatusCode.INTERNAL_SERVER_ERROR.getCode());
 		} finally {
 			pm.close();
 		}

@@ -99,7 +99,7 @@ public class DeckService {
 	public List<Deck> getDecks(PersistenceManager pm, User user) {
 
 		Query query = pm.newQuery(Deck.class);
-		query.setFilter("userId == userIdParam");
+		query.setFilter("userId == userIdParam && isStructure == false");
 		query.declareParameters("String userIdParam");
 
 		try {
@@ -172,7 +172,8 @@ public class DeckService {
 	 * @return True if the user has access, false otherwise.
 	 */
 	public boolean userHasWriteAccess(Deck deck) {
-		if (deck == null) {
+		User user = userService.getCurrentUser();
+		if (deck == null || user == null) {
 			return false;
 		}
 
@@ -183,7 +184,6 @@ public class DeckService {
 			}
 		} else {
 			// Users can only modify their own decks.
-			User user = userService.getCurrentUser();
 			if (deck.getUserId().equals(user.getUserId())) {
 				return true;
 			}

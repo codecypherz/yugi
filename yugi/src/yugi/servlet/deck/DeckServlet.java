@@ -157,8 +157,9 @@ public class DeckServlet extends HttpServlet {
 		        pm.makePersistent(deck);
 			} else {
 				User user = userService.getCurrentUser();
+				String userId = user != null ? user.getUserId() : "anonymous";
 				logger.warning("This user tried to edit a deck that they didn't have access to.  " +
-						"User: " + user.getUserId() + ", Deck: " + deckKey);
+						"User: " + userId + ", Deck: " + deckKey);
 				resp.setStatus(ResponseStatusCode.BAD_REQUEST.getCode());
 				return;
 			}
