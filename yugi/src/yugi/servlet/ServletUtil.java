@@ -17,9 +17,11 @@ import org.apache.http.client.utils.URIBuilder;
 import yugi.Config;
 import yugi.Config.HtmlParam;
 import yugi.Config.Mode;
+import yugi.Config.Servlet;
 import yugi.service.UserUtil;
 import yugi.Screen;
 
+import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
@@ -94,11 +96,22 @@ public class ServletUtil {
 			e.printStackTrace();
 		}
 
+		// Figure out the sign/in out URL.
+		User user = userService.getCurrentUser();
+		boolean signedOut = user == null;
+		String signInOutUrl = signedOut ?
+				userService.createLoginURL(thisUrl) :
+				userService.createLogoutURL(createUrl(req, "/"));
+
+		// Figure out the deck manager URL.
+		String deckManagerUrl = createUrl(req, Servlet.DECK_MANAGER.getPath());
+		if (signedOut) {
+			deckManagerUrl = userService.createLoginURL(deckManagerUrl);
+		}
+
 		// Replace basic, shared parameters.
-		paramMap.put(HtmlParam.BASE_LOGIN_URL, userService.createLoginURL(""));
-		paramMap.put(HtmlParam.SIGN_IN_URL, userService.createLoginURL(thisUrl));
-		paramMap.put(HtmlParam.SIGN_OUT_URL, userService.createLogoutURL(
-				createUrl(req, "/")));
+		paramMap.put(HtmlParam.SIGN_IN_OUT_URL, signInOutUrl);
+		paramMap.put(HtmlParam.DECK_MANAGER_URL, deckManagerUrl);
 		paramMap.put(HtmlParam.USER_JSON, UserUtil.getCurrentUserAsJson());
 
 		// Replace specified parameters

@@ -23,21 +23,19 @@ goog.require('yugi.util.deck');
 
 /**
  * The container for all the main components of the application.
- * @param {string} baseLoginUrl The base URL for login.
- * @param {string} signInUrl The URL to visit to sign in.
- * @param {string} signOutUrl The URL to visit to sign out.
+ * @param {string} signInOutUrl The URL to use to either sign in or out.
+ * @param {string} deckManagerUrl The URL for the deck manager.
  * @param {string} userJson The user object as raw JSON.
  * @constructor
  * @extends {yugi.Main}
  */
-yugi.deck.manager.Main =
-    function(baseLoginUrl, signInUrl, signOutUrl, userJson) {
+yugi.deck.manager.Main = function(signInOutUrl, deckManagerUrl, userJson) {
   goog.base(this);
 
   // Create all of the model/service classes.
   var user = yugi.model.User.register(userJson);
   var authService = yugi.service.AuthService.register(
-      baseLoginUrl, signInUrl, signOutUrl);
+      signInOutUrl, deckManagerUrl);
   var decksService = yugi.service.DecksService.register();
   var deckService = yugi.service.DeckService.register();
   var decks = yugi.deck.manager.model.Decks.register(deckService);
@@ -88,14 +86,12 @@ yugi.deck.manager.Main.prototype.logger = goog.debug.Logger.getLogger(
 
 /**
  * Main entry point to the program.  All bootstrapping happens here.
- * @param {string} baseLoginUrl The base URL for login.
- * @param {string} signInUrl The URL to visit to sign in.
- * @param {string} signOutUrl The URL to visit to sign out.
+ * @param {string} signInOutUrl The URL to use to either sign in or out.
+ * @param {string} deckManagerUrl The URL for the deck manager.
  * @param {string} userJson The user object as raw JSON.
  */
-yugi.deck.manager.bootstrap =
-    function(baseLoginUrl, signInUrl, signOutUrl, userJson) {
-  new yugi.deck.manager.Main(baseLoginUrl, signInUrl, signOutUrl, userJson);
+yugi.deck.manager.bootstrap = function(signInOutUrl, deckManagerUrl, userJson) {
+  new yugi.deck.manager.Main(signInOutUrl, deckManagerUrl, userJson);
 };
 
 

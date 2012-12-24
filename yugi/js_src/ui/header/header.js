@@ -135,8 +135,7 @@ yugi.ui.header.Header.prototype.enterDocument = function() {
   // Also render the links.
   this.linkContainer_ = goog.soy.renderAsElement(yugi.ui.header.soy.LINKS, {
     gamesUrl: yugi.service.url.build(yugi.Config.ServletPath.MAIN),
-    deckManagerUrl: this.authService_.buildUrl(
-        yugi.Config.ServletPath.DECK_MANAGER),
+    deckManagerUrl: this.authService_.getDeckManagerUrl(),
     structureDeckManagerUrl: yugi.service.url.build(
         yugi.Config.ServletPath.DECK_MANAGER,
         yugi.Config.UrlParameter.STRUCTURE,
@@ -145,8 +144,7 @@ yugi.ui.header.Header.prototype.enterDocument = function() {
         yugi.Config.ServletPath.ADMIN_CARD_SEARCH),
     cardUploadUrl: yugi.service.url.build(
         yugi.Config.ServletPath.ADMIN_CARD),
-    signInUrl: this.authService_.getSignInUrl(),
-    signOutUrl: this.authService_.getSignOutUrl(),
+    signInOutUrl: this.authService_.getSignInOutUrl(),
     signedIn: this.user_.isSignedIn(),
     isAdmin: this.user_.isAdmin(),
     userName: this.user_.getName()

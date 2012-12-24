@@ -27,9 +27,8 @@ goog.require('yugi.ui.selection.Selection');
 
 /**
  * The container for all the main components of the application.
- * @param {string} baseLoginUrl The base URL for login.
- * @param {string} signInUrl The URL to visit to sign in.
- * @param {string} signOutUrl The URL to visit to sign out.
+ * @param {string} signInOutUrl The URL to use to either sign in or out.
+ * @param {string} deckManagerUrl The URL for the deck manager.
  * @param {string} userJson The user object as raw JSON.
  * @param {string} deckKey The key to the deck or empty if this is for a new
  *     deck.
@@ -37,13 +36,13 @@ goog.require('yugi.ui.selection.Selection');
  * @extends {yugi.Main}
  */
 yugi.deck.editor.Main = function(
-    baseLoginUrl, signInUrl, signOutUrl, userJson, deckKey) {
+    signInOutUrl, deckManagerUrl, userJson, deckKey) {
   goog.base(this);
 
   // Create all of the model/service classes.
   var user = yugi.model.User.register(userJson);
   var authService = yugi.service.AuthService.register(
-      baseLoginUrl, signInUrl, signOutUrl);
+      signInOutUrl, deckManagerUrl);
   var selectionModel = yugi.model.Selection.register();
   var deckService = yugi.service.DeckService.register();
   var uiState = yugi.deck.editor.model.UiState.register();
@@ -110,17 +109,16 @@ yugi.deck.editor.Main.prototype.logger = goog.debug.Logger.getLogger(
 
 /**
  * Main entry point to the program.  All bootstrapping happens here.
- * @param {string} baseLoginUrl The base URL for login.
- * @param {string} signInUrl The URL to visit to sign in.
- * @param {string} signOutUrl The URL to visit to sign out.
+ * @param {string} signInOutUrl The URL to use to either sign in or out.
+ * @param {string} deckManagerUrl The URL for the deck manager.
  * @param {string} userJson The user object as raw JSON.
  * @param {string} deckKey The key to the deck or empty if this is for a new
  *     deck.
  */
 yugi.deck.editor.bootstrap = function(
-    baseLoginUrl, signInUrl, signOutUrl, userJson, deckKey) {
+    signInOutUrl, deckManagerUrl, userJson, deckKey) {
   new yugi.deck.editor.Main(
-      baseLoginUrl, signInUrl, signOutUrl, userJson, deckKey);
+      signInOutUrl, deckManagerUrl, userJson, deckKey);
 };
 
 

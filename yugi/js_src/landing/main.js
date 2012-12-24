@@ -25,20 +25,19 @@ goog.require('yugi.ui.header.Header');
 
 /**
  * The container for all the main components of the application.
- * @param {string} baseLoginUrl The base URL for login.
- * @param {string} signInUrl The URL to visit to sign in.
- * @param {string} signOutUrl The URL to visit to sign out.
+ * @param {string} signInOutUrl The URL to use to either sign in or out.
+ * @param {string} deckManagerUrl The URL for the deck manager.
  * @param {string} userJson The user object as raw JSON.
  * @constructor
  * @extends {yugi.Main}
  */
-yugi.landing.Main = function(baseLoginUrl, signInUrl, signOutUrl, userJson) {
+yugi.landing.Main = function(signInOutUrl, deckManagerUrl, userJson) {
   goog.base(this);
 
   // Register all the model/server classes.
   var user = yugi.model.User.register(userJson);
   var authService = yugi.service.AuthService.register(
-      baseLoginUrl, signInUrl, signOutUrl);
+      signInOutUrl, deckManagerUrl);
   var games = yugi.landing.model.Games.register();
   var notifier = yugi.model.Notifier.register();
   var localStore = yugi.service.LocalStore.register();
@@ -136,14 +135,12 @@ yugi.landing.Main.prototype.maybePromptUserToJoin_ = function() {
 
 /**
  * Main entry point to the program.  All bootstrapping happens here.
- * @param {string} baseLoginUrl The base URL for login.
- * @param {string} signInUrl The URL to visit to sign in.
- * @param {string} signOutUrl The URL to visit to sign out.
+ * @param {string} signInOutUrl The URL to use to either sign in or out.
+ * @param {string} deckManagerUrl The URL for the deck manager.
  * @param {string} userJson The user object as raw JSON.
  */
-yugi.landing.bootstrap =
-    function(baseLoginUrl, signInUrl, signOutUrl, userJson) {
-  new yugi.landing.Main(baseLoginUrl, signInUrl, signOutUrl, userJson);
+yugi.landing.bootstrap = function(signInOutUrl, deckManagerUrl, userJson) {
+  new yugi.landing.Main(signInOutUrl, deckManagerUrl, userJson);
 };
 
 

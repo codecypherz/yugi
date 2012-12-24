@@ -9,7 +9,6 @@ goog.require('goog.events.EventType');
 goog.require('goog.soy');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
-goog.require('yugi.Config');
 goog.require('yugi.landing.model.Games');
 goog.require('yugi.landing.ui.launcher.GameJoiner');
 goog.require('yugi.landing.ui.launcher.GameStarter');
@@ -99,9 +98,7 @@ yugi.landing.ui.launcher.Launcher.prototype.createDom = function() {
   this.setElementInternal(goog.soy.renderAsElement(
       yugi.landing.ui.launcher.soy.LAUNCHER, {
         ids: this.makeIds(yugi.landing.ui.launcher.Launcher.Id_),
-        signInUrl: this.authService_.getSignInUrl(),
-        deckManagerUrl: this.authService_.buildUrl(
-            yugi.Config.ServletPath.DECK_MANAGER)
+        deckManagerUrl: this.authService_.getDeckManagerUrl()
       }));
   goog.dom.classes.add(this.getElement(),
       yugi.landing.ui.launcher.Launcher.Css_.LAUNCHER);

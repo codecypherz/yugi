@@ -20,9 +20,8 @@ goog.require('yugi.ui.header.Header');
 
 /**
  * The container for all the main components of the application.
- * @param {string} baseLoginUrl The base URL for login.
- * @param {string} signInUrl The URL to visit to sign in.
- * @param {string} signOutUrl The URL to visit to sign out.
+ * @param {string} signInOutUrl The URL to use to either sign in or out.
+ * @param {string} deckManagerUrl The URL for the deck manager.
  * @param {string} userJson The user object as raw JSON.
  * @param {string} uploadUrl The upload URL for the card image.  This is created
  *     server-side by the blobstore service.
@@ -32,7 +31,7 @@ goog.require('yugi.ui.header.Header');
  * @extends {yugi.Main}
  */
 yugi.admin.card.Main = function(
-    baseLoginUrl, signInUrl, signOutUrl, userJson, uploadUrl, cardKey) {
+    signInOutUrl, deckManagerUrl, userJson, uploadUrl, cardKey) {
   goog.base(this);
 
   this.logger.info('Blobstore Upload URL: ' + uploadUrl);
@@ -41,7 +40,7 @@ yugi.admin.card.Main = function(
   // Create all of the model/service classes.
   var user = yugi.model.User.register(userJson);
   var authService = yugi.service.AuthService.register(
-      baseLoginUrl, signInUrl, signOutUrl);
+      signInOutUrl, deckManagerUrl);
   var loader = yugi.admin.card.model.Loader.register(cardKey);
   var notifier = yugi.model.Notifier.register();
 
@@ -81,9 +80,8 @@ yugi.admin.card.Main.prototype.logger = goog.debug.Logger.getLogger(
 
 /**
  * Main entry point to the program.  All bootstrapping happens here.
- * @param {string} baseLoginUrl The base URL for login.
- * @param {string} signInUrl The URL to visit to sign in.
- * @param {string} signOutUrl The URL to visit to sign out.
+ * @param {string} signInOutUrl The URL to use to either sign in or out.
+ * @param {string} deckManagerUrl The URL for the deck manager.
  * @param {string} userJson The user object as raw JSON.
  * @param {string} uploadUrl The upload URL for the card image.  This is created
  *     server-side by the blobstore service.
@@ -91,9 +89,9 @@ yugi.admin.card.Main.prototype.logger = goog.debug.Logger.getLogger(
  *     is meant for a new card.
  */
 yugi.admin.card.bootstrap = function(
-    baseLoginUrl, signInUrl, signOutUrl, userJson, uploadUrl, cardKey) {
+    signInOutUrl, deckManagerUrl, userJson, uploadUrl, cardKey) {
   new yugi.admin.card.Main(
-      baseLoginUrl, signInUrl, signOutUrl, userJson, uploadUrl, cardKey);
+      signInOutUrl, deckManagerUrl, userJson, uploadUrl, cardKey);
 };
 
 
