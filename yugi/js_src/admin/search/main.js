@@ -34,8 +34,9 @@ yugi.admin.search.Main = function(
   goog.base(this);
 
   // Create all of the model/service classes.
-  var authService = yugi.service.AuthService.register(baseLoginUrl);
   var user = yugi.model.User.register(userJson);
+  var authService = yugi.service.AuthService.register(
+      baseLoginUrl, signInUrl, signOutUrl);
   var selectionModel = yugi.model.Selection.register();
   var searchModel = yugi.model.Search.register();
   var notifier = yugi.model.Notifier.register();
@@ -44,7 +45,7 @@ yugi.admin.search.Main = function(
   var dom = goog.dom.getDomHelper();
 
   // Header
-  var header = new yugi.ui.header.Header(signInUrl, signOutUrl);
+  var header = new yugi.ui.header.Header();
   header.render(dom.getElement('header'));
 
   // Footer

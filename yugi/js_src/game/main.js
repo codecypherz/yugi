@@ -70,8 +70,9 @@ yugi.game.Main = function(baseLoginUrl, signInUrl, signOutUrl, userJson,
       playerName);
 
   // Register generic models.
-  var authService = yugi.service.AuthService.register(baseLoginUrl);
   var user = yugi.model.User.register(userJson);
+  var authService = yugi.service.AuthService.register(
+      baseLoginUrl, signInUrl, signOutUrl);
   var cardCache = yugi.model.CardCache.register();
   var selectionModel = yugi.model.Selection.register();
   var notifier = yugi.model.Notifier.register();

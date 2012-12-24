@@ -39,8 +39,9 @@ yugi.admin.card.Main = function(
   this.logger.info('Card Key: ' + cardKey);
 
   // Create all of the model/service classes.
-  var authService = yugi.service.AuthService.register(baseLoginUrl);
   var user = yugi.model.User.register(userJson);
+  var authService = yugi.service.AuthService.register(
+      baseLoginUrl, signInUrl, signOutUrl);
   var loader = yugi.admin.card.model.Loader.register(cardKey);
   var notifier = yugi.model.Notifier.register();
 
@@ -48,7 +49,7 @@ yugi.admin.card.Main = function(
   var dom = goog.dom.getDomHelper();
 
   // Header
-  var header = new yugi.ui.header.Header(signInUrl, signOutUrl);
+  var header = new yugi.ui.header.Header();
   header.render(dom.getElement('header'));
 
   // Footer

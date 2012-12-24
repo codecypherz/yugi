@@ -3,17 +3,22 @@
  */
 
 .yugi-landing-heading {
-	border-bottom: NORMAL_BORDER;
-	font-size: 24px;
+	display: inline-block;
+	font-size: 19px;
+	font-weight: bold;
+	margin: 15px 0;
+}
+
+.yugi-game-joiner-heading {
 	text-align: left;
 }
 
-.yugi-landing-heading > button {
-  float: right;
+.yugi-game-joiner-heading > div,
+.yugi-game-joiner-heading > img,
+.yugi-game-joiner-heading > button {
+  vertical-align: middle;
 }
 
-.yugi-landing-heading-waiting {
-	float: right;
-	margin-top: 6px;
-	margin-right: 30px;
+.yugi-game-joiner-heading-waiting {
+	margin-left: 10px;
 }

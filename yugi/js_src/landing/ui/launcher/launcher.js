@@ -9,10 +9,12 @@ goog.require('goog.events.EventType');
 goog.require('goog.soy');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
+goog.require('yugi.Config');
 goog.require('yugi.landing.model.Games');
 goog.require('yugi.landing.ui.launcher.GameJoiner');
 goog.require('yugi.landing.ui.launcher.GameStarter');
 goog.require('yugi.landing.ui.launcher.soy');
+goog.require('yugi.service.AuthService');
 
 
 
@@ -23,6 +25,12 @@ goog.require('yugi.landing.ui.launcher.soy');
  */
 yugi.landing.ui.launcher.Launcher = function() {
   goog.base(this);
+
+  /**
+   * @type {!yugi.service.AuthService}
+   * @private
+   */
+  this.authService_ = yugi.service.AuthService.get();
 
   /**
    * @type {!yugi.landing.model.Games}
@@ -90,7 +98,10 @@ yugi.landing.ui.launcher.Launcher.prototype.waitingImage_ = null;
 yugi.landing.ui.launcher.Launcher.prototype.createDom = function() {
   this.setElementInternal(goog.soy.renderAsElement(
       yugi.landing.ui.launcher.soy.LAUNCHER, {
-        ids: this.makeIds(yugi.landing.ui.launcher.Launcher.Id_)
+        ids: this.makeIds(yugi.landing.ui.launcher.Launcher.Id_),
+        signInUrl: this.authService_.getSignInUrl(),
+        deckManagerUrl: this.authService_.buildUrl(
+            yugi.Config.ServletPath.DECK_MANAGER)
       }));
   goog.dom.classes.add(this.getElement(),
       yugi.landing.ui.launcher.Launcher.Css_.LAUNCHER);

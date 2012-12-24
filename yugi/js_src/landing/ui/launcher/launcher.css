@@ -6,16 +6,35 @@
 @def GAME_GRADIENT                 top, GAME_GRADIENT_FALLBACK 0%, #febf04 100%;
 
 .yugi-launcher {
-	text-align: center;
-	width: 370px;
+	height: 420px;
+  text-align: left;
 }
 
-.yugi-game-starter {
-  margin: 20px;
+.yugi-landing-column {
+	margin-top: -15px;
+}
+
+.yugi-landing-column.left {
+	float: left;
+	width: 40%;
+}
+
+.yugi-landing-column.right {
+	float: right;
+	width: 60%;
+}
+
+.yugi-landing-column.right > * {
+	padding-left: 40px;
+}
+
+.yugi-landing-column > p {
+	margin: 0 0 15px;
+  text-align: left;
 }
 
 .yugi-game-joiner {
-	margin: 15px;
+	margin-top: 15px;
 }
 
 .yugi-game-joiner {
@@ -32,8 +51,6 @@
 	border: 1px solid #333;
 	height: 32px;
 	margin-bottom: 5px;
-	margin-left: 5px;
-	margin-right: 5px;
 	padding: 5px;
 	text-align: left;
 	@mixin linear_gradient(GAME_GRADIENT, GAME_GRADIENT_FALLBACK);
@@ -50,5 +67,5 @@
   text-overflow: ellipsis;
   vertical-align: top;
   white-space: nowrap;
-	width: 251px;
+	width: 284px;
 }

@@ -22,25 +22,11 @@ goog.require('yugi.ui.header.soy');
 
 /**
  * The header widget.
- * @param {string} signInUrl The URL to visit to sign in.
- * @param {string} signOutUrl The URL to visit to sign out.
  * @constructor
  * @extends {goog.ui.Component}
  */
-yugi.ui.header.Header = function(signInUrl, signOutUrl) {
+yugi.ui.header.Header = function() {
   goog.base(this);
-
-  /**
-   * @type {string}
-   * @private
-   */
-  this.signInUrl_ = signInUrl;
-
-  /**
-   * @type {string}
-   * @private
-   */
-  this.signOutUrl_ = signOutUrl;
 
   /**
    * @type {!yugi.model.User}
@@ -149,9 +135,7 @@ yugi.ui.header.Header.prototype.enterDocument = function() {
   // Also render the links.
   this.linkContainer_ = goog.soy.renderAsElement(yugi.ui.header.soy.LINKS, {
     gamesUrl: yugi.service.url.build(yugi.Config.ServletPath.MAIN),
-    deckManagerUrl: yugi.service.url.build(
-        yugi.Config.ServletPath.DECK_MANAGER),
-    signInDeckManagerUrl: this.authService_.buildLoginUrl(
+    deckManagerUrl: this.authService_.buildUrl(
         yugi.Config.ServletPath.DECK_MANAGER),
     structureDeckManagerUrl: yugi.service.url.build(
         yugi.Config.ServletPath.DECK_MANAGER,
@@ -161,8 +145,8 @@ yugi.ui.header.Header.prototype.enterDocument = function() {
         yugi.Config.ServletPath.ADMIN_CARD_SEARCH),
     cardUploadUrl: yugi.service.url.build(
         yugi.Config.ServletPath.ADMIN_CARD),
-    signInUrl: this.signInUrl_,
-    signOutUrl: this.signOutUrl_,
+    signInUrl: this.authService_.getSignInUrl(),
+    signOutUrl: this.authService_.getSignOutUrl(),
     signedIn: this.user_.isSignedIn(),
     isAdmin: this.user_.isAdmin(),
     userName: this.user_.getName()

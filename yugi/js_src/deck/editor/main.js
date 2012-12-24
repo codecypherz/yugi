@@ -41,8 +41,9 @@ yugi.deck.editor.Main = function(
   goog.base(this);
 
   // Create all of the model/service classes.
-  var authService = yugi.service.AuthService.register(baseLoginUrl);
   var user = yugi.model.User.register(userJson);
+  var authService = yugi.service.AuthService.register(
+      baseLoginUrl, signInUrl, signOutUrl);
   var selectionModel = yugi.model.Selection.register();
   var deckService = yugi.service.DeckService.register();
   var uiState = yugi.deck.editor.model.UiState.register();
@@ -56,7 +57,7 @@ yugi.deck.editor.Main = function(
   var mainElement = dom.getElement('main');
 
   // Header
-  var header = new yugi.ui.header.Header(signInUrl, signOutUrl);
+  var header = new yugi.ui.header.Header();
   header.render(dom.getElement('header'));
 
   // Footer

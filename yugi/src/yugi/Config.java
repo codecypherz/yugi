@@ -17,7 +17,7 @@ public class Config {
 	 * This is used to bust the cache for JS and CSS.  Change this every time
 	 * you deploy to AppEngine.
 	 */
-	public static final String VERSION = "11";
+	public static final String VERSION = "12";
 	
 	/**
 	 * The set of servlets and their meta-data.

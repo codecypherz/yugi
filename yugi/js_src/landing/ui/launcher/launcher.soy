@@ -5,22 +5,45 @@
 /**
  * The HTML for the launcher component.
  * @param ids The DOM IDs to use in this template.
+ * @param signInUrl The sign in URL.
+ * @param deckManagerUrl The deck manager URL.
  */
 {template .LAUNCHER}
-  <div class="{css yugi-landing-heading}">
-    <span>
-      GAMES TO JOIN
-    </span>
-    <img id="{$ids.WAITING_IMAGE|id}" src="/images/waiting.gif"
-        class="{css yugi-landing-heading-waiting}">
-    </img>
-    <button id="{$ids.REFRESH_LINK|id}" class="{css yugi-link}">
-      Refresh
-    </button>
+  <div class="{css yugi-landing-column}{sp}{css left}">
+    <div class="{css yugi-game-joiner-heading}">
+      <div class="{css yugi-landing-heading}">
+        Games to Join
+      </div>
+      /** TODO Make the img/button combo here one component. */
+      <img id="{$ids.WAITING_IMAGE|id}" src="/images/waiting.gif"
+          class="{css yugi-game-joiner-heading-waiting}">
+      </img>
+      <button id="{$ids.REFRESH_LINK|id}" class="{css yugi-link}">
+        Refresh
+      </button>
+    </div>
+    <div id="{$ids.GAME_STARTER|id}">
+    </div>
+    <div id="{$ids.GAME_JOINER|id}">
+    </div>
   </div>
-  <div id="{$ids.GAME_STARTER|id}">
-  </div>
-  <div id="{$ids.GAME_JOINER|id}">
+  <div class="{css yugi-landing-column}{sp}{css right}">
+    <div class="{css yugi-landing-heading}">
+      Welcome to Yu-Gi-Oh! Online
+    </div>
+    <p>
+      To play a game, either start a new game or join an existing one.  You can
+      choose to play with an official structure deck or one of your own.  If you
+      want to create your own decks, just <a href="{$signInUrl}">sign in</a> so
+      the deck can be associated with you.  You can manage all of your decks
+      with the <a href="{$deckManagerUrl}">deck manager</a>.
+    </p>
+    <div>
+      <div class="g-plus"
+          data-href="//plus.google.com/107049532455190654121"
+          data-rel="publisher">
+      </div>
+    </div>
   </div>
 {/template}
 

@@ -36,8 +36,9 @@ yugi.landing.Main = function(baseLoginUrl, signInUrl, signOutUrl, userJson) {
   goog.base(this);
 
   // Register all the model/server classes.
-  var authService = yugi.service.AuthService.register(baseLoginUrl);
   var user = yugi.model.User.register(userJson);
+  var authService = yugi.service.AuthService.register(
+      baseLoginUrl, signInUrl, signOutUrl);
   var games = yugi.landing.model.Games.register();
   var notifier = yugi.model.Notifier.register();
   var localStore = yugi.service.LocalStore.register();
@@ -47,7 +48,7 @@ yugi.landing.Main = function(baseLoginUrl, signInUrl, signOutUrl, userJson) {
   var dom = goog.dom.getDomHelper();
 
   // Header
-  var header = new yugi.ui.header.Header(signInUrl, signOutUrl);
+  var header = new yugi.ui.header.Header();
   header.render(dom.getElement('header'));
 
   // Footer
