@@ -14,12 +14,10 @@ goog.require('goog.string');
 /**
  * Intercepts chat messages in order execute commands.
  * @param {!yugi.game.model.Game} game The game object.
- * @param {!yugi.game.net.Channel} channel The channel.
- * @param {!yugi.game.service.Sync} syncService The sync service.
  * @constructor
  * @extends {goog.Disposable}
  */
-yugi.game.model.ChatInterceptor = function(game, channel, syncService) {
+yugi.game.model.ChatInterceptor = function(game) {
   goog.base(this);
 
   /**
@@ -29,32 +27,25 @@ yugi.game.model.ChatInterceptor = function(game, channel, syncService) {
   this.game_ = game;
 
   /**
-   * @type {!yugi.game.net.Channel}
-   * @private
-   */
-  this.channel_ = channel;
-
-  /**
-   * @type {!yugi.game.service.Sync}
-   * @private
-   */
-  this.syncService_ = syncService;
-
-  /**
    * @type {!goog.i18n.NumberFormat}
    * @private
    */
   this.numberFormatter_ = new goog.i18n.NumberFormat(
       goog.i18n.NumberFormat.Format.DECIMAL);
+
+  /**
+   * @type {yugi.game.model.Chat}
+   * @private
+   */
+  this.chat_ = null;
+
+  /**
+   * @type {yugi.game.service.LifePoint}
+   * @private
+   */
+  this.lifePointService_ = null;
 };
 goog.inherits(yugi.game.model.ChatInterceptor, goog.Disposable);
-
-
-/**
- * @type {yugi.game.model.Chat}
- * @private
- */
-yugi.game.model.ChatInterceptor.prototype.chat_ = null;
 
 
 /**
@@ -70,6 +61,16 @@ yugi.game.model.ChatInterceptor.prototype.logger =
  */
 yugi.game.model.ChatInterceptor.prototype.setChatModel = function(chat) {
   this.chat_ = chat;
+};
+
+
+/**
+ * @param {!yugi.game.service.LifePoint} lifePointService The life point
+ *     service.
+ */
+yugi.game.model.ChatInterceptor.prototype.setLifePointService =
+    function(lifePointService) {
+  this.lifePointService_ = lifePointService;
 };
 
 
@@ -134,21 +135,21 @@ yugi.game.model.ChatInterceptor.prototype.interceptLifePointCommand_ =
     var currentLifePoints = this.game_.getPlayer().getLifePoints();
     switch (operator) {
       case '=':
-        this.updateLifePoints_(num);
+        this.lifePointService_.updateLifePoints(num);
         break;
       case '+':
-        this.updateLifePoints_(currentLifePoints + num);
+        this.lifePointService_.updateLifePoints(currentLifePoints + num);
         break;
       case '-':
-        this.updateLifePoints_(currentLifePoints - num);
+        this.lifePointService_.updateLifePoints(currentLifePoints - num);
         break;
       case '*':
-        this.updateLifePoints_(currentLifePoints * num);
+        this.lifePointService_.updateLifePoints(currentLifePoints * num);
         break;
       case '/':
         // Don't let the user divide by zero.
         if (num != 0) {
-          this.updateLifePoints_(Math.ceil(currentLifePoints / num));
+          this.lifePointService_.updateLifePoints(currentLifePoints / num);
         }
         break;
       default:
@@ -160,40 +161,4 @@ yugi.game.model.ChatInterceptor.prototype.interceptLifePointCommand_ =
     return false;
   }
   return true;
-};
-
-
-/**
- * Updates the player's life points to the new value and notifies the opponent.
- * @param {number} newLifePoints The new life points to set for the player.
- * @private
- */
-yugi.game.model.ChatInterceptor.prototype.updateLifePoints_ =
-    function(newLifePoints) {
-
-  // Always round up.
-  newLifePoints = Math.ceil(newLifePoints);
-
-  var player = this.game_.getPlayer();
-  var oldLifePoints = player.getLifePoints();
-
-  // Sync the value with the model since the model enforces bounds.
-  newLifePoints = player.setLifePoints(newLifePoints);
-
-  // Maybe chat some text if the life points actually changed.
-  var text = player.getName();
-  if (oldLifePoints == newLifePoints) {
-    return;
-  } else if (oldLifePoints > newLifePoints) {
-    text += ' decreased';
-  } else {
-    text += ' increased';
-  }
-
-  var formattedNumber = this.numberFormatter_.format(
-      Math.abs(oldLifePoints - newLifePoints));
-  text += ' their life points by ' + formattedNumber + '.';
-
-  this.chat_.sendSystemRemote(text);
-  this.syncService_.sendPlayerState();
 };

@@ -40,6 +40,7 @@ yugi.landing.ui.launcher.GameJoin = function(game, showPrompt) {
    * @private
    */
   this.joinButton_ = new goog.ui.Button(null);
+  this.addChild(this.joinButton_);
 };
 goog.inherits(yugi.landing.ui.launcher.GameJoin, goog.ui.Component);
 

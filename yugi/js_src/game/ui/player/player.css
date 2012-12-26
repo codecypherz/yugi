@@ -2,18 +2,23 @@
  * CSS for the life points widget.
  */
 
-@def LIFE_POINT_MARGIN                    10px;
+@def LIFE_POINT_COLOR_GOOD                #90EE90;
+@def LIFE_POINT_COLOR_BAD                 #F08080;
+@def LIFE_POINT_BORDER                    1px solid #333;
+@def LIFE_POINT_BUTTON_COLOR              rgba(0, 0, 0, 0.7);
+@def LIFE_POINT_BUTTON_BG_COLOR           rgba(0, 0, 0, 0.2);
+@def LIFE_POINT_BUTTON_BG_COLOR_HOVER     rgba(0, 0, 0, 0.3);
 
 .yugi-life-points {
-	border: 1px solid #333;
-	font-size: 30px;
+	border: LIFE_POINT_BORDER;
 	margin: 10px 0;
+	position: relative;
 	text-align: center;
 	@mixin border_radius(5px);
 }
 
 .yugi-life-points.high {
-  background-color: #90EE90;
+  background-color: LIFE_POINT_COLOR_GOOD;
 }
 
 .yugi-life-points.okay {
@@ -21,11 +26,101 @@
 }
 
 .yugi-life-points.low {
-  background-color: #F08080;
+  background-color: LIFE_POINT_COLOR_BAD;
 }
 
 .yugi-life-points-value {
+	font-size: 30px;
 	font-weight: bold;
+}
+
+.yugi-life-points > button {
+	background-color: LIFE_POINT_BUTTON_BG_COLOR;
+  border: none;
+  color: LIFE_POINT_BUTTON_COLOR;
+  margin: 0;
+  padding: 0;
+  @mixin border_radius(0);
+}
+
+
+.yugi-life-points > button {
+	border-left: LIFE_POINT_BORDER;
+	height: 18px;
+	position: absolute;
+	right: 0;
+	width: 22px;
+}
+
+.yugi-life-points > button:hover {
+  background-color: LIFE_POINT_BUTTON_BG_COLOR_HOVER;
+}
+
+.yugi-life-points > button.plus {
+	border-bottom: LIFE_POINT_BORDER;
+	border-top-right-radius: 3px;
+	top: 0;
+}
+
+.yugi-life-points > button.minus {
+	border-bottom-right-radius: 3px;
+  bottom: 0;
+}
+
+.yugi-life-point-mod {
+	background-color: #fff;
+	border: 3px solid #aaa;
+	bottom: 0;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	font-size: 15px;
+	left: 229px;
+	outline: none;
+	position: absolute;
+	text-align: left;
+	width: 121px;
+	z-index: 100;
+	@mixin border_radius(2px);
+}
+
+.yugi-life-point-mod > button {
+	background-color: #fff;
+	border: none;
+	border-bottom: 1px solid #ddd;
+	color: #333;
+	display: block;
+	font-weight: normal;
+	margin: 0;
+	text-align: left;
+	width: 100%;
+	@mixin border_radius(0);
+}
+
+.yugi-life-point-mod > button:hover {
+	background-color: #ccc;
+}
+
+.yugi-life-point-input-sign {
+	display: inline-block;
+	margin-left: 8px;
+	margin-right: 4px;
+}
+
+.yugi-life-point-mod > input {
+	margin: 0;
+	width: 40px;
+}
+
+button.yugi-life-point-input-ok {
+	border: 1px solid #ccc;
+	display: inline;
+	margin-left: 5px;
+	padding: 1px 4px;
+	width: auto;
+	@mixin border_radius(3px);
+}
+
+.yugi-life-point-mod.subtract > button.yugi-life-point-input-ok {
+	margin-left: 7px;
 }
 
 .yugi-player-controls button {

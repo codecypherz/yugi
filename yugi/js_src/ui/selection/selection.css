@@ -23,7 +23,6 @@
 	overflow: auto;
 	text-align: left;
 	width: 218px;
-	@mixin border_radius(5px);
 }
 
 .yugi-card-name {

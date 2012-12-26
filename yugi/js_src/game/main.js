@@ -25,6 +25,7 @@ goog.require('yugi.game.model.Decks');
 goog.require('yugi.game.model.Game');
 goog.require('yugi.game.model.Synchronization');
 goog.require('yugi.game.net.Channel');
+goog.require('yugi.game.service.LifePoint');
 goog.require('yugi.game.service.Sync');
 goog.require('yugi.game.ui.Main');
 goog.require('yugi.game.ui.State');
@@ -86,11 +87,16 @@ yugi.game.Main = function(signInOutUrl, deckManagerUrl, userJson,
   var syncService = yugi.game.service.Sync.register(this.channel_, game);
   var decksModel = yugi.game.model.Decks.register(decksService, user);
 
-  var chatInterceptor = new yugi.game.model.ChatInterceptor(game,
-      this.channel_, syncService);
+  var chatInterceptor = new yugi.game.model.ChatInterceptor(game);
   var chat = yugi.game.model.Chat.register(this.channel_, playerName,
       chatInterceptor);
+
+  var lifePointService = yugi.game.service.LifePoint.register(
+      game.getPlayer(), chat, syncService);
+
+  // Setters required because of dependency order.
   chatInterceptor.setChatModel(chat);
+  chatInterceptor.setLifePointService(lifePointService);
 
   var synchronization = yugi.game.model.Synchronization.register(game,
       deckService, cardCache);
