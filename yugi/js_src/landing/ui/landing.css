@@ -2,6 +2,10 @@
  * CSS for the landing page.
  */
 
+body > a {
+	display: none;
+}
+
 .yugi-landing-heading {
 	display: inline-block;
 	font-size: 19px;
