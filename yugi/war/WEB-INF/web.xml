@@ -184,6 +184,18 @@
       <url-pattern>/_ah/channel/disconnected/</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+	  <servlet-name>SystemServiceServlet</servlet-name>
+	  <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+	  <init-param>
+	   <param-name>services</param-name>
+	   <param-value/>
+	  </init-param>
+	 </servlet>
+	 <servlet-mapping>
+	  <servlet-name>SystemServiceServlet</servlet-name>
+	  <url-pattern>/_ah/spi/*</url-pattern>
+	 </servlet-mapping>
   <!-- ===================================================== -->
   <!-- ===================== SECURITY ====================== -->
   <!-- ===================================================== -->
@@ -197,16 +209,12 @@
     </auth-constraint>
   </security-constraint>
 
- <servlet>
-  <servlet-name>SystemServiceServlet</servlet-name>
-  <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
-  <init-param>
-   <param-name>services</param-name>
-   <param-value/>
-  </init-param>
- </servlet>
- <servlet-mapping>
-  <servlet-name>SystemServiceServlet</servlet-name>
-  <url-pattern>/_ah/spi/*</url-pattern>
- </servlet-mapping>
+  <security-constraint>
+    <web-resource-collection>
+      <url-pattern>/tasks/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
 </web-app>
