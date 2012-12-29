@@ -162,6 +162,60 @@
     <url-pattern>/admin/task/cardindex</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>Crawl Task</servlet-name>
+    <servlet-class>yugi.servlet.admin.task.CrawlTaskServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Crawl Task</servlet-name>
+    <url-pattern>/tasks/crawl</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>Crawl Task Maker</servlet-name>
+    <servlet-class>yugi.servlet.admin.task.CrawlTaskMakerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Crawl Task Maker</servlet-name>
+    <url-pattern>/tasks/create_crawl_task</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>Delete Auto Upload Cards Task</servlet-name>
+    <servlet-class>yugi.servlet.admin.task.DeleteAutoUploadCardsTaskServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Delete Auto Upload Cards Task</servlet-name>
+    <url-pattern>/tasks/delete_auto_upload_cards</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>Delete Auto Upload Cards Task Maker</servlet-name>
+    <servlet-class>yugi.servlet.admin.task.DeleteAutoUploadCardsTaskMakerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Delete Auto Upload Cards Task Maker</servlet-name>
+    <url-pattern>/tasks/create_delete_auto_upload_cards_task</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>Auto Upload Card Task</servlet-name>
+    <servlet-class>yugi.servlet.admin.task.AutoUploadTaskServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Auto Upload Card Task</servlet-name>
+    <url-pattern>/tasks/auto_upload</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>Auto Upload Card Task Maker</servlet-name>
+    <servlet-class>yugi.servlet.admin.task.AutoUploadTaskMakerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Auto Upload Card Task Maker</servlet-name>
+    <url-pattern>/tasks/create_upload_tasks</url-pattern>
+  </servlet-mapping>
+  
   <!-- ===================================================== -->
   <!-- ================ AppEngine Services ================= -->
   <!-- ===================================================== -->

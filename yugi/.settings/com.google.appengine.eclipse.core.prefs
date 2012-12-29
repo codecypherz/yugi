@@ -5,4 +5,4 @@ gaeHrdEnabled=true
 gaeIsEclipseDefaultInstPath=true
 googleCloudSqlEnabled=false
 localDevMySqlEnabled=true
-ormEnhancementInclusions=src/yugi/model/*|src/yugi/model/index/*
+ormEnhancementInclusions=src/yugi/model/*|src/yugi/model/index/*|src/yugi/model/auto/*

@@ -9,7 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +20,7 @@ import yugi.PMF;
 import yugi.Screen;
 import yugi.index.Indexer;
 import yugi.model.Card;
+import yugi.service.CardService;
 import yugi.servlet.ResponseStatusCode;
 import yugi.servlet.ServletUtil;
 
@@ -54,11 +54,11 @@ public class CardEditorServlet extends HttpServlet {
 		TYPE
 	}
 
-	// Initialize some private members.
-	private final BlobstoreService blobstoreService =
+	private static final BlobstoreService blobstoreService =
 			BlobstoreServiceFactory.getBlobstoreService();
-	private final ImagesService imagesService =
+	private static final ImagesService imagesService =
 			ImagesServiceFactory.getImagesService();
+	private static final CardService cardService = CardService.getInstance();
 	
 	/**
 	 * This is request for the application.  This only writes back the HTML.
@@ -287,14 +287,14 @@ public class CardEditorServlet extends HttpServlet {
 
 			// No card key, so that means a new card will be created.
 			// Make sure the card doesn't yet exist.
-			String existingCardKey = getExistingCardKey(newCard.getUpperName());
+			String existingCardKey = cardService.getExistingCardKey(newCard.getUpperName());
 			if (existingCardKey != null) {
 				logger.severe("Card that failed: " + newCard.toString());
 				throw new Exception(newCard.getName() + " already exists!");
 			}
 			
 			// The card doesn't yet exist, so proceed.
-			createNewCard(newCard);
+			cardService.createNewCard(newCard);
 			cardKey = newCard.getKeyAsString();
 			
 			// The card key must exist at this point because it is used to
@@ -317,56 +317,6 @@ public class CardEditorServlet extends HttpServlet {
 
 		// Everything is done, so return the card key.
 		return cardKey;
-	}
-	
-	/**
-	 * Checks to see if the given card already exists.
-	 * @param name The name to check.
-	 * @return The existing card key or null if no card was found.
-	 */
-	private String getExistingCardKey(String name) {
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		try {
-			Query query = pm.newQuery(Card.class);
-			query.setFilter("upperName == nameParam");
-			query.declareParameters("String nameParam");
-
-			@SuppressWarnings("unchecked")
-			List<Card> cards = (List<Card>) query.execute(name.toUpperCase());
-			if (!cards.isEmpty()) {
-				return cards.get(0).getKeyAsString();
-			}
-			return null;
-		} finally {
-			pm.close();
-		}
-	}
-	
-	/**
-	 * Persists the new card.
-	 * @param card The new card to persist.
-	 * @throws Exception Thrown if any error occurs.
-	 */
-	private void createNewCard(Card card) throws Exception {
-
-		// Validate the new card.
-		if (!card.isValid()) {
-			throw new Exception("Failed to create the card because something was invalid.");
-		}
-		
-		// Persist the new card.
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		try {
-			pm.makePersistent(card);
-			String cardKey = card.getKeyAsString();
-
-			// Create the index entries for the card.
-			Indexer.createNameIndex(card.getName(), cardKey, pm);
-			Indexer.createDescriptionIndex(card.getDescription(), cardKey, pm);
-			
-		} finally {
-			pm.close();
-		}
 	}
 	
 	/**
