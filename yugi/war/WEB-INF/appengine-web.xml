@@ -27,4 +27,9 @@
     <service>channel_presence</service>
   </inbound-services>
 
+  <static-error-handlers>
+    <handler file="default-error.html"/>
+    <handler file="over-quota.html" error-code="over_quota"/>
+  </static-error-handlers>
+
 </appengine-web-app>
