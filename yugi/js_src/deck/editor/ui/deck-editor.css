@@ -12,8 +12,12 @@
 
 .yugi-deck-browser-container {
 	border: 1px solid #333;
-	height: 674px;
+	height: 672px;
 	margin-top: -3px;
+}
+
+#name-status {
+	margin-bottom: 10px;
 }
 
 .yugi-deck-name {
@@ -21,7 +25,11 @@
 	display: inline-block;
 	font-size: 22px;
 	font-weight: bold;
-	margin: 0 10px 10px 10px;
+	margin-right: 10px;
+}
+
+.yugi-read-only .yugi-deck-name {
+	cursor: auto;
 }
 
 .yugi-deck-status {
@@ -34,15 +42,19 @@
 }
 
 .yugi-deck-browser button {
-	margin-bottom: 10px;
-	margin-left: 15px;
-	margin-top: 15px;
+	margin: 15px;
+}
+
+.yugi-deck-tabs {
+	padding: 0 10px;
 }
 
 .yugi-deck-tab {
+	background-color: #eee;
 	border-bottom: none;
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
+	color: #777;
 	font-weight: normal;
 	margin-left: 5px;
 	margin-right: 5px;
@@ -51,20 +63,33 @@
 }
 
 .yugi-deck-tab.yugi-deck-tab-selected {
-	background-color: #eee;
+	background-color: #fff;
 	color: #333;
 	font-weight: bold;
 }
 
 .yugi-card-browser {
 	border-top: 1px solid #333;
-	height: 621px;
+	height: 601px;
 	overflow: auto;
+	padding: 6px;
+}
+
+.yugi-read-only .yugi-card-browser {
+	height: 660px;
+}
+
+.yugi-card-browser-card-container {
+	margin: 6px;
+}
+
+.yugi-read-only .yugi-card-browser {
+	border: none;
 }
 
 .yugi-deck-editor-search-results {
 	border: 1px solid #333;
-	height: 655px;
+	height: 653px;
 	overflow: auto;
 	position: relative;
 }
@@ -78,4 +103,18 @@
 .yugi-deck-editor-buttons > button {
 	margin-left: 10px;
 	width: 120px;
+}
+
+.yugi-deck-editor-search {
+	position: relative;
+}
+
+.yugi-search-name-input {
+	width: 360px;
+}
+
+.yugi-back-to-deck {
+	position: absolute;
+	right: 0;
+	top: 0;
 }

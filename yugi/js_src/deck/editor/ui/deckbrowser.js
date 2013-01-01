@@ -53,20 +53,19 @@ yugi.deck.editor.ui.DeckBrowser = function(deckType) {
   this.selection_ = yugi.model.Selection.get();
 
   /**
-   * @type {!goog.ui.Button}
-   * @private
-   */
-  this.addCardsButton_ = new goog.ui.Button(null);
-
-  /**
    * @type {!yugi.ui.browser.CardBrowser}
    * @private
    */
   this.cardBrowser_ = new yugi.ui.browser.CardBrowser(
       goog.bind(this.createActions_, this));
-
-  this.addChild(this.addCardsButton_);
   this.addChild(this.cardBrowser_);
+
+  /**
+   * @type {!goog.ui.Button}
+   * @private
+   */
+  this.addCardsButton_ = new goog.ui.Button(null);
+  this.addChild(this.addCardsButton_);
 };
 goog.inherits(yugi.deck.editor.ui.DeckBrowser, goog.ui.Component);
 
@@ -104,7 +103,8 @@ yugi.deck.editor.ui.DeckBrowser.Css_ = {
 yugi.deck.editor.ui.DeckBrowser.prototype.createDom = function() {
   this.setElementInternal(goog.soy.renderAsElement(
       yugi.deck.editor.ui.soy.DECK_BROWSER, {
-        ids: this.makeIds(yugi.deck.editor.ui.DeckBrowser.Id_)
+        ids: this.makeIds(yugi.deck.editor.ui.DeckBrowser.Id_),
+        readOnly: this.uiState_.isReadOnly()
       }));
   goog.dom.classes.add(this.getElement(),
       yugi.deck.editor.ui.DeckBrowser.Css_.DECK_BROWSER);
@@ -115,19 +115,21 @@ yugi.deck.editor.ui.DeckBrowser.prototype.createDom = function() {
 yugi.deck.editor.ui.DeckBrowser.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
 
-  if (!this.addCardsButton_.wasDecorated()) {
-    this.addCardsButton_.decorate(this.getElementByFragment(
-        yugi.deck.editor.ui.DeckBrowser.Id_.ADD_CARDS_BUTTON));
+  // Render the add button if not in read only mode.
+  if (!this.uiState_.isReadOnly()) {
+    if (!this.addCardsButton_.wasDecorated()) {
+      this.addCardsButton_.decorate(this.getElementByFragment(
+          yugi.deck.editor.ui.DeckBrowser.Id_.ADD_CARDS_BUTTON));
+    }
+    // Listen for when to switch modes.
+    this.getHandler().listen(this.addCardsButton_,
+        goog.ui.Component.EventType.ACTION,
+        this.switchToSearchMode_);
   }
 
   // Render the card browser.
   this.cardBrowser_.render(this.getElementByFragment(
       yugi.deck.editor.ui.DeckBrowser.Id_.CARD_BROWSER));
-
-  // Listen for when to switch modes.
-  this.getHandler().listen(this.addCardsButton_,
-      goog.ui.Component.EventType.ACTION,
-      this.switchToSearchMode_);
 
   // Listen for when to refresh the UI.
   this.getHandler().listen(this.constructor_,
@@ -172,9 +174,12 @@ yugi.deck.editor.ui.DeckBrowser.prototype.onCardsChanged_ = function(e) {
  */
 yugi.deck.editor.ui.DeckBrowser.prototype.createActions_ = function(card) {
   var actions = new Array();
-  actions.push(new yugi.deck.editor.model.CoverAction(card,
-      this.constructor_));
-  actions.push(new yugi.deck.editor.model.RemoveAction(card,
-      this.constructor_));
+  // Don't create actions in read only mode.
+  if (!this.uiState_.isReadOnly()) {
+    actions.push(new yugi.deck.editor.model.CoverAction(card,
+        this.constructor_));
+    actions.push(new yugi.deck.editor.model.RemoveAction(card,
+        this.constructor_));
+  }
   return actions;
 };

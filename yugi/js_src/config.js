@@ -91,6 +91,7 @@ yugi.Config.ServletPath = {
   DECK_DELETE: '/deck/delete',
   DECK_EDITOR: '/deck/editor',
   DECK_MANAGER: '/deck/manager',
+  DECK_VIEWER: '/deck/viewer',
   DECKS: '/decks',
   JOIN_GAME: '/game/join',
   JOIN_QUERY: '/game/join/query',
@@ -115,6 +116,7 @@ yugi.Config.UrlParameter = {
   IMAGE_FILE: 'image_file',   // The image file (used in card uploading).
   MODE: 'mode',               // The mode (such as "dev" mode)
   PLAYER_NAME: 'player_name', // The name of the player.
+  READ_ONLY: 'read_only',     // True if this screen is read only.
   STRUCTURE: 'structure'      // True if this is for structure decks.
 };
 

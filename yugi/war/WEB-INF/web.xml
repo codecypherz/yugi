@@ -63,7 +63,16 @@
     <servlet-name>Card</servlet-name>
     <url-pattern>/card</url-pattern>
   </servlet-mapping>
-
+  
+  <servlet>
+    <servlet-name>Deck Viewer</servlet-name>
+    <servlet-class>yugi.servlet.deck.DeckViewerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Deck Viewer</servlet-name>
+    <url-pattern>/deck/viewer</url-pattern>
+  </servlet-mapping>
+  
   <servlet>
     <servlet-name>Deck Editor</servlet-name>
     <servlet-class>yugi.servlet.deck.DeckEditorServlet</servlet-class>

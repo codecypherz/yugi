@@ -40,6 +40,9 @@ public class DeckEditorServlet extends HttpServlet {
 		// The user must be authenticated to use this servlet.
 		User user = userService.getCurrentUser();
 		if (user == null) {
+			
+			// TODO Redirect to the deck viewer instead.
+			
 			ServletUtil.writeLoginScreen(req, res, userService);
 			return;
 		}
@@ -86,6 +89,9 @@ public class DeckEditorServlet extends HttpServlet {
 			}
 			
 			if (!deckService.userHasWriteAccess(deck)) {
+				
+				// TODO Redirect to the deck viewer instead.
+				
 				logger.warning("This user tried to edit a deck that they didn't have access to: " + user.getUserId());
 				res.getWriter().write(
 						"<p>Error: You do not have permission to edit this deck.</p>");
@@ -96,6 +102,7 @@ public class DeckEditorServlet extends HttpServlet {
 		// If we got here, then the user is allowed to create/edit the deck.
 		Map<HtmlParam, String> paramMap = new HashMap<HtmlParam, String>();
 		paramMap.put(HtmlParam.DECK_KEY, deckKey);
+		paramMap.put(HtmlParam.READ_ONLY, "false");
 		
 		ServletUtil.writeScreen(req, res, Screen.DECK_EDITOR, paramMap);
 	}

@@ -7,6 +7,8 @@ goog.provide('yugi.deck.editor.Main');
 
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
+goog.require('goog.dom.classes');
+goog.require('goog.string');
 goog.require('yugi.Main');
 goog.require('yugi.deck.editor.model.Constructor');
 goog.require('yugi.deck.editor.model.UiState');
@@ -32,12 +34,15 @@ goog.require('yugi.ui.selection.Selection');
  * @param {string} userJson The user object as raw JSON.
  * @param {string} deckKey The key to the deck or empty if this is for a new
  *     deck.
+ * @param {string} readOnly 'true' if in read only mode.
  * @constructor
  * @extends {yugi.Main}
  */
 yugi.deck.editor.Main = function(
-    signInOutUrl, deckManagerUrl, userJson, deckKey) {
+    signInOutUrl, deckManagerUrl, userJson, deckKey, readOnly) {
   goog.base(this);
+
+  var isReadOnly = goog.string.caseInsensitiveCompare('true', readOnly) == 0;
 
   // Create all of the model/service classes.
   var user = yugi.model.User.register(userJson);
@@ -45,7 +50,7 @@ yugi.deck.editor.Main = function(
       signInOutUrl, deckManagerUrl);
   var selectionModel = yugi.model.Selection.register();
   var deckService = yugi.service.DeckService.register();
-  var uiState = yugi.deck.editor.model.UiState.register();
+  var uiState = yugi.deck.editor.model.UiState.register(isReadOnly);
   var search = yugi.model.Search.register();
   var notifier = yugi.model.Notifier.register();
   var constructor = yugi.deck.editor.model.Constructor.register(notifier,
@@ -53,6 +58,8 @@ yugi.deck.editor.Main = function(
 
   // Render all of the UI components.
   var dom = goog.dom.getDomHelper();
+  goog.dom.classes.enable(
+      dom.getDocument().body, yugi.deck.editor.Main.Css_.READ_ONLY, isReadOnly);
   var mainElement = dom.getElement('main');
 
   // Header
@@ -67,8 +74,10 @@ yugi.deck.editor.Main = function(
   var nameAndStatusElement = dom.getElement('name-status');
   var name = new yugi.deck.editor.ui.Name();
   name.render(nameAndStatusElement);
-  var status = new yugi.deck.editor.ui.Status();
-  status.render(nameAndStatusElement);
+  if (!isReadOnly) { // Don't render status for read only.
+    var status = new yugi.deck.editor.ui.Status();
+    status.render(nameAndStatusElement);
+  }
 
   // Selection
   var selectionUi = new yugi.ui.selection.Selection();
@@ -100,6 +109,15 @@ goog.inherits(yugi.deck.editor.Main, yugi.Main);
 
 
 /**
+ * @enum {string}
+ * @private
+ */
+yugi.deck.editor.Main.Css_ = {
+  READ_ONLY: goog.getCssName('yugi-read-only')
+};
+
+
+/**
  * @type {!goog.debug.Logger}
  * @protected
  */
@@ -114,11 +132,12 @@ yugi.deck.editor.Main.prototype.logger = goog.debug.Logger.getLogger(
  * @param {string} userJson The user object as raw JSON.
  * @param {string} deckKey The key to the deck or empty if this is for a new
  *     deck.
+ * @param {string} readOnly 'true' if in read only mode.
  */
 yugi.deck.editor.bootstrap = function(
-    signInOutUrl, deckManagerUrl, userJson, deckKey) {
+    signInOutUrl, deckManagerUrl, userJson, deckKey, readOnly) {
   new yugi.deck.editor.Main(
-      signInOutUrl, deckManagerUrl, userJson, deckKey);
+      signInOutUrl, deckManagerUrl, userJson, deckKey, readOnly);
 };
 
 

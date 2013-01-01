@@ -16,11 +16,18 @@ goog.require('goog.events.EventTarget');
 
 /**
  * Model for the state of the deck editor UI.
+ * @param {boolean} readOnly True if the screen is in read only mode.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-yugi.deck.editor.model.UiState = function() {
+yugi.deck.editor.model.UiState = function(readOnly) {
   goog.base(this);
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.readOnly_ = readOnly;
 
   /**
    * @type {!yugi.deck.editor.model.UiState.Mode}
@@ -67,11 +74,12 @@ yugi.deck.editor.model.UiState.EventType = {
 
 /**
  * Registers an instance of the model.
+ * @param {boolean} readOnly True if the screen is in read only mode.
  * @return {!yugi.deck.editor.model.UiState} The registered instance.
  */
-yugi.deck.editor.model.UiState.register = function() {
+yugi.deck.editor.model.UiState.register = function(readOnly) {
   yugi.deck.editor.model.UiState.instance_ =
-      new yugi.deck.editor.model.UiState();
+      new yugi.deck.editor.model.UiState(readOnly);
   return yugi.deck.editor.model.UiState.get();
 };
 
@@ -81,6 +89,14 @@ yugi.deck.editor.model.UiState.register = function() {
  */
 yugi.deck.editor.model.UiState.get = function() {
   return yugi.deck.editor.model.UiState.instance_;
+};
+
+
+/**
+ * @return {boolean} True if the editor is in read only mode.
+ */
+yugi.deck.editor.model.UiState.prototype.isReadOnly = function() {
+  return this.readOnly_;
 };
 
 

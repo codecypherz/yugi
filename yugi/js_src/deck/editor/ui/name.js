@@ -11,6 +11,7 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
 goog.require('yugi.deck.editor.model.Constructor');
+goog.require('yugi.deck.editor.model.UiState');
 goog.require('yugi.deck.editor.ui.NameDialog');
 goog.require('yugi.model.Deck');
 
@@ -29,6 +30,12 @@ yugi.deck.editor.ui.Name = function() {
    * @private
    */
   this.constructor_ = yugi.deck.editor.model.Constructor.get();
+
+  /**
+   * @type {!yugi.deck.editor.model.UiState}
+   * @private
+   */
+  this.uiState_ = yugi.deck.editor.model.UiState.get();
 
   /**
    * @type {!goog.events.EventHandler}
@@ -85,9 +92,12 @@ yugi.deck.editor.ui.Name.prototype.enterDocument = function() {
 
   this.nameElement_ = this.getElement();
 
-  this.getHandler().listen(this.nameElement_,
-      goog.events.EventType.CLICK,
-      this.onNameClick_);
+  // Don't listen to clicks if in read only mode.
+  if (!this.uiState_.isReadOnly()) {
+    this.getHandler().listen(this.nameElement_,
+        goog.events.EventType.CLICK,
+        this.onNameClick_);
+  }
 
   // Listen for when the deck changes so the deck listener can be updated.
   this.getHandler().listen(this.constructor_,

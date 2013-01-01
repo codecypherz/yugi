@@ -17,7 +17,7 @@ public class Config {
 	 * This is used to bust the cache for JS and CSS.  Change this every time
 	 * you deploy to AppEngine.
 	 */
-	public static final String VERSION = "18";
+	public static final String VERSION = "19";
 	
 	/**
 	 * The set of servlets and their meta-data.
@@ -85,6 +85,7 @@ public class Config {
 		GAME_KEY,
 		JS_FILE_PATH,
 		PLAYER_NAME,
+		READ_ONLY,
 		SIGN_IN_OUT_URL,
 		UPLOAD_URL,
 		USER_JSON
