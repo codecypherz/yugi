@@ -7,6 +7,8 @@ goog.provide('yugi.deck.manager.Main');
 
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
+goog.require('goog.dom.classes');
+goog.require('goog.string');
 goog.require('yugi.Main');
 goog.require('yugi.deck.manager.model.Decks');
 goog.require('yugi.deck.manager.ui.DecksViewer');
@@ -26,11 +28,21 @@ goog.require('yugi.util.deck');
  * @param {string} signInOutUrl The URL to use to either sign in or out.
  * @param {string} deckManagerUrl The URL for the deck manager.
  * @param {string} userJson The user object as raw JSON.
+ * @param {string} readOnly 'true' if in read only mode.
  * @constructor
  * @extends {yugi.Main}
  */
-yugi.deck.manager.Main = function(signInOutUrl, deckManagerUrl, userJson) {
+yugi.deck.manager.Main = function(
+    signInOutUrl, deckManagerUrl, userJson, readOnly) {
   goog.base(this);
+
+  /**
+   * @type {!goog.debug.Logger}
+   * @protected
+   */
+  this.logger = goog.debug.Logger.getLogger('yugi.deck.manager.Main');
+
+  var isReadOnly = goog.string.caseInsensitiveCompare('true', readOnly) == 0;
 
   // Create all of the model/service classes.
   var user = yugi.model.User.register(userJson);
@@ -43,13 +55,16 @@ yugi.deck.manager.Main = function(signInOutUrl, deckManagerUrl, userJson) {
 
   // Render all of the UI components.
   var dom = goog.dom.getDomHelper();
+  goog.dom.classes.enable(
+      dom.getDocument().body,
+      yugi.deck.manager.Main.Css_.READ_ONLY, isReadOnly);
 
   // Header
   var header = new yugi.ui.header.Header();
   header.render(dom.getElement('header'));
 
   // Main content
-  var decksViewer = new yugi.deck.manager.ui.DecksViewer();
+  var decksViewer = new yugi.deck.manager.ui.DecksViewer(isReadOnly);
   decksViewer.render(dom.getElement('main'));
 
   // Footer
@@ -77,11 +92,12 @@ goog.inherits(yugi.deck.manager.Main, yugi.Main);
 
 
 /**
- * @type {!goog.debug.Logger}
- * @protected
+ * @enum {string}
+ * @private
  */
-yugi.deck.manager.Main.prototype.logger = goog.debug.Logger.getLogger(
-    'yugi.deck.manager.Main');
+yugi.deck.manager.Main.Css_ = {
+  READ_ONLY: goog.getCssName('yugi-read-only')
+};
 
 
 /**
@@ -89,9 +105,11 @@ yugi.deck.manager.Main.prototype.logger = goog.debug.Logger.getLogger(
  * @param {string} signInOutUrl The URL to use to either sign in or out.
  * @param {string} deckManagerUrl The URL for the deck manager.
  * @param {string} userJson The user object as raw JSON.
+ * @param {string} readOnly 'true' if in read only mode.
  */
-yugi.deck.manager.bootstrap = function(signInOutUrl, deckManagerUrl, userJson) {
-  new yugi.deck.manager.Main(signInOutUrl, deckManagerUrl, userJson);
+yugi.deck.manager.bootstrap = function(
+    signInOutUrl, deckManagerUrl, userJson, readOnly) {
+  new yugi.deck.manager.Main(signInOutUrl, deckManagerUrl, userJson, readOnly);
 };
 
 

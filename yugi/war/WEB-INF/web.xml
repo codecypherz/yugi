@@ -81,7 +81,16 @@
     <servlet-name>Deck Editor</servlet-name>
     <url-pattern>/deck/editor</url-pattern>
   </servlet-mapping>
-
+  
+  <servlet>
+    <servlet-name>Decks Viewer</servlet-name>
+    <servlet-class>yugi.servlet.deck.DecksViewerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Decks Viewer</servlet-name>
+    <url-pattern>/decks/viewer</url-pattern>
+  </servlet-mapping>
+  
   <servlet>
     <servlet-name>Deck Manager</servlet-name>
     <servlet-class>yugi.servlet.deck.DeckManagerServlet</servlet-class>

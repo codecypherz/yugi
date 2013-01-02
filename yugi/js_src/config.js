@@ -93,6 +93,7 @@ yugi.Config.ServletPath = {
   DECK_MANAGER: '/deck/manager',
   DECK_VIEWER: '/deck/viewer',
   DECKS: '/decks',
+  DECKS_VIEWER: '/decks/viewer',
   JOIN_GAME: '/game/join',
   JOIN_QUERY: '/game/join/query',
   LANDING: '/landing',

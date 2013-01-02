@@ -20,6 +20,7 @@
  * The HTML for the links in the header.
  * @param gamesUrl The games URL.
  * @param deckManagerUrl The URL to use the deck manager.
+ * @param browseStructureDecksUrl The URL for structure deck browsing.
  * @param structureDeckManagerUrl The URL for managing structure decks.
  * @param cardSearchUrl The URL for searching for cards.
  * @param cardUploadUrl The URL for uploading cards.
@@ -33,12 +34,18 @@
   </div>
   <div class="{css yugi-link-container}">
     <div class="{css yugi-links}{sp}{css yugi-left}{sp}{css goog-inline-block}">
-      <a href="{$gamesUrl}">Games</a>
-      <a href="{$deckManagerUrl}">Deck Manager</a>
+      <a href="{$gamesUrl}" title="View active games">Games</a>
+      <a href="{$deckManagerUrl}" title="Create and edit your decks">
+        Deck Manager
+      </a>
       {if $isAdmin}
-        <a href="{$structureDeckManagerUrl}">Structure Deck Manager</a>
+        <a href="{$structureDeckManagerUrl}">Structure Decks</a>
         <a href="{$cardSearchUrl}">Card Search</a>
         <a href="{$cardUploadUrl}">Upload Card</a>
+      {else}
+        <a href="{$browseStructureDecksUrl}" title="Browse structure decks">
+          Structure Decks
+        </a>
       {/if}
     </div>
     <div class="{css yugi-links}{sp}{css yugi-right}{sp}{css goog-inline-block}">

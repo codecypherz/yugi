@@ -6,6 +6,7 @@
  * The HTML for the launcher component.
  * @param ids The DOM IDs to use in this template.
  * @param deckManagerUrl The deck manager URL.
+ * @param structureDecksUrl The structure decks URL.
  */
 {template .LAUNCHER}
   <div class="{css yugi-landing-column}{sp}{css left}">
@@ -33,7 +34,8 @@
     <p>
       To play a game, either start a new game or join an existing one.
       <br>
-      You can choose to play with an official structure deck or one of your own.
+      You can choose to play with one of the official&nbsp;
+      <a href="{$structureDecksUrl}">structure decks</a> or one of your own.
       &nbsp&nbspIf you want to create your own decks, just sign in so the deck
       can be associated with you.&nbsp&nbspYou can manage all of your decks with
       the {sp}

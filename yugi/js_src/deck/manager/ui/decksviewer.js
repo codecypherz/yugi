@@ -26,11 +26,18 @@ goog.require('yugi.util.deck');
 
 /**
  * Displays an arbitrary list of decks.
+ * @param {boolean} readOnly True if in read only mode.
  * @constructor
  * @extends {goog.ui.Component}
  */
-yugi.deck.manager.ui.DecksViewer = function() {
+yugi.deck.manager.ui.DecksViewer = function(readOnly) {
   goog.base(this);
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.readOnly_ = readOnly;
 
   /**
    * @type {!yugi.service.DecksService}
@@ -156,40 +163,49 @@ yugi.deck.manager.ui.DecksViewer.prototype.renderDecks_ = function() {
 
   // Render each deck.
   goog.array.forEach(this.decks_.getDecks(), function(deck) {
-    var editPath = yugi.service.url.build(
-        yugi.Config.ServletPath.DECK_EDITOR,
-        yugi.Config.UrlParameter.DECK_KEY, deck.getKey());
+    var servlet = this.readOnly_ ?
+        yugi.Config.ServletPath.DECK_VIEWER :
+        yugi.Config.ServletPath.DECK_EDITOR;
+    var deckPath = yugi.service.url.build(
+        servlet, yugi.Config.UrlParameter.DECK_KEY, deck.getKey());
 
     var deckElement = goog.soy.renderAsElement(
         yugi.deck.manager.ui.deck.soy.DECK, {
-          editPath: editPath,
+          deckPath: deckPath,
           name: deck.getName(),
           imageSource: deck.getImageSource(210)
         });
     goog.dom.appendChild(element, deckElement);
 
-    // Set up the menus for the deck.
-    var actions = new Array();
-    actions.push(new yugi.deck.manager.model.DeleteAction(deck, this.decks_));
-    var menu = new yugi.ui.menu.Menu(actions);
-    menu.render(deckElement);
-    this.menus_.push(menu);
+    // Don't render actions in read only mode.
+    if (!this.readOnly_) {
+      // Set up the menus for the deck.
+      var actions = new Array();
+      actions.push(new yugi.deck.manager.model.DeleteAction(deck, this.decks_));
+      var menu = new yugi.ui.menu.Menu(actions);
+      menu.render(deckElement);
+      this.menus_.push(menu);
+    }
 
   }, this);
 
-  // Figure out the request to make to build a new deck.
-  var newDeckRequestStr = yugi.service.url.build(
-      yugi.Config.ServletPath.DECK_EDITOR);
-  var newDeckRequestUri = goog.Uri.parse(newDeckRequestStr);
-  // Forward the structure deck aspect.
-  yugi.util.deck.setStructureDeckRequest(newDeckRequestUri,
-      yugi.util.deck.isStructureDeckRequest(window.location.href));
+  // Don't create the "new deck" deck if in read only mode.
+  if (!this.readOnly_) {
 
-  // Render the area for creating a new deck.
-  goog.dom.appendChild(element, goog.soy.renderAsElement(
-      yugi.deck.manager.ui.deck.soy.NEW_DECK, {
-        newDeckPath: newDeckRequestUri.toString()
-      }));
+    // Figure out the request to make to build a new deck.
+    var newDeckRequestStr = yugi.service.url.build(
+        yugi.Config.ServletPath.DECK_EDITOR);
+    var newDeckRequestUri = goog.Uri.parse(newDeckRequestStr);
+    // Forward the structure deck aspect.
+    yugi.util.deck.setStructureDeckRequest(newDeckRequestUri,
+        yugi.util.deck.isStructureDeckRequest(window.location.href));
+
+    // Render the area for creating a new deck.
+    goog.dom.appendChild(element, goog.soy.renderAsElement(
+        yugi.deck.manager.ui.deck.soy.NEW_DECK, {
+          newDeckPath: newDeckRequestUri.toString()
+        }));
+  }
 };
 
 

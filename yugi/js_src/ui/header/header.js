@@ -136,6 +136,10 @@ yugi.ui.header.Header.prototype.enterDocument = function() {
   this.linkContainer_ = goog.soy.renderAsElement(yugi.ui.header.soy.LINKS, {
     gamesUrl: yugi.service.url.build(yugi.Config.ServletPath.MAIN),
     deckManagerUrl: this.authService_.getDeckManagerUrl(),
+    browseStructureDecksUrl: yugi.service.url.build(
+        yugi.Config.ServletPath.DECKS_VIEWER,
+        yugi.Config.UrlParameter.STRUCTURE,
+        'true'),
     structureDeckManagerUrl: yugi.service.url.build(
         yugi.Config.ServletPath.DECK_MANAGER,
         yugi.Config.UrlParameter.STRUCTURE,
