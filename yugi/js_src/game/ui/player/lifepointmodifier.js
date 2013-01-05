@@ -60,10 +60,10 @@ yugi.game.ui.player.LifePointModifier = function(player) {
    * @private
    */
   this.values_ = [
-    1000,
-    500,
     100,
-    50
+    200,
+    500,
+    1000
   ];
 
   /**
