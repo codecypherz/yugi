@@ -3,7 +3,6 @@ package yugi.servlet;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.CharBuffer;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,14 +11,12 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.http.client.utils.URIBuilder;
-
 import yugi.Config;
 import yugi.Config.HtmlParam;
 import yugi.Config.Mode;
 import yugi.Config.Servlet;
-import yugi.service.UserUtil;
 import yugi.Screen;
+import yugi.service.UserUtil;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -80,27 +77,18 @@ public class ServletUtil {
 		// All CSS is parameterized the same way.
 		html = Config.replaceParam(html, HtmlParam.CSS_FILE_PATH, screen.getCssPath());
 		
-		// Figure out the continue URL with the mode parameter attached.
-		String thisUrl = req.getRequestURI();
-		
-		try {
-			URIBuilder builder = new URIBuilder(thisUrl);
-			Mode mode = Config.getMode(req);
-			if (mode != null) {
-				builder.setParameter(
-						Config.UrlParameter.MODE.name().toLowerCase(),
-						mode.toString().toLowerCase());
-			}
-			thisUrl = builder.build().toString();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
+		// Make the continue URL this exact same URL.
+		String currentUrl = req.getRequestURL().toString();
+		String currentQueryString = req.getQueryString();
+		if (currentQueryString != null) {
+			currentUrl += "?" + currentQueryString;
 		}
 
 		// Figure out the sign/in out URL.
 		User user = userService.getCurrentUser();
 		boolean signedOut = user == null;
 		String signInOutUrl = signedOut ?
-				userService.createLoginURL(thisUrl) :
+				userService.createLoginURL(currentUrl) :
 				userService.createLogoutURL(createUrl(req, "/"));
 
 		// Figure out the deck manager URL.
