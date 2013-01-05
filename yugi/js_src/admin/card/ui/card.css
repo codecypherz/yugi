@@ -128,11 +128,21 @@ label.yugi-admin-card-effect {
 }
 
 .yugi-admin-buttons {
-  margin-right: 50px;
+  margin-right: 17px;
   text-align: right;
 }
 
 .yugi-admin-buttons > button {
   margin-left: 10px;
   width: 100px;
+}
+
+/*
+ * Disable this button until we decide we need it again.  Deleting a card is
+ * harder now since people are creating decks.  To enable this on a more
+ * permanent basis, a card to deck mapping will need to be created somewhere
+ * otherwise a really expensive removal operation will need to be done.
+ */
+.yugi-delete-button {
+	display: none;
 }
