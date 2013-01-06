@@ -76,19 +76,12 @@ public class ServletUtil {
 
 		// All CSS is parameterized the same way.
 		html = Config.replaceParam(html, HtmlParam.CSS_FILE_PATH, screen.getCssPath());
-		
-		// Make the continue URL this exact same URL.
-		String currentUrl = req.getRequestURL().toString();
-		String currentQueryString = req.getQueryString();
-		if (currentQueryString != null) {
-			currentUrl += "?" + currentQueryString;
-		}
 
 		// Figure out the sign/in out URL.
 		User user = userService.getCurrentUser();
 		boolean signedOut = user == null;
 		String signInOutUrl = signedOut ?
-				userService.createLoginURL(currentUrl) :
+				createLoginUrl(req) :
 				userService.createLogoutURL(createUrl(req, "/"));
 
 		// Figure out the deck manager URL.
@@ -114,13 +107,11 @@ public class ServletUtil {
 	/**
 	 * Writes the login screen to the response.
 	 * @param resp The HTTP response.
-	 * @param userService The user service.
 	 * @throws IOException Thrown if writing the response fails.
 	 */
 	public static void writeLoginScreen(
 			HttpServletRequest req,
-			HttpServletResponse res,
-			UserService userService)
+			HttpServletResponse res)
 	throws IOException {
 		
 		// TODO Create an actual HTML file for this authentication screen.
@@ -128,8 +119,24 @@ public class ServletUtil {
 		// Write out a link so they can authenticate themselves.  The link will
 		// forward the user to the current URL by default.
 		res.getWriter().println("<p>Please <a href=\"" +
-				userService.createLoginURL(req.getRequestURI()) +
+				createLoginUrl(req) +
 				"\">sign in</a> in order to use this part of Yu-Gi-Oh! Online.</p>");
+	}
+	
+	/**
+	 * Creates a URL that will allow the user to login and be redirected to the
+	 * exact same URL in the given request.
+	 * @param req The request.
+	 * @return The login URL.
+	 */
+	public static String createLoginUrl(HttpServletRequest req) {
+		// Make the continue URL this exact same URL.
+		String currentUrl = req.getRequestURL().toString();
+		String currentQueryString = req.getQueryString();
+		if (currentQueryString != null) {
+			currentUrl += "?" + currentQueryString;
+		}
+		return userService.createLoginURL(currentUrl);
 	}
 	
 	/**

@@ -28,6 +28,10 @@
 	margin-right: 10px;
 }
 
+.yugi-deck-name > input {
+	width: 203px;
+}
+
 .yugi-read-only .yugi-deck-name {
 	cursor: auto;
 }

@@ -17,7 +17,7 @@ public class Config {
 	 * This is used to bust the cache for JS and CSS.  Change this every time
 	 * you deploy to AppEngine.
 	 */
-	public static final String VERSION = "22";
+	public static final String VERSION = "23";
 	
 	/**
 	 * The set of servlets and their meta-data.
@@ -29,7 +29,9 @@ public class Config {
 		CARD_IMAGE("/card/image"),
 		CREATE_GAME("/game/create"),
 		DECK("/deck"),
+		DECK_COPY("/deck/copy"),
 		DECK_DELETE("/deck/delete"),
+		DECK_EDITOR("/deck/editor"),
 		DECK_MANAGER("/deck/manager"),
 		DECK_VIEWER("/deck/viewer"),
 		DECKS("/decks"),

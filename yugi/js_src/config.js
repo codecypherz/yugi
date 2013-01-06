@@ -88,6 +88,7 @@ yugi.Config.ServletPath = {
   CARD_SEARCH: '/card/search',
   CREATE_GAME: '/game/create',
   DECK: '/deck',
+  DECK_COPY: '/deck/copy',
   DECK_DELETE: '/deck/delete',
   DECK_EDITOR: '/deck/editor',
   DECK_MANAGER: '/deck/manager',

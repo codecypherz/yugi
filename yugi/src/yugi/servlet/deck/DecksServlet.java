@@ -54,7 +54,7 @@ public class DecksServlet extends HttpServlet {
 				// Make sure the user is logged in.
 				User user = userService.getCurrentUser();
 				if (user == null) {
-					ServletUtil.writeLoginScreen(req, res, userService);
+					ServletUtil.writeLoginScreen(req, res);
 					return;
 				}
 				

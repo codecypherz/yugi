@@ -17,7 +17,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 public class DeckManagerServlet extends HttpServlet {
-
+	
 	private static final long serialVersionUID = 2854995977277290164L;
 	
 	private static UserService userService = UserServiceFactory.getUserService();
@@ -26,17 +26,22 @@ public class DeckManagerServlet extends HttpServlet {
 	 * This is the request for the application.  This only writes back the HTML.
 	 */
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
+	public void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws IOException {
-
+		
 		// Mark the page as read only if the request is for structure decks and
 		// the user is not an administrator.
 		Map<HtmlParam, String> paramMap = new HashMap<HtmlParam, String>();
 		if (isReadOnly(req)) {
 			paramMap.put(HtmlParam.READ_ONLY, "true");
+		} else if (!userService.isUserLoggedIn()) {
+			// It's not read only, so check if the user is logged in.  You need
+			// to be logged in to manage decks of any sort.
+			ServletUtil.writeLoginScreen(req, res);
+			return;
 		}
 		
-		ServletUtil.writeScreen(req, resp, Screen.DECK_MANAGER, paramMap);
+		ServletUtil.writeScreen(req, res, Screen.DECK_MANAGER, paramMap);
 	}
 	
 	/**

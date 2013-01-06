@@ -37,7 +37,7 @@ public class DeckDeleteServlet extends HttpServlet {
 		// The user must be signed in to delete anything.
 		User user = userService.getCurrentUser();
 		if (user == null) {
-			ServletUtil.writeLoginScreen(req, res, userService);
+			ServletUtil.writeLoginScreen(req, res);
 			return;
 		}
 

@@ -43,7 +43,7 @@ public class DeckEditorServlet extends HttpServlet {
 			
 			// TODO Redirect to the deck viewer instead.
 			
-			ServletUtil.writeLoginScreen(req, res, userService);
+			ServletUtil.writeLoginScreen(req, res);
 			return;
 		}
 		

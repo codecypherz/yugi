@@ -12,10 +12,12 @@ goog.require('goog.dom.classes');
 goog.require('goog.soy');
 goog.require('goog.ui.Component');
 goog.require('yugi.Config');
+goog.require('yugi.deck.manager.model.CopyAction');
 goog.require('yugi.deck.manager.model.Decks');
 goog.require('yugi.deck.manager.model.DeleteAction');
 goog.require('yugi.deck.manager.ui.deck.soy');
 goog.require('yugi.model.Notifier');
+goog.require('yugi.model.User');
 goog.require('yugi.service.DeckService');
 goog.require('yugi.service.DecksService');
 goog.require('yugi.service.url');
@@ -62,6 +64,12 @@ yugi.deck.manager.ui.DecksViewer = function(readOnly) {
    * @private
    */
   this.notifier_ = yugi.model.Notifier.get();
+
+  /**
+   * @type {!yugi.model.User}
+   * @private
+   */
+  this.user_ = yugi.model.User.get();
 
   /**
    * @type {!Array.<!yugi.ui.menu.Menu>}
@@ -177,11 +185,9 @@ yugi.deck.manager.ui.DecksViewer.prototype.renderDecks_ = function() {
         });
     goog.dom.appendChild(element, deckElement);
 
-    // Don't render actions in read only mode.
-    if (!this.readOnly_) {
-      // Set up the menus for the deck.
-      var actions = new Array();
-      actions.push(new yugi.deck.manager.model.DeleteAction(deck, this.decks_));
+    // Set up the menu for the deck.
+    var actions = this.createActions_(deck);
+    if (actions && actions.length > 0) {
       var menu = new yugi.ui.menu.Menu(actions);
       menu.render(deckElement);
       this.menus_.push(menu);
@@ -206,6 +212,24 @@ yugi.deck.manager.ui.DecksViewer.prototype.renderDecks_ = function() {
           newDeckPath: newDeckRequestUri.toString()
         }));
   }
+};
+
+
+/**
+ * Create the actions the user can take on the given deck.
+ * @param {!yugi.model.Deck} deck The deck for which to create actions.
+ * @return {!Array.<!yugi.model.Action>} actions The actions for the deck.
+ * @private
+ */
+yugi.deck.manager.ui.DecksViewer.prototype.createActions_ = function(deck) {
+  var actions = new Array();
+  if (this.user_.isSignedIn()) {
+    actions.push(new yugi.deck.manager.model.CopyAction(deck));
+  }
+  if (!this.readOnly_) {
+    actions.push(new yugi.deck.manager.model.DeleteAction(deck, this.decks_));
+  }
+  return actions;
 };
 
 

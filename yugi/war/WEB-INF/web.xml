@@ -127,6 +127,15 @@
     <url-pattern>/deck</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>Deck Copy Servlet</servlet-name>
+    <servlet-class>yugi.servlet.deck.DeckCopyServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Deck Copy Servlet</servlet-name>
+    <url-pattern>/deck/copy</url-pattern>
+  </servlet-mapping>
+  
   <!-- ===================================================== -->
   <!-- ======================= ADMIN ======================= -->
   <!-- ===================================================== -->
