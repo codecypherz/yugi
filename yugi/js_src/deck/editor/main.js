@@ -124,6 +124,12 @@ yugi.deck.editor.Main = function(
         }
         selectionUi.render(mainElement);
         swapper.render(mainElement);
+
+        // Select the main card if there is one.
+        var mainCard = e.deck.getMainCard();
+        if (mainCard) {
+          selectionModel.setSelected(mainCard, null);
+        }
       });
 };
 goog.inherits(yugi.deck.editor.Main, yugi.Main);

@@ -113,7 +113,7 @@ yugi.model.Selection.prototype.setSelected = function(selectable, element) {
       goog.dom.classes.enable(this.selectedElement_, yugi.ui.Css.SELECTED,
           true);
     } else {
-      this.logger.severe('No element associated with the selected item.');
+      this.logger.warning('No element associated with the selected item.');
     }
 
     this.dispatchEvent(new yugi.model.Selection.SelectedEvent(this.selected_));
