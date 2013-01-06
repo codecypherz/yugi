@@ -43,7 +43,7 @@ yugi.deck.editor.model.Constructor = function(notifier, deckService) {
    * @private
    */
   this.deck_ = new yugi.model.Deck();
-  this.deck_.setName('Untitled Deck');
+  this.deck_.setName(yugi.deck.editor.model.Constructor.DEFAULT_NAME);
 
   /**
    * @type {!yugi.model.Deck.Type}
@@ -112,6 +112,14 @@ yugi.deck.editor.model.Constructor.Status = {
   SAVED: 'Saved',
   SAVING: 'Saving...'
 };
+
+
+/**
+ * The default name for a new deck.
+ * @type {string}
+ * @const
+ */
+yugi.deck.editor.model.Constructor.DEFAULT_NAME = 'Untitled Deck';
 
 
 /**
@@ -229,6 +237,9 @@ yugi.deck.editor.model.Constructor.prototype.setCoverCard = function(card) {
  * @param {string} name The name of the deck.
  */
 yugi.deck.editor.model.Constructor.prototype.setName = function(name) {
+  if (this.deck_.getName() == name) {
+    return; // No change.
+  }
   this.notifier_.post('Set deck name to "' + name + '"');
   this.deck_.setName(name);
   this.save_();

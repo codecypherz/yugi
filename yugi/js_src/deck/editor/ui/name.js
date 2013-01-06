@@ -4,15 +4,17 @@
 
 goog.provide('yugi.deck.editor.ui.Name');
 
+goog.require('goog.Timer');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
+goog.require('goog.string');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.LabelInput');
 goog.require('yugi.deck.editor.model.Constructor');
 goog.require('yugi.deck.editor.model.UiState');
-goog.require('yugi.deck.editor.ui.NameDialog');
 goog.require('yugi.model.Deck');
 
 
@@ -24,6 +26,12 @@ goog.require('yugi.model.Deck');
  */
 yugi.deck.editor.ui.Name = function() {
   goog.base(this);
+
+  /**
+   * @type {!goog.debug.Logger}
+   * @protected
+   */
+  this.logger = goog.debug.Logger.getLogger('yugi.deck.editor.ui.Name');
 
   /**
    * @type {!yugi.deck.editor.model.Constructor}
@@ -38,6 +46,13 @@ yugi.deck.editor.ui.Name = function() {
   this.uiState_ = yugi.deck.editor.model.UiState.get();
 
   /**
+   * @type {!goog.ui.LabelInput}
+   * @private
+   */
+  this.nameLabelInput_ = new goog.ui.LabelInput('Enter deck name');
+  this.addChild(this.nameLabelInput_);
+
+  /**
    * @type {!goog.events.EventHandler}
    * @private
    */
@@ -45,28 +60,14 @@ yugi.deck.editor.ui.Name = function() {
   this.registerDisposable(this.deckHandler_);
 
   /**
-   * @type {!yugi.deck.editor.ui.NameDialog}
+   * The last valid deck name.  Used to restore the deck name if the user
+   * deletes the name and the input field loses focus.
+   * @type {string}
    * @private
    */
-  this.nameDialog_ = new yugi.deck.editor.ui.NameDialog();
-  this.addChild(this.nameDialog_);
+  this.lastDeckName_ = '';
 };
 goog.inherits(yugi.deck.editor.ui.Name, goog.ui.Component);
-
-
-/**
- * @type {Element}
- * @private
- */
-yugi.deck.editor.ui.Name.prototype.nameElement_ = null;
-
-
-/**
- * @type {!goog.debug.Logger}
- * @protected
- */
-yugi.deck.editor.ui.Name.prototype.logger = goog.debug.Logger.getLogger(
-    'yugi.deck.editor.ui.Name');
 
 
 /**
@@ -81,8 +82,13 @@ yugi.deck.editor.ui.Name.Css_ = {
 
 /** @override */
 yugi.deck.editor.ui.Name.prototype.createDom = function() {
-  this.setElementInternal(goog.dom.createDom(goog.dom.TagName.DIV,
+  this.setElementInternal(goog.dom.createDom(
+      goog.dom.TagName.DIV,
       yugi.deck.editor.ui.Name.Css_.ROOT));
+
+  if (!this.uiState_.isReadOnly()) {
+    this.nameLabelInput_.render(this.getElement());
+  }
 };
 
 
@@ -90,13 +96,11 @@ yugi.deck.editor.ui.Name.prototype.createDom = function() {
 yugi.deck.editor.ui.Name.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
 
-  this.nameElement_ = this.getElement();
-
   // Don't listen to clicks if in read only mode.
   if (!this.uiState_.isReadOnly()) {
-    this.getHandler().listen(this.nameElement_,
-        goog.events.EventType.CLICK,
-        this.onNameClick_);
+    this.getHandler().listen(this.nameLabelInput_.getElement(),
+        goog.events.EventType.BLUR,
+        this.onNameBlur_);
   }
 
   // Listen for when the deck changes so the deck listener can be updated.
@@ -132,15 +136,30 @@ yugi.deck.editor.ui.Name.prototype.onDeckChanged_ = function() {
  * @private
  */
 yugi.deck.editor.ui.Name.prototype.onNameChanged_ = function() {
-  this.nameElement_.innerHTML = this.constructor_.getDeck().getName();
+  this.lastDeckName_ = this.constructor_.getDeck().getName();
+  if (this.uiState_.isReadOnly()) {
+    goog.dom.setTextContent(this.getElement(), this.lastDeckName_);
+  } else {
+    this.nameLabelInput_.setValue(this.lastDeckName_);
+    if (this.lastDeckName_ == yugi.deck.editor.model.Constructor.DEFAULT_NAME) {
+      goog.Timer.callOnce(
+          goog.bind(this.nameLabelInput_.focusAndSelect, this.nameLabelInput_),
+          0,
+          this);
+    }
+  }
 };
 
 
 /**
- * Opens up the deck name dialog.
+ * Saves the deck name.
  * @private
  */
-yugi.deck.editor.ui.Name.prototype.onNameClick_ = function() {
-  this.logger.info('Opening the deck name dialog.');
-  this.nameDialog_.show(this.constructor_.getDeck().getName());
+yugi.deck.editor.ui.Name.prototype.onNameBlur_ = function() {
+  var newDeckName = this.nameLabelInput_.getValue();
+  if (goog.string.isEmptySafe(newDeckName)) {
+    this.nameLabelInput_.setValue(this.lastDeckName_);
+  } else {
+    this.constructor_.setName(newDeckName);
+  }
 };

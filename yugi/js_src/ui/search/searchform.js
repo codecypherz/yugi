@@ -97,7 +97,6 @@ yugi.ui.search.SearchForm.prototype.focus = function() {
   if (!this.isInDocument()) {
     return;
   }
-  console.info('About to give focus');
   this.delayNameInputFocus_();
 };
 
