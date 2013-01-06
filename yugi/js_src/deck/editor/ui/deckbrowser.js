@@ -134,7 +134,9 @@ yugi.deck.editor.ui.DeckBrowser.prototype.enterDocument = function() {
   // Listen for when to refresh the UI.
   this.getHandler().listen(this.constructor_,
       yugi.deck.editor.model.Constructor.EventType.CARDS_CHANGED,
-      this.onCardsChanged_);
+      this.updateCards_);
+
+  this.updateCards_();
 };
 
 
@@ -158,11 +160,11 @@ yugi.deck.editor.ui.DeckBrowser.prototype.switchToSearchMode_ = function() {
 
 /**
  * Updates the UI to reflect the change in cards.
- * @param {!yugi.deck.editor.model.Constructor.CardsChangedEvent} e The event.
  * @private
  */
-yugi.deck.editor.ui.DeckBrowser.prototype.onCardsChanged_ = function(e) {
-  this.cardBrowser_.browse(e.deck.getCards(this.deckType_));
+yugi.deck.editor.ui.DeckBrowser.prototype.updateCards_ = function() {
+  var deck = this.constructor_.getDeck();
+  this.cardBrowser_.browse(deck.getCards(this.deckType_));
 };
 
 

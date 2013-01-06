@@ -7,7 +7,9 @@ goog.provide('yugi.deck.editor.Main');
 
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classes');
+goog.require('goog.events.EventHandler');
 goog.require('goog.string');
 goog.require('yugi.Main');
 goog.require('yugi.deck.editor.model.Constructor');
@@ -64,6 +66,7 @@ yugi.deck.editor.Main = function(
 
   // Header
   var header = new yugi.ui.header.Header();
+  this.registerDisposable(header);
   header.render(dom.getElement('header'));
 
   // Footer
@@ -73,24 +76,19 @@ yugi.deck.editor.Main = function(
   // Name and State components
   var nameAndStatusElement = dom.getElement('name-status');
   var name = new yugi.deck.editor.ui.Name();
-  name.render(nameAndStatusElement);
-  if (!isReadOnly) { // Don't render status for read only.
-    var status = new yugi.deck.editor.ui.Status();
-    status.render(nameAndStatusElement);
-  }
+  this.registerDisposable(name);
+  var status = new yugi.deck.editor.ui.Status();
+  this.registerDisposable(status);
 
   // Selection
   var selectionUi = new yugi.ui.selection.Selection();
-  selectionUi.render(mainElement);
+  this.registerDisposable(selectionUi);
 
   // Swapper
   var swapper = new yugi.deck.editor.ui.Swapper();
-  swapper.render(mainElement);
+  this.registerDisposable(swapper);
 
   // Register all the disposables.
-  this.registerDisposable(header);
-  this.registerDisposable(selectionUi);
-  this.registerDisposable(swapper);
   this.registerDisposable(selectionModel);
   this.registerDisposable(deckService);
   this.registerDisposable(constructor);
@@ -100,10 +98,33 @@ yugi.deck.editor.Main = function(
   this.registerDisposable(user);
   this.registerDisposable(authService);
 
+  // Render a simple loading UI.
+  var loadingDiv = goog.dom.createDom(goog.dom.TagName.DIV);
+  goog.dom.setTextContent(loadingDiv, 'Loading...');
+  mainElement.appendChild(loadingDiv);
+
   // Start loading the deck.
   if (deckKey) {
     deckService.load(deckKey);
   }
+
+  var handler = new goog.events.EventHandler(this);
+  this.registerDisposable(handler);
+
+  // Render more stuff after the deck loads.
+  handler.listen(yugi.service.DeckService.get(),
+      yugi.service.DeckService.EventType.LOADED,
+      function(e) {
+
+        // Render the deck editing UI.
+        goog.dom.removeNode(loadingDiv);
+        name.render(nameAndStatusElement);
+        if (!isReadOnly) { // Don't render status for read only.
+          status.render(nameAndStatusElement);
+        }
+        selectionUi.render(mainElement);
+        swapper.render(mainElement);
+      });
 };
 goog.inherits(yugi.deck.editor.Main, yugi.Main);
 
