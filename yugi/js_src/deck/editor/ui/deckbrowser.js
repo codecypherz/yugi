@@ -14,7 +14,6 @@ goog.require('yugi.deck.editor.model.CoverAction');
 goog.require('yugi.deck.editor.model.RemoveAction');
 goog.require('yugi.deck.editor.model.UiState');
 goog.require('yugi.deck.editor.ui.soy');
-goog.require('yugi.model.Selection');
 goog.require('yugi.ui.browser.CardBrowser');
 
 
@@ -45,12 +44,6 @@ yugi.deck.editor.ui.DeckBrowser = function(deckType) {
    * @private
    */
   this.uiState_ = yugi.deck.editor.model.UiState.get();
-
-  /**
-   * @type {!yugi.model.Selection}
-   * @private
-   */
-  this.selection_ = yugi.model.Selection.get();
 
   /**
    * @type {!yugi.ui.browser.CardBrowser}
@@ -153,7 +146,6 @@ yugi.deck.editor.ui.DeckBrowser.prototype.getDeckType = function() {
  * @private
  */
 yugi.deck.editor.ui.DeckBrowser.prototype.switchToSearchMode_ = function() {
-  this.selection_.deselect();
   this.uiState_.setMode(yugi.deck.editor.model.UiState.Mode.SEARCH);
 };
 

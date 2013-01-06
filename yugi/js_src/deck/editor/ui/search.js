@@ -12,7 +12,6 @@ goog.require('goog.ui.Component');
 goog.require('yugi.deck.editor.model.Constructor');
 goog.require('yugi.deck.editor.model.UiState');
 goog.require('yugi.deck.editor.ui.soy');
-goog.require('yugi.model.Selection');
 goog.require('yugi.ui.search.SearchForm');
 goog.require('yugi.ui.search.SearchResults');
 
@@ -37,12 +36,6 @@ yugi.deck.editor.ui.Search = function() {
    * @private
    */
   this.uiState_ = yugi.deck.editor.model.UiState.get();
-
-  /**
-   * @type {!yugi.model.Selection}
-   * @private
-   */
-  this.selection_ = yugi.model.Selection.get();
 
   /**
    * @type {!yugi.ui.search.SearchForm}
@@ -146,7 +139,6 @@ yugi.deck.editor.ui.Search.prototype.enterDocument = function() {
  * @private
  */
 yugi.deck.editor.ui.Search.prototype.switchToBrowseMode_ = function() {
-  this.selection_.deselect();
   this.uiState_.setMode(yugi.deck.editor.model.UiState.Mode.BROWSE);
 };
 
