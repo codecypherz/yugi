@@ -30,43 +30,48 @@
 
 .yugi-search-results {
 	border-collapse: collapse;
+	cursor: pointer;
 	font-size: 12px;
   width: 100%;
 }
 
-.yugi-search-results tr {
-	cursor: pointer;
+.yugi-search-row.yugi-selected {
+  font-weight: bold;
+  outline: none;
 }
 
-.yugi-search-results td {
+.yugi-search-row.yugi-monster-card {
+  background-color: MONSTER_COLOR;
+}
+
+.yugi-search-row.yugi-spell-card {
+  background-color: SPELL_COLOR;
+}
+
+.yugi-search-row.yugi-trap-card {
+  background-color: TRAP_COLOR;
+}
+
+.yugi-search-cell {
 	border-bottom: SEARCH_RESULTS_BORDER;
 	border-left: SEARCH_RESULTS_BORDER;
 	padding: 3px 8px;
 }
 
-.yugi-search-results td:first-child {
+.yugi-search-cell:nth-child(1) {
 	border-left: none;
 }
 
-tr.yugi-monster-card {
-	background-color: MONSTER_COLOR;
+.yugi-search-cell:nth-child(2) {
+  width: 50px;
 }
 
-tr.yugi-spell-card {
-  background-color: SPELL_COLOR;
-}
-
-tr.yugi-trap-card {
-  background-color: TRAP_COLOR;
+.yugi-search-cell:nth-child(3) {
+	width: 37px;
 }
 
 .yugi-search-results-action-button {
   font-size: 10px;
-}
-
-tr.yugi-selected {
-	font-weight: bold;
-	outline: none;
 }
 
 .yugi-search-results-empty {

@@ -4,6 +4,7 @@
 
 goog.provide('yugi.ui.search.SearchForm');
 
+goog.require('goog.Timer');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom.classes');
 goog.require('goog.events.KeyCodes');
@@ -12,6 +13,7 @@ goog.require('goog.soy');
 goog.require('goog.string');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.LabelInput');
 goog.require('yugi.model.Notifier');
 goog.require('yugi.model.Search');
 goog.require('yugi.ui.search.soy');
@@ -27,6 +29,12 @@ yugi.ui.search.SearchForm = function() {
   goog.base(this);
 
   /**
+   * @type {!goog.debug.Logger}
+   * @protected
+   */
+  this.logger = goog.debug.Logger.getLogger('yugi.ui.search.SearchForm');
+
+  /**
    * @type {!yugi.model.Notifier}
    * @private
    */
@@ -39,36 +47,26 @@ yugi.ui.search.SearchForm = function() {
   this.search_ = yugi.model.Search.get();
 
   /**
+   * @type {!goog.ui.LabelInput}
+   * @private
+   */
+  this.nameLabelInput_ = new goog.ui.LabelInput('Search by name');
+  this.addChild(this.nameLabelInput_);
+
+  /**
    * @type {!goog.ui.Button}
    * @private
    */
   this.searchButton_ = new goog.ui.Button(null);
-
   this.addChild(this.searchButton_);
+
+  /**
+   * @type {goog.events.KeyHandler}
+   * @private
+   */
+  this.nameInputKeyHandler_ = null;
 };
 goog.inherits(yugi.ui.search.SearchForm, goog.ui.Component);
-
-
-/**
- * @type {Element}
- * @private
- */
-yugi.ui.search.SearchForm.prototype.nameInput_;
-
-
-/**
- * @type {goog.events.KeyHandler}
- * @private
- */
-yugi.ui.search.SearchForm.prototype.nameInputKeyHandler_;
-
-
-/**
- * @type {!goog.debug.Logger}
- * @protected
- */
-yugi.ui.search.SearchForm.prototype.logger = goog.debug.Logger.getLogger(
-    'yugi.ui.search.SearchForm');
 
 
 /**
@@ -108,17 +106,20 @@ yugi.ui.search.SearchForm.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
 
   // Grab references to the elements.
-  this.nameInput_ = this.getElementByFragment(
+  var nameInputElement = this.getElementByFragment(
       yugi.ui.search.SearchForm.Id_.NAME_INPUT);
 
-  // Decorate the buttons.
+  // Decorate.
+  if (!this.nameLabelInput_.wasDecorated()) {
+    this.nameLabelInput_.decorate(nameInputElement);
+  }
   if (!this.searchButton_.wasDecorated()) {
     this.searchButton_.decorate(this.getElementByFragment(
         yugi.ui.search.SearchForm.Id_.SEARCH_BUTTON));
   }
 
   // Set up the key handler for various inputs.
-  this.nameInputKeyHandler_ = new goog.events.KeyHandler(this.nameInput_);
+  this.nameInputKeyHandler_ = new goog.events.KeyHandler(nameInputElement);
 
   // Listen to various things.
   this.getHandler().listen(this.nameInputKeyHandler_,
@@ -128,8 +129,15 @@ yugi.ui.search.SearchForm.prototype.enterDocument = function() {
       goog.ui.Component.EventType.ACTION,
       this.startSearch_);
 
+  this.getHandler().listen(this.search_,
+      yugi.model.Search.EventType.RESULTS,
+      this.onResults_);
+
   // Give the text field focus.
-  this.nameInput_.focus();
+  goog.Timer.callOnce(
+      goog.bind(this.nameLabelInput_.focusAndSelect, this.nameLabelInput_),
+      0,
+      this);
 };
 
 
@@ -157,11 +165,23 @@ yugi.ui.search.SearchForm.prototype.onNameInputKeyEvent_ = function(e) {
  * @private
  */
 yugi.ui.search.SearchForm.prototype.startSearch_ = function() {
-  var name = goog.string.trim(this.nameInput_.value);
+  var name = goog.string.trim(this.nameLabelInput_.getValue());
   if (name) {
+    this.searchButton_.setEnabled(false);
     this.search_.byName(name);
   } else {
     this.notifier_.post('Please enter a name by which to search.');
-    this.nameInput_.focus();
+    this.nameLabelInput_.focusAndSelect();
   }
+};
+
+
+/**
+ * Enables the search button and gives the name input focus after the search
+ * completes.
+ * @private
+ */
+yugi.ui.search.SearchForm.prototype.onResults_ = function() {
+  this.searchButton_.setEnabled(true);
+  this.nameLabelInput_.focusAndSelect();
 };

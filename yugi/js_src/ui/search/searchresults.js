@@ -122,7 +122,9 @@ yugi.ui.search.SearchResults.Id_ = {
  * @private
  */
 yugi.ui.search.SearchResults.Css_ = {
+  CELL: goog.getCssName('yugi-search-cell'),
   MONSTER: goog.getCssName('yugi-monster-card'),
+  ROW: goog.getCssName('yugi-search-row'),
   ROW_ACTION_BUTTON: goog.getCssName('yugi-search-results-action-button'),
   SPELL: goog.getCssName('yugi-spell-card'),
   TRAP: goog.getCssName('yugi-trap-card')
@@ -187,6 +189,9 @@ yugi.ui.search.SearchResults.prototype.exitDocument = function() {
 yugi.ui.search.SearchResults.prototype.onResults_ = function(e) {
   this.logger.info('Rendering search results.');
 
+  var dom = this.getDomHelper();
+  var css = yugi.ui.search.SearchResults.Css_;
+
   // Wipe the table clean.
   this.clearResults_();
 
@@ -205,14 +210,19 @@ yugi.ui.search.SearchResults.prototype.onResults_ = function(e) {
   // Create a tbody to add to the table.  This is for efficient DOM
   // manipulation, since the tbody will be in memory but not actually in the
   // DOM.  Rendering per row would be really slow.
-  var tbody = goog.dom.createElement(goog.dom.TagName.TBODY);
+  var tbody = dom.createDom(goog.dom.TagName.TBODY);
+
+  var firstRow = null;
 
   // We have cards, so render all the rows.
   goog.array.forEach(cards, function(card) {
-    var row = goog.dom.createElement(goog.dom.TagName.TR);
-    goog.dom.appendChild(tbody, row);
+    var row = dom.createDom(goog.dom.TagName.TR);
+    if (!firstRow) {
+      firstRow = row;
+    }
+    tbody.appendChild(row);
     var rowClass = yugi.ui.search.SearchResults.TYPE_TO_CSS_[card.getType()];
-    goog.dom.classes.add(row, rowClass);
+    goog.dom.classes.add(row, css.ROW, rowClass);
 
     // Listen to row focus.
     this.resultsHandler_.listen(row,
@@ -221,36 +231,50 @@ yugi.ui.search.SearchResults.prototype.onResults_ = function(e) {
             card, row));
 
     // Name
-    var name = goog.dom.createElement(goog.dom.TagName.TD);
-    name.innerHTML = card.getName();
-    goog.dom.appendChild(row, name);
+    var nameCell = this.appendCell_(row);
+    goog.dom.setTextContent(nameCell, card.getName());
 
     // Type
-    var type = goog.dom.createElement(goog.dom.TagName.TD);
-    type.innerHTML = card.getType();
-    goog.dom.appendChild(row, type);
+    var typeCell = this.appendCell_(row);
+    goog.dom.setTextContent(typeCell, card.getType());
 
     // The action button for the row.
-    var buttonTableData = goog.dom.createElement(goog.dom.TagName.TD);
-    goog.dom.appendChild(row, buttonTableData);
-    var buttonElement = goog.dom.createElement(goog.dom.TagName.BUTTON);
-    buttonElement.innerHTML = this.actionButtonText_;
-    goog.dom.classes.add(buttonElement,
-        yugi.ui.search.SearchResults.Css_.ROW_ACTION_BUTTON);
-    goog.dom.appendChild(buttonTableData, buttonElement);
+    var buttonCell = this.appendCell_(row);
+    var button = dom.createDom(goog.dom.TagName.BUTTON);
+    goog.dom.setTextContent(button, this.actionButtonText_);
+    goog.dom.classes.add(button, css.ROW_ACTION_BUTTON);
+    buttonCell.appendChild(button);
 
     // Create a card/button pair and add it to the list.
     cardButtonList.push({
       card: card,
-      buttonElement: buttonElement
+      buttonElement: button
     });
   }, this);
 
-  goog.dom.appendChild(this.table_, tbody);
+  this.table_.appendChild(tbody);
+
+  // Select the first card.
+  this.selection_.setSelected(cards[0], firstRow);
 
   // Delay the decoration of the buttons to make the UI appear snappier.
-  goog.Timer.callOnce(goog.bind(this.decorateRowButtons_, this,
-      cardButtonList), 0, this);
+  goog.Timer.callOnce(
+      goog.bind(this.decorateRowButtons_, this, cardButtonList), 0, this);
+};
+
+
+/**
+ * Creates a cell element.
+ * @param {!Element} row The row to which to append.
+ * @return {!Element} The newly created/appended cell.
+ * @private
+ */
+yugi.ui.search.SearchResults.prototype.appendCell_ = function(row) {
+  var cell = goog.dom.createDom(
+      goog.dom.TagName.TD,
+      yugi.ui.search.SearchResults.Css_.CELL);
+  row.appendChild(cell);
+  return cell;
 };
 
 
@@ -301,7 +325,7 @@ yugi.ui.search.SearchResults.prototype.onRowButtonAction_ = function(card) {
  */
 yugi.ui.search.SearchResults.prototype.onSearching_ = function() {
   this.clearResults_();
-  this.emptyContent_.innerHTML = 'Searching...';
+  goog.dom.setTextContent(this.emptyContent_, 'Searching...');
   goog.style.showElement(this.emptyContent_, true);
   goog.style.showElement(this.table_, false);
 };
@@ -312,7 +336,7 @@ yugi.ui.search.SearchResults.prototype.onSearching_ = function() {
  * @private
  */
 yugi.ui.search.SearchResults.prototype.showEmptyResults_ = function() {
-  this.emptyContent_.innerHTML = 'No Results';
+  goog.dom.setTextContent(this.emptyContent_, 'No cards found.');
   goog.style.showElement(this.emptyContent_, true);
   goog.style.showElement(this.table_, false);
 };

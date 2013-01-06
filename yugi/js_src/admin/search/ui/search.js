@@ -4,7 +4,6 @@
 
 goog.provide('yugi.admin.search.ui.Search');
 
-goog.require('goog.Uri');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom.classes');
 goog.require('goog.soy');
@@ -12,6 +11,7 @@ goog.require('goog.ui.Button');
 goog.require('goog.ui.Component');
 goog.require('yugi.Config');
 goog.require('yugi.admin.search.ui.soy');
+goog.require('yugi.service.url');
 goog.require('yugi.ui.search.SearchForm');
 goog.require('yugi.ui.search.SearchResults');
 
@@ -30,21 +30,21 @@ yugi.admin.search.ui.Search = function() {
    * @private
    */
   this.searchForm_ = new yugi.ui.search.SearchForm();
+  this.addChild(this.searchForm_);
 
   /**
    * @type {!yugi.ui.search.SearchResults}
    * @private
    */
   this.searchResults_ = new yugi.ui.search.SearchResults('Edit');
+  this.addChild(this.searchResults_);
 
   /**
    * @type {!goog.ui.Button}
    * @private
    */
   this.backButton_ = new goog.ui.Button(null);
-
-  this.addChild(this.searchForm_);
-  this.addChild(this.searchResults_);
+  this.addChild(this.backButton_);
 };
 goog.inherits(yugi.admin.search.ui.Search, goog.ui.Component);
 
@@ -111,12 +111,7 @@ yugi.admin.search.ui.Search.prototype.enterDocument = function() {
  */
 yugi.admin.search.ui.Search.prototype.onCardAction_ = function(e) {
 
-  // Redirect the user to the card edit screen.
-  var uri = new goog.Uri();
-  uri.setPath(yugi.Config.ServletPath.ADMIN_CARD);
-  uri.setParameterValue(yugi.Config.UrlParameter.CARD_KEY, e.card.getKey());
-  if (yugi.Config.isDevMode()) {
-    uri.setParameterValue(yugi.Config.UrlParameter.MODE, yugi.Config.Mode.DEV);
-  }
-  window.location.href = uri.toString();
+  window.location.href = yugi.service.url.build(
+      yugi.Config.ServletPath.ADMIN_CARD,
+      yugi.Config.UrlParameter.CARD_KEY, e.card.getKey());
 };
