@@ -3,7 +3,7 @@
  */
 
 .yugi-deck-viewer {
-	margin-top: 20px;
+	margin-top: 15px;
 }
 
 .yugi-deck img {
@@ -14,7 +14,7 @@
 .yugi-deck,
 .yugi-new-deck {
 	color: #333;
-	margin: 10px;
+	margin: 0 12px 20px;
 	text-decoration: none;
 	vertical-align: top;
 }
