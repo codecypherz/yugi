@@ -90,6 +90,18 @@ yugi.ui.search.SearchForm.Css_ = {
 };
 
 
+/**
+ * Gives the appropriate control within the search form focus.
+ */
+yugi.ui.search.SearchForm.prototype.focus = function() {
+  if (!this.isInDocument()) {
+    return;
+  }
+  console.info('About to give focus');
+  this.delayNameInputFocus_();
+};
+
+
 /** @override */
 yugi.ui.search.SearchForm.prototype.createDom = function() {
   this.setElementInternal(goog.soy.renderAsElement(
@@ -134,10 +146,7 @@ yugi.ui.search.SearchForm.prototype.enterDocument = function() {
       this.onResults_);
 
   // Give the text field focus.
-  goog.Timer.callOnce(
-      goog.bind(this.nameLabelInput_.focusAndSelect, this.nameLabelInput_),
-      0,
-      this);
+  this.delayNameInputFocus_();
 };
 
 
@@ -145,6 +154,18 @@ yugi.ui.search.SearchForm.prototype.enterDocument = function() {
 yugi.ui.search.SearchForm.prototype.exitDocument = function() {
   goog.base(this, 'exitDocument');
   goog.dispose(this.nameInputKeyHandler_);
+};
+
+
+/**
+ * Gives the name input focus after a negligible delay.
+ * @private
+ */
+yugi.ui.search.SearchForm.prototype.delayNameInputFocus_ = function() {
+  goog.Timer.callOnce(
+      goog.bind(this.nameLabelInput_.focusAndSelect, this.nameLabelInput_),
+      0,
+      this);
 };
 
 

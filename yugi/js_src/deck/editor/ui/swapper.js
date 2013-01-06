@@ -32,14 +32,13 @@ yugi.deck.editor.ui.Swapper = function() {
    * @private
    */
   this.editor_ = new yugi.deck.editor.ui.Editor();
+  this.addChild(this.editor_);
 
   /**
    * @type {!yugi.deck.editor.ui.Search}
    * @private
    */
   this.search_ = new yugi.deck.editor.ui.Search();
-
-  this.addChild(this.editor_);
   this.addChild(this.search_);
 };
 goog.inherits(yugi.deck.editor.ui.Swapper, goog.ui.Component);

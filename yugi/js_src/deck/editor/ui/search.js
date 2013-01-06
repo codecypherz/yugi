@@ -130,6 +130,14 @@ yugi.deck.editor.ui.Search.prototype.enterDocument = function() {
   this.getHandler().listen(this.searchResults_,
       yugi.ui.search.SearchResults.EventType.CARD_ACTION,
       this.onCardAction_);
+
+  this.getHandler().listen(this.uiState_,
+      yugi.deck.editor.model.UiState.EventType.MODE_CHANGED,
+      function(e) {
+        if (e.mode == yugi.deck.editor.model.UiState.Mode.SEARCH) {
+          this.searchForm_.focus();
+        }
+      });
 };
 
 
