@@ -4,7 +4,6 @@
 
 goog.provide('yugi.deck.editor.ui.Name');
 
-goog.require('goog.Timer');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
@@ -141,14 +140,6 @@ yugi.deck.editor.ui.Name.prototype.onNameChanged_ = function() {
     goog.dom.setTextContent(this.getElement(), this.lastDeckName_);
   } else {
     this.nameLabelInput_.setValue(this.lastDeckName_);
-    // Give the name focus if it was auto-generated.
-    if (this.lastDeckName_ == yugi.deck.editor.model.Constructor.DEFAULT_NAME ||
-        goog.string.startsWith(this.lastDeckName_, 'Copy of ')) {
-      goog.Timer.callOnce(
-          goog.bind(this.nameLabelInput_.focusAndSelect, this.nameLabelInput_),
-          0,
-          this);
-    }
   }
 };
 

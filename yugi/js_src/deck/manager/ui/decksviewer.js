@@ -10,6 +10,7 @@ goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.dom.classes');
 goog.require('goog.soy');
+goog.require('goog.string');
 goog.require('goog.ui.Component');
 goog.require('yugi.Config');
 goog.require('yugi.deck.manager.model.CopyAction');
@@ -169,8 +170,14 @@ yugi.deck.manager.ui.DecksViewer.prototype.renderDecks_ = function() {
   });
   this.menus_ = new Array();
 
+  // Sort the decks by name.
+  var decks = this.decks_.getDecks();
+  goog.array.sort(decks, function(deck1, deck2) {
+    return goog.string.caseInsensitiveCompare(deck1.getName(), deck2.getName());
+  });
+
   // Render each deck.
-  goog.array.forEach(this.decks_.getDecks(), function(deck) {
+  goog.array.forEach(decks, function(deck) {
     var servlet = this.readOnly_ ?
         yugi.Config.ServletPath.DECK_VIEWER :
         yugi.Config.ServletPath.DECK_EDITOR;
