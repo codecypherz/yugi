@@ -13,7 +13,7 @@ import yugi.PMF;
 import yugi.message.DisconnectedMessage;
 import yugi.model.GameSession;
 import yugi.net.ChannelUtil;
-import yugi.query.Game;
+import yugi.service.GameService;
 
 import com.google.appengine.api.channel.ChannelPresence;
 import com.google.appengine.api.channel.ChannelService;
@@ -26,6 +26,8 @@ public class ChannelDisconnectedServlet extends HttpServlet {
 	private static final long serialVersionUID = -5765351299311083314L;
 	private static final Logger logger = Logger.getLogger(ChannelDisconnectedServlet.class.getName());
 	
+	private static GameService gameService = GameService.getInstance();
+	
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 	throws IOException {
@@ -34,7 +36,7 @@ public class ChannelDisconnectedServlet extends HttpServlet {
 		String clientId = presence.clientId();
 		logger.info(clientId + " just disconnected");
 		
-		GameSession game = Game.getForClientId(clientId);
+		GameSession game = gameService.getForClientId(clientId);
 		if (game == null) {
 			logger.severe("Failed to find the game for this client: " + clientId);
 			return;

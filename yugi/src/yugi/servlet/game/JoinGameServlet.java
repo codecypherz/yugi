@@ -3,10 +3,8 @@ package yugi.servlet.game;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -19,39 +17,45 @@ import yugi.Config.HtmlParam;
 import yugi.PMF;
 import yugi.Screen;
 import yugi.model.GameSession;
+import yugi.service.GameService;
 import yugi.servlet.ResponseStatusCode;
 import yugi.servlet.ServletUtil;
 
 import com.google.appengine.api.channel.ChannelService;
 import com.google.appengine.api.channel.ChannelServiceFactory;
-import com.google.appengine.api.datastore.KeyFactory;
 
 /**
  * Servlet responsible for joining games.
  */
 public class JoinGameServlet extends HttpServlet {
-
+	
 	private static final long serialVersionUID = -2913910228648599370L;
 	private static final Logger logger = Logger.getLogger(JoinGameServlet.class.getName());
-
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
+	
+	private static final ChannelService channelService = ChannelServiceFactory.getChannelService();
+	private static final GameService gameService = GameService.getInstance();
+	
+	public void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws IOException {
-
+		
 		// To join the game, you must have the game key of the game to join and
 		// specify the name you desire as a player.
 		String gameKey = Config.getGameKey(req);
 		String playerName = Config.getPlayerName(req);
-
+		
 		// Make sure the parameters were passed and valid.
 		if (gameKey == null || playerName == null) {
-			resp.setStatus(ResponseStatusCode.BAD_REQUEST.getCode());
+			res.setStatus(ResponseStatusCode.BAD_REQUEST.getCode());
 			return;
 		}
-
+		
+		// Get the existing client ID, if one exists.
+		String existingClientId = getPlayerClientId(req);
+		
 		// See if the game exists, then join it.
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		GameSession game = null;
-		String playerClientId = null;
+		String clientId = null;
 		try {
 
 			// TODO This lookup will fail if a user refreshes the page while
@@ -59,101 +63,114 @@ public class JoinGameServlet extends HttpServlet {
 			// might be to just delay game destruction on player disconnect.  If
 			// we do this, then we'll have to flag the game to not be destroyed
 			// once a reconnect happens.
-			game = pm.getObjectById(GameSession.class, KeyFactory.stringToKey(gameKey));
-
-			// Get the player's ID in the cookie, if it has one.
-			playerClientId = getPlayerClientId(req);
+			game = gameService.getGame(pm, gameKey);
+			if (game == null) {
+				res.setStatus(ResponseStatusCode.BAD_REQUEST.getCode());
+				return;
+			}
 			
-			if (playerClientId == null) {
-				
-				// If the player has no player ID, then they are a new participant.
-				playerClientId = join(game, gameKey, playerName);
-				
+			// See if the player is reconnecting.
+			if (isReconnecting(existingClientId, game)) {
+				logger.info("Player " + playerName +
+						" is reconnecting to " + game.getKeyAsString());
+				clientId = existingClientId;
 			} else {
 				
-				// If the player has an ID, then it could be from another game or
-				// from this game.  First, check to see if the player is just joining
-				// the same game again, otherwise check for an open spot and update
-				// the player's ID.
+				// The player is not reconnecting, just doing a simple join.
 				
-				if (playerClientId.equals(game.getPlayer1ClientId()) ||
-					playerClientId.equals(game.getPlayer2ClientId())) {
-					
-					// The player is already in the game, so they are
-					// reconnecting.  Game synchronization is kicked off once
-					// the ConnectedHandler is notified of the channel being
-					// established with the reconnected player.
-					logger.info("Player " + playerName + " rejoined their game.");
-					
-				} else {
-					
-					// The player is not in the game, so try to join it and get
-					// a different ID.  This is the common case where a user has
-					// played a game in the past and is trying to play a new game.
-					playerClientId = join(game, gameKey, playerName);
+				// Make sure the game is not full.
+				if (isGameFull(game)) {
+					logger.warning("Player " + playerName + " tried to join " +
+							"the game with game key = " + gameKey + ", but it was full.");
+					// TODO Write an error page.  Don't redirect to the landing.
+					redirectWithError(req, res, Config.Error.GAME_FULL, game);
+					return;
 				}
+				
+				// Join the game and get the player ID that was generated.
+				clientId = join(game, playerName);
+				
+				// Save the game since the state changed.
+				pm.makePersistent(game);
+				logger.info("Finished saving the game.");
 			}
-		} catch (JDOObjectNotFoundException e) {
-			logger.log(Level.SEVERE, "Could not find the game", e);
-			redirectWithError(req, resp, Config.Error.GAME_NOT_FOUND, game);
-			return;
-		} catch (GameFullException gfe) {
-			logger.warning("Player " + playerName + " tried to join " +
-					"the game with game key = " + gameKey + ", but it was full.");
-			redirectWithError(req, resp, Config.Error.GAME_FULL, game);
-			return;
 		} finally {
 			pm.close();
 		}
-
+		
+		// Double check that the client ID was set.
+		if (clientId == null) {
+			logger.severe("Failed to set the client ID");
+			res.setStatus(ResponseStatusCode.INTERNAL_SERVER_ERROR.getCode());
+			return;
+		}
+		
 		// Create the channel token to be used for this client.
-		ChannelService channelService = ChannelServiceFactory.getChannelService();
-		String channelToken = channelService.createChannel(playerClientId);
-
+		String channelToken = channelService.createChannel(clientId);
+		
 		// Write the response back to the client.
 	    Map<HtmlParam, String> paramMap = new HashMap<HtmlParam, String>();
-		paramMap.put(HtmlParam.GAME_KEY, KeyFactory.keyToString(game.getKey()));
+		paramMap.put(HtmlParam.GAME_KEY, game.getKeyAsString());
 		paramMap.put(HtmlParam.CHANNEL_TOKEN, channelToken);
 		paramMap.put(HtmlParam.PLAYER_NAME, playerName);
 		
-		resp.addCookie(new Cookie(CookieName.PLAYER_ID.name(), playerClientId));
+		res.addCookie(new Cookie(CookieName.PLAYER_ID.name(), clientId));
 		
-		ServletUtil.writeScreen(req, resp, Screen.GAME, paramMap);
+		ServletUtil.writeScreen(req, res, Screen.GAME, paramMap);
 	}
 	
 	/**
-	 * Tries to let the player with the given name join the game.  It is assumed
-	 * that the player has not already joined the game.
-	 * @param game The game to join.
-	 * @param gameKey The game's key as a string.
-	 * @param playerName The name with which to join the game.
-	 * @return The player's generated ID for the game.
-	 * @throws GameFullException Thrown if the game is already full.
+	 * Checks to see if the player identified by the client ID is reconnecting
+	 * to the given game.
+	 * @param clientId The client ID of the potentially reconnecting player.
+	 * @param game The game to check against.
+	 * @return True if the client is reconnecting.
 	 */
-	private String join(GameSession game, String gameKey, String playerName)
-	throws GameFullException{
+	private boolean isReconnecting(String clientId, GameSession game) {
+		if (clientId == null) {
+			return false;
+		} else {
+			// Reconnecting if the client ID equals either existing one.
+			return clientId.equals(game.getPlayer1ClientId()) ||
+					clientId.equals(game.getPlayer2ClientId());
+		}
+	}
+	
+	/**
+	 * Checks to see if the game is full.
+	 * @param game The game to check.
+	 * @return True if the game is full, false otherwise.
+	 */
+	private boolean isGameFull(GameSession game) {
+		return game.getPlayer1ClientId() != null &&
+				game.getPlayer2ClientId() != null;
+	}
+	
+	/**
+	 * Joins the game and returns the player's client ID.
+	 * @param game The game.
+	 * @param playerName The name of the player.
+	 * @return The generated client ID.
+	 */
+	private String join(GameSession game, String playerName) {
 		
-		String playerClientId = null;
-		
-		if (game.getPlayer1() == null) {
-			game.setPlayer1(playerName);
-			playerClientId = gameKey + "1";
+		String gameKey = game.getKeyAsString();
+		if (game.getPlayer1ClientId() == null) {
 			logger.info("Player " + playerName + " joined as player 1.");
-			game.setPlayer1ClientId(playerClientId);
-		} else if (game.getPlayer2() == null) {
-			game.setPlayer2(playerName);
-			playerClientId = gameKey + "2";
+			String clientId = gameKey + "1";
+			game.setPlayer1(playerName);
+			game.setPlayer1ClientId(clientId);
+			return clientId;
+		} else if (game.getPlayer2ClientId() == null) {
 			logger.info("Player " + playerName + " joined as player 2.");
-			game.setPlayer2ClientId(playerClientId);
+			String clientId = gameKey + "2";
+			game.setPlayer2(playerName);
+			game.setPlayer2ClientId(clientId);
+			return clientId;
 		}
 		
-		// The game is considered full if a player ID was not assigned.
-		if (playerClientId == null) {
-			throw new GameFullException();
-		}
-		
-		// The player joined successfully because they now have a player ID for this game.
-		return playerClientId;
+		// Error condition.
+		return null;
 	}
 	
 	/**
@@ -171,13 +188,6 @@ public class JoinGameServlet extends HttpServlet {
 			}
 		}
 		return null;
-	}
-	
-	/**
-	 * The exception thrown if there is an attempt to join a game that is full. 
-	 */
-	private class GameFullException extends Exception {
-		private static final long serialVersionUID = -8868716127385908827L;
 	}
 	
 	/**

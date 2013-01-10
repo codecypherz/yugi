@@ -5,6 +5,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import org.json.JSONObject;
+
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
@@ -89,6 +91,9 @@ public class GameSession {
 	public Key getKey() {
 		return key;
 	}
+	public String getKeyAsString() {
+		return KeyFactory.keyToString(key);
+	}
 
 	public String getName() {
 		return name;
@@ -152,7 +157,20 @@ public class GameSession {
 	public void setPlayer2WasConnected(boolean player2WasConnected) {
 		this.player2WasConnected = player2WasConnected;
 	}
-
+	
+	/**
+	 * Converts this object to JSON.
+	 * @return The JSON format of the game model.
+	 */
+	public JSONObject toJson() {
+		JSONObject jsonObject = new JSONObject();
+		
+		jsonObject.put("key", getKeyAsString());
+		jsonObject.put("name", getName());
+		
+		return jsonObject;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

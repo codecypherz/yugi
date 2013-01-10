@@ -15,7 +15,7 @@ import yugi.message.Message;
 import yugi.message.Message.Type;
 import yugi.model.GameSession;
 import yugi.net.ChannelUtil;
-import yugi.query.Game;
+import yugi.service.GameService;
 
 import com.google.appengine.api.channel.ChannelPresence;
 import com.google.appengine.api.channel.ChannelService;
@@ -28,6 +28,8 @@ public class ChannelConnectedServlet extends HttpServlet {
 	private static final long serialVersionUID = -4023972523268676461L;
 	private static final Logger logger = Logger.getLogger(ChannelConnectedServlet.class.getName());
 	
+	private static GameService gameService = GameService.getInstance();
+	
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 	throws IOException {
@@ -36,7 +38,7 @@ public class ChannelConnectedServlet extends HttpServlet {
 		String clientId = presence.clientId();
 		logger.info(clientId + " just connected");
 
-		GameSession game = Game.getForClientId(clientId);
+		GameSession game = gameService.getForClientId(clientId);
 		if (game == null) {
 			logger.severe("Failed to find the game for this client: " + clientId);
 			return;

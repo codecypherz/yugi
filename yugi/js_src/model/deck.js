@@ -118,10 +118,15 @@ yugi.model.Deck.prototype.clone = function() {
   var deck = new yugi.model.Deck();
   deck.setKey(this.key_);
   deck.setName(this.name_);
-  deck.setMainCard(this.mainCard_.clone());
+
+  if (this.mainCard_) {
+    deck.setMainCard(this.mainCard_.clone());    
+  }
+
   deck.setMainCardList(this.mainCardList_.clone());
   deck.setExtraCardList(this.extraCardList_.clone());
   deck.setSideCardList(this.sideCardList_.clone());
+
   return deck;
 };
 
