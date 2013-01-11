@@ -12,6 +12,7 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('yugi.game.message.Chat');
 goog.require('yugi.game.message.MessageType');
+goog.require('yugi.game.net.Channel');
 
 
 

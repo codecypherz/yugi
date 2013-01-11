@@ -7,6 +7,7 @@
 <script src="/js_src/alltests.js"></script>
 
 <script>
+goog.require('goog.Uri');
 goog.require('goog.events');
 goog.require('goog.testing.MultiTestRunner');
 goog.require('goog.userAgent.product');
@@ -91,7 +92,7 @@ a:hover {
       .setName(document.title)
       .setBasePath('./')
       .setPoolSize(parallelInput.checked ? 8 : 1)
-      .setStatsBucketSizes(5, 500)
+      .setStatsBucketSizes(10, 500)
       .setHidePasses(hidePassesInput.checked)
       //.setVerbosePasses(true)
       .addTests(_allTests);

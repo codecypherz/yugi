@@ -62,6 +62,7 @@ yugi.game.ui.chat.ChatWindow = function() {
    * @private
    */
   this.chatInput_ = new goog.ui.LabelInput();
+  this.addChild(this.chatInput_);
 };
 goog.inherits(yugi.game.ui.chat.ChatWindow, goog.ui.Component);
 
@@ -168,10 +169,8 @@ yugi.game.ui.chat.ChatWindow.prototype.renderChatMessage_ =
 
   var sender = chatMessage.getSender();
 
-  // Don't let the user mess with the dom using html in their chat.
-  var text = goog.string.htmlEscape(chatMessage.getText());
-
   // Parse the text and tag it if you find things.
+  var text = goog.string.htmlEscape(chatMessage.getText());
   text = this.tagCardNames_(text); // Do this first so there is less to search.
   text = this.tagName_(text, this.game_.getPlayer().getName());
   text = this.tagName_(text, this.game_.getOpponent().getName());
@@ -207,12 +206,15 @@ yugi.game.ui.chat.ChatWindow.prototype.renderChatMessage_ =
  * @private
  */
 yugi.game.ui.chat.ChatWindow.prototype.tagName_ = function(text, name) {
-  var nameIndex = text.indexOf(name);
-  if (nameIndex >= 0) {
-    var className = this.getClassForName_(name);
-    var taggedName = '<span class="' + className + '">' + name + '</span>';
-    var re = new RegExp(goog.string.regExpEscape(name), 'g');
-    text = text.replace(re, taggedName);
+  // Guard against blank names just in case.
+  if (!goog.string.isEmptySafe(name)) {
+    var nameIndex = text.indexOf(name);
+    if (nameIndex >= 0) {
+      var className = this.getClassForName_(name);
+      var taggedName = '<span class="' + className + '">' + name + '</span>';
+      var re = new RegExp(goog.string.regExpEscape(name), 'g');
+      text = text.replace(re, taggedName);
+    }
   }
   return text;
 };
@@ -247,27 +249,94 @@ yugi.game.ui.chat.ChatWindow.prototype.tagCardNames_ = function(text) {
   // Get all the words in the text.
   var words = text.split(/\s+/g);
 
-  var cardNamesFound = new goog.structs.Set();
+  // Use a set to remove duplicates.
+  var cardNameSet = new goog.structs.Set();
 
   // Loop through each word and look for card name prefix matches.
   goog.array.forEach(words, function(word) {
     var cardNames = this.cardCache_.getNamesByPrefix(word);
     goog.array.forEach(cardNames, function(cardName) {
       if (goog.string.contains(text, cardName)) {
-        cardNamesFound.add(cardName);
+        cardNameSet.add(cardName);
       }
     });
   }, this);
 
-  // Loop through each card name found and surround with a link.
-  goog.array.forEach(cardNamesFound.getValues(), function(cardName) {
-    var taggedCardName =
-        '<button class="' + yugi.ui.Css.LINK + '">' + cardName + '</button>';
-    var re = new RegExp(goog.string.regExpEscape(cardName), 'g');
-    text = text.replace(re, taggedCardName);
+  // Convert the set to an array and sort the largest number of tokens should be
+  // processed first.
+  var cardNames = cardNameSet.getValues();
+  goog.array.sort(cardNames, function(cardName1, cardName2) {
+    var numTokens1 = cardName1.split(/\s+/g).length;
+    var numTokens2 = cardName2.split(/\s+/g).length;
+    return numTokens2 - numTokens1;
   });
 
+  // Loop through each card name found and surround with a link.
+  window.console.info('Original text: ', text);
+  goog.array.forEach(cardNames, function(cardName) {
+    var taggedCardName =
+        '<button class="' + yugi.ui.Css.LINK + '">' + cardName + '</button>';
+
+    var re = new RegExp(goog.string.regExpEscape(cardName), 'g');
+
+    while (true) {
+      var replaced = false;
+      var match;
+      while (match = re.exec(text)) {
+        if (replaced) {
+          continue;
+        }
+
+        // Try to tag the card name at the index.
+        if (this.isInElement_(match.index, text)) {
+          continue;
+        } else {
+          // Text is not in an element, so can be tagged.
+          text = text.substring(0, match.index) +
+              taggedCardName +
+              text.substring(match.index + match[0].length);
+          replaced = true;
+        }
+      }
+      if (replaced) {
+        continue;
+      } else {
+        break;
+      }
+    }
+  }, this);
+
   return text;
+};
+
+
+/**
+ * Checks to see if the index in the text is within an element.
+ * @param {number} index The index to check.
+ * @param {string} text The text to check.
+ * @return {boolean} True if the index is in an element, false otherwise.
+ * @private
+ */
+yugi.game.ui.chat.ChatWindow.prototype.isInElement_ = function(index, text) {
+  // Look for the ">" preceeding the index.
+  var gtIndex = -1;
+  var pre = index;
+  while (pre >= 0) {
+    if (text[pre] == '>') {
+      gtIndex = pre;
+      break;
+    }
+    pre--;
+  }
+  // Look for the next "<"
+  var ltIndex = text.indexOf('<', index);
+  if (gtIndex >= 0 && ltIndex >= 0 &&
+      gtIndex < ltIndex &&
+      gtIndex < index &&
+      index < ltIndex) {
+    return true;
+  }
+  return false;
 };
 
 

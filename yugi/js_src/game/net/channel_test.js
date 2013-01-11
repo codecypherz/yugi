@@ -3,7 +3,7 @@
  */
 
 /** @suppress {extraProvide} */
-goog.provide('yugi.net.ChannelTest');
+goog.provide('yugi.game.net.ChannelTest');
 
 goog.require('goog.net.EventType');
 goog.require('goog.net.XhrIo');

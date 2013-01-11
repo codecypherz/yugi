@@ -19,6 +19,21 @@ goog.require('goog.testing.mockmatchers.ArgumentMatcher');
 
 
 /**
+ * Mocks the class and makes the get() function return the mock.
+ * @param {!goog.testing.MockControl} mockControl The mock control.
+ * @param {!Object} clazz The class to mock.
+ * @return {!goog.testing.Mock} The mocked object.
+ */
+yugi.test.mock = function(mockControl, clazz) {
+  var mock = mockControl.createLooseMock(clazz);
+  clazz.get = function() {
+    return mock;
+  };
+  return clazz.get();
+};
+
+
+/**
  * Verifies the execution of the given function.  This is a convenience method
  * so you don't have to write the $replayAll(), $verifyAll(), and $resetAll()
  * lines everywhere.
