@@ -272,7 +272,6 @@ yugi.game.ui.chat.ChatWindow.prototype.tagCardNames_ = function(text) {
   });
 
   // Loop through each card name found and surround with a link.
-  window.console.info('Original text: ', text);
   goog.array.forEach(cardNames, function(cardName) {
     var taggedCardName =
         '<button class="' + yugi.ui.Css.LINK + '">' + cardName + '</button>';
