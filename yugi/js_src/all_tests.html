@@ -107,6 +107,11 @@ a:hover {
 
   goog.events.listen(filterInput, 'keyup', setFilterFunction);
   setFilterFunction();
+
+  // Auto-start if passed
+  if (goog.Uri.parse(window.location.href).getParameterValue('auto_start')) {
+    testRunner.start();
+  }
 </script>
 
 </body>

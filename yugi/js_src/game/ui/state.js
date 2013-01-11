@@ -199,6 +199,10 @@ yugi.game.ui.State.prototype.setModeBasedOnDeckAndSyncState_ = function() {
 
     } else if (playerDeckLoaded || this.game_.getPlayer().isDeckSelected()) {
 
+      // TODO Check if there is an opponent and their deck selection status.
+      // If they haven't selected a deck, show a different screen since this
+      // client is technically no longer waiting for an opponent to join.
+
       // We are waiting (as in not selecting a deck) if synchronization is
       // finished and we have a loaded deck or are waiting for the deck to load.
       this.setMode(yugi.game.ui.State.Mode.WAITING_FOR_OPPONENT_JOIN);

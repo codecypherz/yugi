@@ -120,7 +120,7 @@ yugi.model.Deck.prototype.clone = function() {
   deck.setName(this.name_);
 
   if (this.mainCard_) {
-    deck.setMainCard(this.mainCard_.clone());    
+    deck.setMainCard(this.mainCard_.clone());
   }
 
   deck.setMainCardList(this.mainCardList_.clone());

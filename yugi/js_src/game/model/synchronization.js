@@ -309,12 +309,6 @@ yugi.game.model.Synchronization.prototype.maybeFinish_ = function() {
       throw new Error('No game data set in order to continue synchronization');
     }
 
-    // Make sure this client is ready to do this.
-    if (!this.game_.getPlayer().isDeckLoaded() ||
-        !this.game_.getOpponent().isDeckLoaded()) {
-      throw new Error('Cannot handle game state until both decks are loaded.');
-    }
-
     // Set the game info and tell everyone we are done.
     this.game_.setFromData(this.gameData_, this.cardCache_);
     this.state_ = yugi.game.model.Synchronization.State.FINISHED;
