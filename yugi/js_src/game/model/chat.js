@@ -56,6 +56,9 @@ yugi.game.model.Chat = function(channel, playerName, chatInterceptor) {
   this.registerDisposable(handler);
 
   handler.listen(this.channel_,
+      yugi.game.net.Channel.EventType.OPENED,
+      this.onChannelOpened_);
+  handler.listen(this.channel_,
       yugi.game.message.MessageType.CHAT,
       this.onChat_);
 };
@@ -201,6 +204,15 @@ yugi.game.model.Chat.prototype.sendSystemRemote = function(text) {
  */
 yugi.game.model.Chat.prototype.getChatHistory = function() {
   return this.chatHistory_;
+};
+
+
+/**
+ * Called when the channel opens.
+ * @private
+ */
+yugi.game.model.Chat.prototype.onChannelOpened_ = function() {
+  this.sendSystemLocal('Connected successfully.');
 };
 
 
