@@ -67,6 +67,7 @@ yugi.game.handler.JoinResponse.prototype.onJoinResponse_ = function(e) {
   var name = message.getName();
   opponent.setName(name);
   opponent.setConnected(true);
+  this.game_.markOpponentJoined();
 
   // If the opponent selected their deck, select it here too.
   var deckKey = message.getDeckKey();

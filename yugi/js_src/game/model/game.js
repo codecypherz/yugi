@@ -157,7 +157,7 @@ yugi.game.model.Game.prototype.getOpponent = function() {
  */
 yugi.game.model.Game.prototype.setOpponent = function(opponent) {
   this.opponent_ = opponent;
-  this.markOpponentJoined_();
+  this.markOpponentJoined();
 };
 
 
@@ -172,9 +172,8 @@ yugi.game.model.Game.prototype.hasOpponentJoined = function() {
 /**
  * Marks the opponent as joined.  It's not parameterized because it is not
  * expected for an opponent to "unjoin" a game.
- * @private
  */
-yugi.game.model.Game.prototype.markOpponentJoined_ = function() {
+yugi.game.model.Game.prototype.markOpponentJoined = function() {
 
   // Only dispatch the event if the value changed.
   if (!this.opponentJoined_) {
@@ -221,5 +220,5 @@ yugi.game.model.Game.prototype.setFromData = function(gameData, cardCache) {
 
   // The opponent is considered joined because you can't get this game data
   // without the opponent sending it to this client.
-  this.markOpponentJoined_();
+  this.markOpponentJoined();
 };
