@@ -167,6 +167,16 @@ yugi.game.ui.chat.ChatWindow.prototype.onNewChat_ = function(e) {
 yugi.game.ui.chat.ChatWindow.prototype.renderChatMessage_ =
     function(chatMessage) {
 
+  // Detect if chat is current scrolled to the bottom already.
+  var chatArea = this.getElementByFragment(
+      yugi.game.ui.chat.ChatWindow.Id_.CHAT_AREA);
+  var lastChat = goog.dom.getLastElementChild(chatArea);
+  var scrolledToBottom = true;
+  if (lastChat) {
+    var offset = goog.style.getContainerOffsetToScrollInto(lastChat, chatArea);
+    scrolledToBottom = chatArea.scrollTop == offset.y;    
+  }
+
   var sender = chatMessage.getSender();
 
   // Parse the text and tag it if you find things.
@@ -187,14 +197,16 @@ yugi.game.ui.chat.ChatWindow.prototype.renderChatMessage_ =
   goog.dom.classes.add(element, this.getClassForName_(sender));
 
   // Append the element to the chat area.
-  var chatArea = this.getElementByFragment(
-      yugi.game.ui.chat.ChatWindow.Id_.CHAT_AREA);
   goog.dom.appendChild(chatArea, element);
 
   this.listenToCardLinks_(element);
 
-  // Scroll the chat area so the new message is visible.
-  goog.style.scrollIntoContainerView(element, chatArea);
+  // Scroll the chat area so the new message is visible.  Only do this if the
+  // chat area was already scrolled to the bottom otherwise you make users
+  // angry.
+  if (scrolledToBottom) {
+    goog.style.scrollIntoContainerView(element, chatArea);    
+  }
 };
 
 
