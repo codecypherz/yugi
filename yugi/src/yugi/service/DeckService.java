@@ -172,23 +172,26 @@ public class DeckService {
 	 * @return True if the user has access, false otherwise.
 	 */
 	public boolean userHasWriteAccess(Deck deck) {
-		User user = userService.getCurrentUser();
-		if (deck == null || user == null) {
+		
+		// Sanity check.
+		if (deck == null) {
 			return false;
 		}
-
-		if (deck.isStructure()) {
-			// Administrators can edit structure decks.
+		
+		// User must be signed in.
+		if (userService.isUserLoggedIn()) {
+			
+			// Administrators can edit anything.
 			if (userService.isUserAdmin()) {
-				return true;				
-			}
-		} else {
-			// Users can only modify their own decks.
-			if (deck.getUserId().equals(user.getUserId())) {
 				return true;
+			} else {
+				// Normal users can only modify their own decks.
+				User user = userService.getCurrentUser();
+				return deck.getUserId().equals(user.getUserId());
 			}
 		}
 		
+		// No access by default.
 		return false;
 	}
 }
