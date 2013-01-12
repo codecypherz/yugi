@@ -174,7 +174,7 @@ yugi.game.ui.chat.ChatWindow.prototype.renderChatMessage_ =
   var scrolledToBottom = true;
   if (lastChat) {
     var offset = goog.style.getContainerOffsetToScrollInto(lastChat, chatArea);
-    scrolledToBottom = chatArea.scrollTop == offset.y;    
+    scrolledToBottom = chatArea.scrollTop == offset.y;
   }
 
   var sender = chatMessage.getSender();
@@ -205,7 +205,7 @@ yugi.game.ui.chat.ChatWindow.prototype.renderChatMessage_ =
   // chat area was already scrolled to the bottom otherwise you make users
   // angry.
   if (scrolledToBottom) {
-    goog.style.scrollIntoContainerView(element, chatArea);    
+    goog.style.scrollIntoContainerView(element, chatArea);
   }
 };
 

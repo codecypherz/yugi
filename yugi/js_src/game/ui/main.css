@@ -13,7 +13,8 @@ body {
 #centered-content {
 	background: #fff;
   margin: auto;
-  width: 1050px;
+  min-width: 916px;
+  width: auto;
 }
 
 .yugi-game-header {

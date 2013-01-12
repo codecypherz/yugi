@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +25,9 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
+/**
+ * Handles requests pertaining to the data of a single deck.
+ */
 public class DeckServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -6507153157705937766L;
@@ -36,7 +38,7 @@ public class DeckServlet extends HttpServlet {
 	private static UserService userService = UserServiceFactory.getUserService();
 
 	/**
-	 * This is the request for a deck.
+	 * This is the request for a deck's full data.
 	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
@@ -57,30 +59,34 @@ public class DeckServlet extends HttpServlet {
 		List<Card> sideCards = new ArrayList<Card>();
 		Card mainCard = null;
 		try {
+			logger.info("Looking up this deck: " + deckKey);
 			deck = deckService.getDeck(pm, deckKey);
+			if (deck == null) {
+				resp.setStatus(ResponseStatusCode.BAD_REQUEST.getCode());
+				return;
+			}
+			logger.info("Found the deck: " + deck.getName());
+			logger.info("Looking up all the cards.");
 
 			// Look up all the card objects.
 			for (String cardKey : deck.getMainCardKeys()) {
-				mainCards.add(cardService.getCard(pm, cardKey));
+				addCard(mainCards, pm, cardKey);
 			}
 			for (String cardKey : deck.getExtraCardKeys()) {
-				extraCards.add(cardService.getCard(pm, cardKey));
+				addCard(extraCards, pm, cardKey);
 			}
 			for (String cardKey : deck.getSideCardKeys()) {
-				sideCards.add(cardService.getCard(pm, cardKey));
+				addCard(sideCards, pm, cardKey);
 			}
 			
 			// Look up the main card.
 			String mainCardKey = deck.getMainCardKey();
 			if (mainCardKey != null && !mainCardKey.isEmpty()) {
-				mainCard = cardService.getCard(pm, mainCardKey);	
+				Card card = cardService.getCard(pm, mainCardKey);
+				if (card != null) {
+					mainCard = card;
+				}
 			}
-
-		} catch (JDOObjectNotFoundException e) {
-			e.printStackTrace();
-			logger.severe(e.getMessage());
-			resp.setStatus(ResponseStatusCode.BAD_REQUEST.getCode());
-			return;
 		} finally {
 			pm.close();
 		}
@@ -166,5 +172,18 @@ public class DeckServlet extends HttpServlet {
 	    } finally {
 	        pm.close();
 	    }
+	}
+	
+	/**
+	 * Adds a card to the list of cards after the lookup is complete.
+	 * @param cards The card list to which to add the card.
+	 * @param pm The persistence manager.
+	 * @param cardKey The key of the card to lookup.
+	 */
+	private void addCard(List<Card> cards, PersistenceManager pm, String cardKey) {
+		Card card = cardService.getCard(pm, cardKey);
+		if (card != null) {
+			cards.add(card);
+		}
 	}
 }
