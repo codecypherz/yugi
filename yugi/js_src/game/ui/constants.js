@@ -7,11 +7,11 @@ goog.provide('yugi.game.ui.Css');
 
 
 /**
- * The width of a card, in pixels, on the field.
+ * The maximum height of a card in pixels.
  * @type {number}
  * @const
  */
-yugi.game.ui.CARD_HEIGHT = 88;
+yugi.game.ui.MAX_CARD_HEIGHT = 200;
 
 
 /**
@@ -19,5 +19,7 @@ yugi.game.ui.CARD_HEIGHT = 88;
  * @enum {string}
  */
 yugi.game.ui.Css = {
+  CARD_SIZE: goog.getCssName('yugi-card-size'),
+  MODE_SWAPPER_CONTAINER: goog.getCssName('yugi-mode-swapper-container'),
   OPPONENT: goog.getCssName('opponent')
 };

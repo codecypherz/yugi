@@ -8,8 +8,10 @@
  * @param imageSource The source of the card image.
  */
 {template .CARD}
-  <div class="{css yugi-hand-card-container}{sp}{css goog-inline-block}">
-    <img src="{$imageSource}" class="{css yugi-hand-card}">
+  <div class="{css yugi-card-size}{sp}{css yugi-hand-card-container}{sp}
+      {css goog-inline-block}">
+    <img src="{$imageSource}" class="{css yugi-card-size}{sp}
+        {css yugi-hand-card}">
     </img>
   </div>
 {/template}

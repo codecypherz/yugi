@@ -142,11 +142,11 @@ yugi.game.ui.field.FieldCard.prototype.onFieldCardChanged_ = function() {
       yugi.model.Card.EventType.POSITION_CHANGED,
       this.onFieldCardChanged_);
 
-  var img = dom.createDom(goog.dom.TagName.IMG);
+  var img = dom.createDom(goog.dom.TagName.IMG, yugi.game.ui.Css.CARD_SIZE);
 
   // Set the image based on position.
   if (fieldCard.isFaceUp()) {
-    img.src = fieldCard.getImageSource(yugi.game.ui.CARD_HEIGHT);
+    img.src = fieldCard.getImageSource(yugi.game.ui.MAX_CARD_HEIGHT);
     goog.dom.classes.add(img, yugi.game.ui.field.FieldCard.Css_.FACE_UP);
   } else {
     img.src = yugi.ui.Image.CARD_BACK;

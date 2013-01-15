@@ -33,15 +33,15 @@ yugi.ui.menu.Menu = function(actions) {
   this.registerDisposable(this.actionContainer_);
 
   /**
-   * The number of pixels from the right of the parent to render the menu.
-   * @type {number}
+   * The value from the right of the parent to render the menu.
+   * @type {number|string}
    * @private
    */
   this.right_ = yugi.ui.menu.Menu.DEFAULT_RIGHT;
 
   /**
-   * The number of pixels from the top of the parent to render the menu.
-   * @type {number}
+   * The value from the top of the parent to render the menu.
+   * @type {number|string}
    * @private
    */
   this.top_ = yugi.ui.menu.Menu.DEFAULT_TOP;
@@ -92,8 +92,8 @@ yugi.ui.menu.Menu.DEFAULT_TOP = 5;
 
 /**
  * @param {Element} element The element on which to render.
- * @param {number} right The x-offset.
- * @param {number} top The y-offset.
+ * @param {number|string} right The x-offset.
+ * @param {number|string} top The y-offset.
  */
 yugi.ui.menu.Menu.prototype.renderWithOffset = function(element, right, top) {
   this.right_ = right;
@@ -108,8 +108,10 @@ yugi.ui.menu.Menu.prototype.createDom = function() {
       yugi.ui.menu.soy.HTML, {
         ids: this.makeIds(yugi.ui.menu.Menu.Id_)
       });
-  element.style.right = this.right_ + 'px';
-  element.style.top = this.top_ + 'px';
+  var r = goog.isString(this.right_) ? this.right_ : this.right_ + 'px';
+  var t = goog.isString(this.top_) ? this.top_ : this.top_ + 'px';
+  element.style.right = r;
+  element.style.top = t;
   this.setElementInternal(element);
 };
 

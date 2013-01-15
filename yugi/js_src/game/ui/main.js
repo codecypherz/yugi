@@ -4,6 +4,7 @@
 
 goog.provide('yugi.game.ui.Main');
 
+goog.require('goog.dom.classes');
 goog.require('goog.soy');
 goog.require('goog.ui.Component');
 goog.require('yugi.game.model.Game');
@@ -87,12 +88,23 @@ yugi.game.ui.Main.Id_ = {
 };
 
 
+/**
+ * CSS classes used by this component.
+ * @enum {string}
+ * @private
+ */
+yugi.game.ui.Main.Css_ = {
+  ROOT: goog.getCssName('yugi-main-root')
+};
+
+
 /** @override */
 yugi.game.ui.Main.prototype.createDom = function() {
   this.setElementInternal(goog.soy.renderAsElement(
       yugi.game.ui.soy.HTML, {
         ids: this.makeIds(yugi.game.ui.Main.Id_)
       }));
+  goog.dom.classes.add(this.getElement(), yugi.game.ui.Main.Css_.ROOT);
 };
 
 
@@ -101,8 +113,7 @@ yugi.game.ui.Main.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
 
   // Render the sub components.
-  this.status_.render(this.getElementByFragment(
-      yugi.game.ui.Main.Id_.HEADER));
+  this.status_.render(this.getElement());
   this.selection_.render(this.getElementByFragment(
       yugi.game.ui.Main.Id_.SELECTION));
   this.playerLifePoints_.render(this.getElementByFragment(

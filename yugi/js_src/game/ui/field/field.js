@@ -57,6 +57,14 @@ goog.inherits(yugi.game.ui.field.Field, goog.ui.Component);
 
 
 /**
+ * The ID of the field element.
+ * @type {string}
+ * @const
+ */
+yugi.game.ui.field.Field.ID = 'field';
+
+
+/**
  * The container for the field image.
  * @type {Element}
  * @private
@@ -93,6 +101,7 @@ yugi.game.ui.field.Field.prototype.createDom = function() {
         ids: this.makeIds(yugi.game.ui.field.Field.Id_)
       }));
   goog.dom.classes.add(this.getElement(), yugi.game.ui.field.Field.Css_.ROOT);
+  this.getElement().id = yugi.game.ui.field.Field.ID;
 };
 
 
@@ -144,7 +153,7 @@ yugi.game.ui.field.Field.prototype.onFieldCardChanged_ = function() {
     if (card.isFaceUp()) {
       var dom = this.getDomHelper();
       var img = dom.createDom(goog.dom.TagName.IMG);
-      img.src = card.getImageSource(1125, true);
+      img.src = card.getImageSource(1000, true);
       dom.append(this.imageDiv_, img);
     }
   }

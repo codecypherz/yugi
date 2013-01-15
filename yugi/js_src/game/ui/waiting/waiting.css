@@ -2,22 +2,17 @@
  * The CSS for the waiting widget.
  */
 
-.yugi-waiting {
-  color: NORMAL_COLOR;
-  margin: 0 10px;
-  text-align: left;
-}
-
 .yugi-waiting-text {
-	margin-left: 60px;
-	margin-right: 60px;
-	margin-top: 140px;
+	font-size: 18px;
+  font-style: italic;
+  margin-top: 150px;
+  padding: 40px;
 }
 
 .yugi-game-join-link {
-	border: NORMAL_BORDER;
 	color: #00f;
-	margin-top: 20px;
-	padding: 5px;
+	cursor: pointer;
+	margin: 15px 0 0;
+	width: 100%;
 	@mixin border_radius(5px);
 }

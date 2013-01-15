@@ -58,6 +58,12 @@ yugi.game.ui.field.Monster = function(monsterCard, zone, player) {
   this.player_ = player;
 
   /**
+   * @type {yugi.ui.menu.Menu}
+   * @private
+   */
+  this.menu_ = null;
+
+  /**
    * @type {!yugi.model.Selection}
    * @private
    */
@@ -85,13 +91,6 @@ yugi.game.ui.field.Monster = function(monsterCard, zone, player) {
   this.addChild(this.counters_);
 };
 goog.inherits(yugi.game.ui.field.Monster, goog.ui.Component);
-
-
-/**
- * @type {yugi.ui.menu.Menu}
- * @private
- */
-yugi.game.ui.field.Monster.prototype.menu_ = null;
 
 
 /**
@@ -150,7 +149,7 @@ yugi.game.ui.field.Monster.prototype.onPositionChanged_ = function() {
   goog.dispose(this.counters_);
 
   var dom = this.getDomHelper();
-  var img = dom.createDom(goog.dom.TagName.IMG);
+  var img = dom.createDom(goog.dom.TagName.IMG, yugi.game.ui.Css.CARD_SIZE);
 
   var position = this.monsterCard_.getPosition();
 
@@ -162,7 +161,7 @@ yugi.game.ui.field.Monster.prototype.onPositionChanged_ = function() {
     case yugi.model.MonsterCard.Position.FACE_UP_DEFENSE:
       // Fall through.
     case yugi.model.MonsterCard.Position.FACE_UP_ATTACK:
-      img.src = this.monsterCard_.getImageSource(yugi.game.ui.CARD_HEIGHT);
+      img.src = this.monsterCard_.getImageSource(yugi.game.ui.MAX_CARD_HEIGHT);
       break;
     default:
       throw new Error('Unknown monster card position.');
@@ -274,9 +273,9 @@ yugi.game.ui.field.Monster.prototype.onPositionChanged_ = function() {
     this.menu_ = new yugi.ui.menu.Menu(actions);
     if (position == yugi.model.MonsterCard.Position.FACE_DOWN_DEFENSE ||
         position == yugi.model.MonsterCard.Position.FACE_UP_DEFENSE) {
-      this.menu_.renderWithOffset(element, -8, 20);
+      this.menu_.renderWithOffset(element, '-12%', '20%');
     } else {
-      this.menu_.render(element);
+      this.menu_.renderWithOffset(element, '5%', '4%');
     }
   }
 

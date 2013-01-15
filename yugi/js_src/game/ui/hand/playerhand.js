@@ -105,7 +105,7 @@ yugi.game.ui.hand.PlayerHand.prototype.onCardsChanged_ = function() {
 
     var cardElement = goog.soy.renderAsElement(
         yugi.game.ui.hand.soy.CARD, {
-          imageSource: card.getImageSource(yugi.game.ui.CARD_HEIGHT)
+          imageSource: card.getImageSource(yugi.game.ui.MAX_CARD_HEIGHT)
         });
     goog.dom.appendChild(element, cardElement);
 

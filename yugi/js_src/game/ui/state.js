@@ -28,6 +28,12 @@ yugi.game.ui.State = function() {
   goog.base(this);
 
   /**
+   * @type {!goog.debug.Logger}
+   * @protected
+   */
+  this.logger = goog.debug.Logger.getLogger('yugi.game.ui.State');
+
+  /**
    * @type {!yugi.game.model.Game}
    * @private
    */
@@ -98,14 +104,6 @@ yugi.game.ui.State.Mode = {
   SYNCHRONIZING: 'synchronizing',
   WAITING_FOR_OPPONENT_JOIN: 'waiting-for-opponent-join'
 };
-
-
-/**
- * @type {!goog.debug.Logger}
- * @protected
- */
-yugi.game.ui.State.prototype.logger =
-    goog.debug.Logger.getLogger('yugi.game.ui.State');
 
 
 /**

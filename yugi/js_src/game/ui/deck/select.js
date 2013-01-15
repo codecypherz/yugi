@@ -16,6 +16,7 @@ goog.require('yugi.game.model.Chat');
 goog.require('yugi.game.model.Decks');
 goog.require('yugi.game.model.Game');
 goog.require('yugi.game.net.Channel');
+goog.require('yugi.game.ui.Css');
 goog.require('yugi.game.ui.deck.select.soy');
 goog.require('yugi.model.User');
 
@@ -73,16 +74,6 @@ yugi.game.ui.deck.Select.Id_ = {
 };
 
 
-/**
- * The CSS classes used by this component.
- * @enum {string}
- * @private
- */
-yugi.game.ui.deck.Select.Css_ = {
-  ROOT: goog.getCssName('yugi-deck-select')
-};
-
-
 /** @override */
 yugi.game.ui.deck.Select.prototype.createDom = function() {
   this.setElementInternal(goog.soy.renderAsElement(
@@ -90,7 +81,8 @@ yugi.game.ui.deck.Select.prototype.createDom = function() {
         ids: this.makeIds(yugi.game.ui.deck.Select.Id_),
         signedIn: this.user_.isSignedIn()
       }));
-  goog.dom.classes.add(this.getElement(), yugi.game.ui.deck.Select.Css_.ROOT);
+  goog.dom.classes.add(
+      this.getElement(), yugi.game.ui.Css.MODE_SWAPPER_CONTAINER);
 };
 
 
@@ -175,7 +167,7 @@ yugi.game.ui.deck.Select.prototype.renderDecks_ = function(element, decks) {
       var deckElement = goog.soy.renderAsElement(
           yugi.game.ui.deck.select.soy.DECK, {
             name: deck.getName(),
-            imageSource: deck.getImageSource(210),
+            imageSource: deck.getImageSource(154),
             deckId: deck.getKey(),
             deckName: deck.getName()
           });

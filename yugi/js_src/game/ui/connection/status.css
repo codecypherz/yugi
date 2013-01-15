@@ -5,6 +5,9 @@
 .yugi-connection {
 	border: 1px solid #333;
 	padding: 4px 8px;
+	position: absolute;
+	right: 10px;
+	top: 10px;
 	@mixin border_radius(3px);
 }
 

@@ -145,11 +145,11 @@ yugi.game.ui.field.SpellTrap.prototype.onPositionChanged_ = function() {
   goog.dispose(this.counters_);
 
   var dom = this.getDomHelper();
-  var img = dom.createDom(goog.dom.TagName.IMG);
+  var img = dom.createDom(goog.dom.TagName.IMG, yugi.game.ui.Css.CARD_SIZE);
 
   // Set the image based on position.
   if (this.spellTrapCard_.isFaceUp()) {
-    img.src = this.spellTrapCard_.getImageSource(yugi.game.ui.CARD_HEIGHT);
+    img.src = this.spellTrapCard_.getImageSource(yugi.game.ui.MAX_CARD_HEIGHT);
     goog.dom.classes.add(img, yugi.game.ui.field.SpellTrap.Css_.FACE_UP);
   } else {
     img.src = yugi.ui.Image.CARD_BACK;

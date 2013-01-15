@@ -2,18 +2,25 @@
  * Styles for chat.
  */
 
+.yugi-main-chat {
+	background: #fff;
+	height: 134px;
+	position: relative;
+}
+
+.yugi-chat-window {
+}
+
 .yugi-chat-area {
 	border: INPUT_BORDER;
-	height: 104px;
+	height: 106px;
 	overflow: auto;
-	width: 799px;
 }
 
 .yugi-chat {
 	font-size: 12px;
 	margin: 0 5px;
 	text-align: left;
-	width: 776px;
 }
 
 .yugi-chat-opponent {
@@ -39,7 +46,9 @@
 }
 
 .yugi-chat-input {
-	margin-left: -9px;
-	margin-top: -1px;
-	width: 783px;
+	bottom: 0;
+	left: 0;
+	margin: -1px 0 0;
+	position: absolute;
+	right: 0;
 }

@@ -87,6 +87,7 @@ yugi.game.ui.chat.ChatWindow.Css_ = {
   CHAT: goog.getCssName('yugi-chat'),
   OPPONENT: goog.getCssName('yugi-chat-opponent'),
   PLAYER: goog.getCssName('yugi-chat-player'),
+  ROOT: goog.getCssName('yugi-chat-window'),
   SYSTEM: goog.getCssName('yugi-chat-system')
 };
 
@@ -105,6 +106,8 @@ yugi.game.ui.chat.ChatWindow.prototype.createDom = function() {
       yugi.game.ui.chat.soy.WINDOW, {
         ids: this.makeIds(yugi.game.ui.chat.ChatWindow.Id_)
       }));
+  goog.dom.classes.add(
+      this.getElement(), yugi.game.ui.chat.ChatWindow.Css_.ROOT);
 };
 
 

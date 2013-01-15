@@ -3,15 +3,9 @@
  */
 
 .yugi-hand-card-container {
-	height: 88px;
 	margin: 4px 2px 0;
-}
-
-.yugi-hand-container.opponent .yugi-hand-card-container {
-  margin-top: -31px;
 }
 
 .yugi-hand-card {
 	cursor: pointer;
-	height: 88px;
 }

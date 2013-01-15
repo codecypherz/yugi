@@ -2,23 +2,23 @@
  * Styles for the browser container.
  */
 
-.yugi-browser-container {
-
-}
-
 .yugi-game-card-browser {
 	width: 100%;
 }
 
 .yugi-card-browser {
 	border-bottom: 1px solid #999;
-	height: 470px;
-	margin: 10px 20px 10px 10px;
+	margin-top: 10px;
+	max-height: 500px;
 	overflow: auto;
 	text-align: left;
 }
 
+.yugi-card-browser-card-container {
+  margin: 6px 8px;
+}
+
 .yugi-game-browser-container-buttons {
-	margin-right: 20px;
+	margin: 4px;
 	text-align: right;
 }

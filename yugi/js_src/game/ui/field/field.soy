@@ -15,6 +15,7 @@
   </div>
 {/template}
 
+
 /**
  * The HTML for the opponent's zone.
  * @param ids The DOM IDs used in this widget.
@@ -26,98 +27,80 @@
   </div>
 
   <!-- Opponent's Deck, Spell/Trap, and Extra Deck -->
-  <div>
-    <div class="{css yugi-empty-zone}{sp}{css goog-inline-block}">
-      <!-- Empty -->
-    </div>
-    <div id="{$ids.DECK|id}" class="{css yugi-deck-zone}{sp}{css yugi-card-zone}
-        {sp}{css goog-inline-block}">
-    </div>
-    <div id="{$ids.SPELL_TRAP_5|id}" class="{css yugi-spell-trap-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .OPPONENT_ZONE_LABEL_}
-        {param text}Spell/Trap 5{/param}
-      {/call}
-    </div>
-    <div id="{$ids.SPELL_TRAP_4|id}" class="{css yugi-spell-trap-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .OPPONENT_ZONE_LABEL_}
-        {param text}Spell/Trap 4{/param}
-      {/call}
-    </div>
-    <div id="{$ids.SPELL_TRAP_3|id}" class="{css yugi-spell-trap-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .OPPONENT_ZONE_LABEL_}
-        {param text}Spell/Trap 3{/param}
-      {/call}
-    </div>
-    <div id="{$ids.SPELL_TRAP_2|id}" class="{css yugi-spell-trap-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .OPPONENT_ZONE_LABEL_}
-        {param text}Spell/Trap 2{/param}
-      {/call}
-    </div>
-    <div id="{$ids.SPELL_TRAP_1|id}" class="{css yugi-spell-trap-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .OPPONENT_ZONE_LABEL_}
-        {param text}Spell/Trap 1{/param}
-      {/call}
-    </div>
-    <div id="{$ids.EXTRA_DECK|id}" class="{css yugi-extra-deck-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-    </div>
-    <div class="{css yugi-empty-zone}{sp}{css goog-inline-block}">
-      <!-- Empty -->
-    </div>
+  <div class="{css yugi-card-row}">
+    {call .EMPTY_ZONE_ /}
+    {call .DECK_ZONE_}
+      {param id}{$ids.DECK}{/param}
+    {/call}
+    {call .SPELL_TRAP_ZONE_}
+      {param id}{$ids.SPELL_TRAP_5}{/param}
+      {param label}Spell/Trap 5{/param}
+      {param opp}true{/param}
+    {/call}
+    {call .SPELL_TRAP_ZONE_}
+      {param id}{$ids.SPELL_TRAP_4}{/param}
+      {param label}Spell/Trap 4{/param}
+      {param opp}true{/param}
+    {/call}
+    {call .SPELL_TRAP_ZONE_}
+      {param id}{$ids.SPELL_TRAP_3}{/param}
+      {param label}Spell/Trap 3{/param}
+      {param opp}true{/param}
+    {/call}
+    {call .SPELL_TRAP_ZONE_}
+      {param id}{$ids.SPELL_TRAP_2}{/param}
+      {param label}Spell/Trap 2{/param}
+      {param opp}true{/param}
+    {/call}
+    {call .SPELL_TRAP_ZONE_}
+      {param id}{$ids.SPELL_TRAP_1}{/param}
+      {param label}Spell/Trap 1{/param}
+      {param opp}true{/param}
+    {/call}
+    {call .EXTRA_DECK_ZONE_}
+      {param id}{$ids.EXTRA_DECK}{/param}
+    {/call}
+    {call .EMPTY_ZONE_ /}
   </div>
 
   <!-- Opponent's Banish, Graveyard, Monsters, and Field -->
-  <div>
-    <div id="{$ids.BANISH|id}" class="{css yugi-banish-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-    </div>
-    <div id="{$ids.GRAVEYARD|id}" class="{css yugi-graveyard-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-    </div>
-    <div id="{$ids.MONSTER_5|id}" class="{css yugi-monster-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .OPPONENT_ZONE_LABEL_}
-        {param text}Monster 5{/param}
-      {/call}
-    </div>
-    <div id="{$ids.MONSTER_4|id}" class="{css yugi-monster-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .OPPONENT_ZONE_LABEL_}
-        {param text}Monster 4{/param}
-      {/call}
-    </div>
-    <div id="{$ids.MONSTER_3|id}" class="{css yugi-monster-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .OPPONENT_ZONE_LABEL_}
-        {param text}Monster 3{/param}
-      {/call}
-    </div>
-    <div id="{$ids.MONSTER_2|id}" class="{css yugi-monster-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .OPPONENT_ZONE_LABEL_}
-        {param text}Monster 2{/param}
-      {/call}
-    </div>
-    <div id="{$ids.MONSTER_1|id}" class="{css yugi-monster-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .OPPONENT_ZONE_LABEL_}
-        {param text}Monster 1{/param}
-      {/call}
-    </div>
-    <div id="{$ids.FIELD|id}" class="{css yugi-field-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .OPPONENT_ZONE_LABEL_}
-        {param text}Field Card{/param}
-      {/call}
-    </div>
-    <div class="{css yugi-empty-zone}{sp}{css goog-inline-block}">
-      <!-- Empty -->
-    </div>
+  <div class="{css yugi-card-row}">
+    {call .BANISH_ZONE_}
+      {param id}{$ids.BANISH}{/param}
+    {/call}
+    {call .GRAVEYARD_ZONE_}
+      {param id}{$ids.GRAVEYARD}{/param}
+    {/call}
+    {call .MONSTER_ZONE_}
+      {param id}{$ids.MONSTER_5}{/param}
+      {param label}Monster 5{/param}
+      {param opp}true{/param}
+    {/call}
+    {call .MONSTER_ZONE_}
+      {param id}{$ids.MONSTER_4}{/param}
+      {param label}Monster 4{/param}
+      {param opp}true{/param}
+    {/call}
+    {call .MONSTER_ZONE_}
+      {param id}{$ids.MONSTER_3}{/param}
+      {param label}Monster 3{/param}
+      {param opp}true{/param}
+    {/call}
+    {call .MONSTER_ZONE_}
+      {param id}{$ids.MONSTER_2}{/param}
+      {param label}Monster 2{/param}
+      {param opp}true{/param}
+    {/call}
+    {call .MONSTER_ZONE_}
+      {param id}{$ids.MONSTER_1}{/param}
+      {param label}Monster 1{/param}
+      {param opp}true{/param}
+    {/call}
+    {call .FIELD_ZONE_}
+      {param id}{$ids.FIELD}{/param}
+      {param opp}true{/param}
+    {/call}
+    {call .EMPTY_ZONE_ /}
   </div>
 {/template}
 
@@ -129,102 +112,196 @@
 {template .PLAYER_ZONE}
 
   <!-- Players's Field, Monsters, Graveyard, and Banish -->
-  <div>
-    <div class="{css yugi-empty-zone}{sp}{css goog-inline-block}">
-      <!-- Empty -->
-    </div>
-    <div id="{$ids.FIELD|id}" class="{css yugi-field-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .PLAYER_ZONE_LABEL_}
-        {param text}Field Card{/param}
-      {/call}
-    </div>
-    <div id="{$ids.MONSTER_1|id}" class="{css yugi-monster-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .PLAYER_ZONE_LABEL_}
-        {param text}Monster 1{/param}
-      {/call}
-    </div>
-    <div id="{$ids.MONSTER_2|id}" class="{css yugi-monster-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .PLAYER_ZONE_LABEL_}
-        {param text}Monster 2{/param}
-      {/call}
-    </div>
-    <div id="{$ids.MONSTER_3|id}" class="{css yugi-monster-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .PLAYER_ZONE_LABEL_}
-        {param text}Monster 3{/param}
-      {/call}
-    </div>
-    <div id="{$ids.MONSTER_4|id}" class="{css yugi-monster-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .PLAYER_ZONE_LABEL_}
-        {param text}Monster 4{/param}
-      {/call}
-    </div>
-    <div id="{$ids.MONSTER_5|id}" class="{css yugi-monster-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .PLAYER_ZONE_LABEL_}
-        {param text}Monster 5{/param}
-      {/call}
-    </div>
-    <div id="{$ids.GRAVEYARD|id}" class="{css yugi-graveyard-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-    </div>
-    <div id="{$ids.BANISH|id}" class="{css yugi-banish-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-    </div>
+  <div class="{css yugi-card-row}">
+    {call .EMPTY_ZONE_ /}
+    {call .FIELD_ZONE_}
+      {param id}{$ids.FIELD}{/param}
+    {/call}
+    {call .MONSTER_ZONE_}
+      {param id}{$ids.MONSTER_1}{/param}
+      {param label}Monster 1{/param}
+    {/call}
+    {call .MONSTER_ZONE_}
+      {param id}{$ids.MONSTER_2}{/param}
+      {param label}Monster 2{/param}
+    {/call}
+    {call .MONSTER_ZONE_}
+      {param id}{$ids.MONSTER_3}{/param}
+      {param label}Monster 3{/param}
+    {/call}
+    {call .MONSTER_ZONE_}
+      {param id}{$ids.MONSTER_4}{/param}
+      {param label}Monster 4{/param}
+    {/call}
+    {call .MONSTER_ZONE_}
+      {param id}{$ids.MONSTER_5}{/param}
+      {param label}Monster 5{/param}
+    {/call}
+    {call .GRAVEYARD_ZONE_}
+      {param id}{$ids.GRAVEYARD}{/param}
+    {/call}
+    {call .BANISH_ZONE_}
+      {param id}{$ids.BANISH}{/param}
+    {/call}
   </div>
 
   <!-- Players's Extra Deck, Spell/Trap, and Deck -->
-  <div>
-    <div class="{css yugi-empty-zone}{sp}{css goog-inline-block}">
-      <!-- Empty -->
-    </div>
-    <div id="{$ids.EXTRA_DECK|id}" class="{css yugi-extra-deck-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-    </div>
-    <div id="{$ids.SPELL_TRAP_1|id}" class="{css yugi-spell-trap-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .PLAYER_ZONE_LABEL_}
-        {param text}Spell/Trap 1{/param}
-      {/call}
-    </div>
-    <div id="{$ids.SPELL_TRAP_2|id}" class="{css yugi-spell-trap-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .PLAYER_ZONE_LABEL_}
-        {param text}Spell/Trap 2{/param}
-      {/call}
-    </div>
-    <div id="{$ids.SPELL_TRAP_3|id}" class="{css yugi-spell-trap-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .PLAYER_ZONE_LABEL_}
-        {param text}Spell/Trap 3{/param}
-      {/call}
-    </div>
-    <div id="{$ids.SPELL_TRAP_4|id}" class="{css yugi-spell-trap-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .PLAYER_ZONE_LABEL_}
-        {param text}Spell/Trap 4{/param}
-      {/call}
-    </div>
-    <div id="{$ids.SPELL_TRAP_5|id}" class="{css yugi-spell-trap-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-      {call .PLAYER_ZONE_LABEL_}
-        {param text}Spell/Trap 5{/param}
-      {/call}
-    </div>
-    <div id="{$ids.DECK|id}" class="{css yugi-deck-zone}{sp}
-        {css yugi-card-zone}{sp}{css goog-inline-block}">
-    </div>
-    <div id="{$ids.CONTROLS|id}" class="{css yugi-empty-zone}{sp}
+  <div class="{css yugi-card-row}">
+    {call .EMPTY_ZONE_ /}
+    {call .EXTRA_DECK_ZONE_}
+      {param id}{$ids.EXTRA_DECK}{/param}
+    {/call}
+    {call .SPELL_TRAP_ZONE_}
+      {param id}{$ids.SPELL_TRAP_1}{/param}
+      {param label}Spell/Trap 1{/param}
+    {/call}
+    {call .SPELL_TRAP_ZONE_}
+      {param id}{$ids.SPELL_TRAP_2}{/param}
+      {param label}Spell/Trap 2{/param}
+    {/call}
+    {call .SPELL_TRAP_ZONE_}
+      {param id}{$ids.SPELL_TRAP_3}{/param}
+      {param label}Spell/Trap 3{/param}
+    {/call}
+    {call .SPELL_TRAP_ZONE_}
+      {param id}{$ids.SPELL_TRAP_4}{/param}
+      {param label}Spell/Trap 4{/param}
+    {/call}
+    {call .SPELL_TRAP_ZONE_}
+      {param id}{$ids.SPELL_TRAP_5}{/param}
+      {param label}Spell/Trap 5{/param}
+    {/call}
+    {call .DECK_ZONE_}
+      {param id}{$ids.DECK}{/param}
+    {/call}
+    <div id="{$ids.CONTROLS|id}" class="{css yugi-player-control-container}{sp}
+        {css yugi-empty-zone}{sp}{css yugi-card-size}{sp}
         {css goog-inline-block}">
     </div>
   </div>
 
   <!-- Player's Hand -->
   <div id="{$ids.HAND|id}" class="{css yugi-hand-container}{sp}{css player}">
+  </div>
+{/template}
+
+
+/**
+ * HTML for a monster zone.
+ * @param id The ID of the monster zone element.
+ * @param label The text for the label.
+ * @param opp True if the opponent.
+ */
+{template .MONSTER_ZONE_ private="true"}
+  <div id="{$id|id}" class="{css yugi-monster-zone}{sp}{css yugi-card-size}{sp}
+      {css yugi-card-zone}{sp}{css goog-inline-block}">
+    {if $opp}
+      {call .OPPONENT_ZONE_LABEL_}
+        {param text}{$label}{/param}
+      {/call}
+    {else}
+      {call .PLAYER_ZONE_LABEL_}
+        {param text}{$label}{/param}
+      {/call}
+    {/if}
+  </div>
+{/template}
+
+
+/**
+ * HTML for a spell/trap zone.
+ * @param id The ID of the spell/trap zone element.
+ * @param label The text for the label.
+ * @param opp True if the opponent.
+ */
+{template .SPELL_TRAP_ZONE_ private="true"}
+  <div id="{$id|id}" class="{css yugi-spell-trap-zone}{sp}
+      {css yugi-card-size}{sp}{css yugi-card-zone}{sp}{css goog-inline-block}">
+    {if $opp}
+      {call .OPPONENT_ZONE_LABEL_}
+        {param text}{$label}{/param}
+      {/call}
+    {else}
+      {call .PLAYER_ZONE_LABEL_}
+        {param text}{$label}{/param}
+      {/call}
+    {/if}
+  </div>
+{/template}
+
+
+/**
+ * HTML for the field zone.
+ * @param id The ID for the field zone.
+ * @param opp True if the opponent.
+ */
+{template .FIELD_ZONE_ private="true"}
+  <div id="{$id|id}" class="{css yugi-field-zone}{sp}{css yugi-card-size}{sp}
+      {css yugi-card-zone}{sp}{css goog-inline-block}">
+    {if $opp}
+      {call .OPPONENT_ZONE_LABEL_}
+        {param text}Field Card{/param}
+      {/call}
+    {else}
+      {call .PLAYER_ZONE_LABEL_}
+        {param text}Field Card{/param}
+      {/call}
+    {/if}
+  </div>
+{/template}
+
+
+/**
+ * HTML for a deck zone.
+ * @param id The ID of the deck zone.
+ */
+{template .DECK_ZONE_ private="true"}
+  <div id="{$id|id}" class="{css yugi-deck-zone}{sp}{css yugi-card-size}
+      {sp}{css yugi-card-zone}{sp}{css goog-inline-block}">
+  </div>
+{/template}
+
+
+/**
+ * HTML for a banish zone.
+ * @param id The ID of the banish zone.
+ */
+{template .BANISH_ZONE_ private="true"}
+  <div id="{$id|id}" class="{css yugi-banish-zone}{sp}{css yugi-card-size}
+      {sp}{css yugi-card-zone}{sp}{css goog-inline-block}">
+  </div>
+{/template}
+
+
+/**
+ * HTML for a graveyard zone.
+ * @param id The ID of the graveyard zone.
+ */
+{template .GRAVEYARD_ZONE_ private="true"}
+  <div id="{$id|id}" class="{css yugi-graveyard-zone}{sp}{css yugi-card-size}
+      {sp}{css yugi-card-zone}{sp}{css goog-inline-block}">
+  </div>
+{/template}
+
+
+/**
+ * HTML for an extra deck zone.
+ * @param id The ID of an extra deck zone.
+ */
+{template .EXTRA_DECK_ZONE_ private="true"}
+  <div id="{$id|id}" class="{css yugi-extra-deck-zone}{sp}{css yugi-card-size}
+      {sp}{css yugi-card-zone}{sp}{css goog-inline-block}">
+  </div>
+{/template}
+
+
+/**
+ * HTML for an empty zone.  This is a space holder.
+ */
+{template .EMPTY_ZONE_ private="true"}
+  <div class="{css yugi-empty-zone}{sp}{css yugi-card-size}{sp}
+      {css goog-inline-block}">
+    <!-- Empty -->
   </div>
 {/template}
 

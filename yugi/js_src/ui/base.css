@@ -9,12 +9,14 @@
 @def NORMAL_COLOR                         #333;
 @def NORMAL_BORDER                        1px solid NORMAL_COLOR;
 @def ERROR_COLOR                          #d00;
+@def SELECTED_COLOR                       #FFD54C;
 
 @def MONSTER_COLOR                        #f4dea9;
 @def SPELL_COLOR                          #c5dcd6;
 @def TRAP_COLOR                           #ebcfd9;
 
 @def CONTENT_BORDER                       1px solid #AEAEAE;
+@def SELECTED_BORDER                      4px solid SELECTED_COLOR;
 
 /*
  * Default rule; only Safari, Webkit, and Opera handle it without hacks.
@@ -63,5 +65,5 @@ body {
 }
 
 .yugi-selected {
-  outline: 4px solid #FFD54C;
+  outline: SELECTED_BORDER;
 }

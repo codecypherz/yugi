@@ -9,9 +9,22 @@
 @def LIFE_POINT_BUTTON_BG_COLOR           rgba(0, 0, 0, 0.2);
 @def LIFE_POINT_BUTTON_BG_COLOR_HOVER     rgba(0, 0, 0, 0.3);
 
+.yugi-life-points-container {
+	left: 0;
+	position: absolute;
+	right: 0;
+}
+
+.yugi-life-points-container.opponent {
+	top: 0;
+}
+
+.yugi-life-points-container.player {
+  bottom: 0;
+}
+
 .yugi-life-points {
 	border: LIFE_POINT_BORDER;
-	margin: 10px 0;
 	position: relative;
 	text-align: center;
 	@mixin border_radius(5px);
@@ -121,6 +134,13 @@ button.yugi-life-point-input-ok {
 
 .yugi-life-point-mod.subtract > button.yugi-life-point-input-ok {
 	margin-left: 7px;
+}
+
+.yugi-player-controls {
+	left: 50%;
+	margin-left: -30px;
+	position: absolute;
+	width: 60px;
 }
 
 .yugi-player-controls button {

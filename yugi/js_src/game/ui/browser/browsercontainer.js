@@ -13,6 +13,7 @@ goog.require('goog.ui.Component');
 goog.require('yugi.game.model.Browser');
 goog.require('yugi.game.model.Chat');
 goog.require('yugi.game.model.Game');
+goog.require('yugi.game.ui.Css');
 goog.require('yugi.game.ui.State');
 goog.require('yugi.game.ui.browser.soy');
 goog.require('yugi.model.CardList');
@@ -103,24 +104,14 @@ yugi.game.ui.browser.BrowserContainer.Id_ = {
 };
 
 
-/**
- * The CSS names used by this component.
- * @enum {string}
- * @private
- */
-yugi.game.ui.browser.BrowserContainer.Css_ = {
-  ROOT: goog.getCssName('yugi-browser-container')
-};
-
-
 /** @override */
 yugi.game.ui.browser.BrowserContainer.prototype.createDom = function() {
   this.setElementInternal(goog.soy.renderAsElement(
       yugi.game.ui.browser.soy.BROWSER_CONTAINER, {
         ids: this.makeIds(yugi.game.ui.browser.BrowserContainer.Id_)
       }));
-  goog.dom.classes.add(this.getElement(),
-      yugi.game.ui.browser.BrowserContainer.Css_.ROOT);
+  goog.dom.classes.add(
+      this.getElement(), yugi.game.ui.Css.MODE_SWAPPER_CONTAINER);
 };
 
 

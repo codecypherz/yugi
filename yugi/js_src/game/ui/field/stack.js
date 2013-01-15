@@ -173,7 +173,7 @@ yugi.game.ui.field.Stack.prototype.setCards = function(cards) {
 
     // Figure out which image will be repeated.
     var imageSource = this.isFaceUp_ ?
-        cardOnTop.getImageSource(yugi.game.ui.CARD_HEIGHT) :
+        cardOnTop.getImageSource(yugi.game.ui.MAX_CARD_HEIGHT) :
         yugi.ui.Image.CARD_BACK;
 
     // Show fewer images than there are cards.
@@ -182,8 +182,10 @@ yugi.game.ui.field.Stack.prototype.setCards = function(cards) {
     for (var i = 0; i < numImages; i++) {
 
       // Create the image with the source.
-      var image = goog.dom.createDom(goog.dom.TagName.IMG,
-          yugi.game.ui.field.Stack.Css_.CARD);
+      var image = goog.dom.createDom(
+          goog.dom.TagName.IMG,
+          [yugi.game.ui.field.Stack.Css_.CARD,
+           yugi.game.ui.Css.CARD_SIZE]);
       image.src = imageSource;
 
       // Shift the image to create the stacked look.

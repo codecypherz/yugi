@@ -9,11 +9,11 @@
  */
 {template .HTML}
   <div class="{css yugi-game-title}">
-    <div>
+    <div class="{css yugi-game-title-text}">
       Choose a Deck
     </div>
   </div>
-  <div class="{css yugi-deck-select-text}">
+  <div class="{css yugi-deck-select-container}">
 
     <div class="{css yugi-game-sub-title}">
       Your Decks
@@ -48,7 +48,7 @@
 {template .DECK}
   <div id="{$deckId|id}" class="{css yugi-deck}{sp}{css goog-inline-block}"
       title="Click to choose {$deckName}">
-    <img src="{$imageSource}">
+    <img src="{$imageSource}" class="{css yugi-deck-image}">
     </img>
     <div class="{css yugi-deck-name}">
       {$name}

@@ -8,7 +8,6 @@ goog.provide('yugi.game.Main');
 goog.require('goog.array');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
-goog.require('goog.dom.TagName');
 goog.require('yugi.Main');
 goog.require('yugi.game.handler.CardTransfer');
 goog.require('yugi.game.handler.Connection');
@@ -26,6 +25,7 @@ goog.require('yugi.game.model.Game');
 goog.require('yugi.game.model.Synchronization');
 goog.require('yugi.game.net.Channel');
 goog.require('yugi.game.service.LifePoint');
+goog.require('yugi.game.service.Resize');
 goog.require('yugi.game.service.Sync');
 goog.require('yugi.game.ui.Main');
 goog.require('yugi.game.ui.State');
@@ -104,6 +104,7 @@ yugi.game.Main = function(signInOutUrl, deckManagerUrl, userJson,
 
   // Register UI models.
   var state = yugi.game.ui.State.register();
+  var resizeService = yugi.game.service.Resize.register(state);
 
   // Register handlers.
   var handlers = [
@@ -118,19 +119,10 @@ yugi.game.Main = function(signInOutUrl, deckManagerUrl, userJson,
     new yugi.game.handler.WaitForSync(this.channel_, synchronization)
   ];
 
-  // Render the highest level UI component.
-  var centeredDiv = goog.dom.createDom(goog.dom.TagName.DIV, {
-    'id': 'centered-content'
-  });
-
+  // Render the main element.
   var dom = goog.dom.getDomHelper();
   var mainComponent = new yugi.game.ui.Main();
-  mainComponent.createDom();
-  dom.appendChild(centeredDiv, mainComponent.getElement());
-
-  // Do one giant HTML modification.
-  goog.dom.getDocument().body.appendChild(centeredDiv);
-  mainComponent.enterDocument();
+  mainComponent.render(dom.getElement('centered'));
 
   // Register all the disposables.
   this.registerDisposable(mainComponent);
@@ -140,6 +132,7 @@ yugi.game.Main = function(signInOutUrl, deckManagerUrl, userJson,
   this.registerDisposable(notifier);
   this.registerDisposable(chat);
   this.registerDisposable(chatInterceptor);
+  this.registerDisposable(resizeService);
   this.registerDisposable(state);
   this.registerDisposable(game);
   this.registerDisposable(decksModel);

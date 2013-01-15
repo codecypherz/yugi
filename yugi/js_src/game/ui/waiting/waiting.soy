@@ -4,18 +4,20 @@
 
 /**
  * The HTML for the waiting widget.
- * @param joinLink The like to share that will join the game.
+ * @param ids The IDs used in this template.
  */
 {template .HTML}
   <div class="{css yugi-game-title}">
-    <div>
+    <div class="{css yugi-game-title-text}">
       Waiting for an Opponent
     </div>
   </div>
   <div class="{css yugi-waiting-text}">
     Don't want to wait for an opponent?&nbsp&nbspSend this link to your friend.
-    <div class="{css yugi-game-join-link}">
-      {$joinLink}
+    <div>
+      <textarea readonly id="{$ids.LINK_INPUT|id}"
+          class="{css yugi-game-join-link}">
+      </textarea>
     </div>
   </div>
 {/template}

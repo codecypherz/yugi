@@ -8,6 +8,7 @@ goog.require('goog.dom.classes');
 goog.require('goog.soy');
 goog.require('goog.ui.Component');
 goog.require('yugi.game.model.Synchronization');
+goog.require('yugi.game.ui.Css');
 goog.require('yugi.game.ui.sync.soy');
 
 
@@ -37,16 +38,6 @@ yugi.game.ui.sync.Sync.prototype.text_ = null;
 
 
 /**
- * The CSS classes used by this component.
- * @enum {string}
- * @private
- */
-yugi.game.ui.sync.Sync.Css_ = {
-  ROOT: goog.getCssName('yugi-sync')
-};
-
-
-/**
  * DOM IDs used by this widget.
  * @enum {string}
  * @private
@@ -63,8 +54,8 @@ yugi.game.ui.sync.Sync.prototype.createDom = function() {
       yugi.game.ui.sync.soy.HTML, {
         ids: this.makeIds(yugi.game.ui.sync.Sync.Id_)
       }));
-  goog.dom.classes.add(this.getElement(),
-      yugi.game.ui.sync.Sync.Css_.ROOT);
+  goog.dom.classes.add(
+      this.getElement(), yugi.game.ui.Css.MODE_SWAPPER_CONTAINER);
 };
 
 
