@@ -9,6 +9,7 @@ goog.require('goog.soy');
 goog.require('goog.ui.Component');
 goog.require('yugi.game.model.Game');
 goog.require('yugi.game.ui.ModeSwapper');
+goog.require('yugi.game.ui.attack.Mask');
 goog.require('yugi.game.ui.chat.ChatWindow');
 goog.require('yugi.game.ui.connection.Status');
 goog.require('yugi.game.ui.player.LifePoints');
@@ -69,6 +70,13 @@ yugi.game.ui.Main = function() {
    */
   this.chatWindow_ = new yugi.game.ui.chat.ChatWindow();
   this.addChild(this.chatWindow_);
+
+  /**
+   * @type {!yugi.game.ui.attack.Mask}
+   * @private
+   */
+  this.attackMask_ = new yugi.game.ui.attack.Mask();
+  this.addChild(this.attackMask_);
 };
 goog.inherits(yugi.game.ui.Main, goog.ui.Component);
 
@@ -105,6 +113,8 @@ yugi.game.ui.Main.prototype.createDom = function() {
         ids: this.makeIds(yugi.game.ui.Main.Id_)
       }));
   goog.dom.classes.add(this.getElement(), yugi.game.ui.Main.Css_.ROOT);
+
+  this.attackMask_.render(this.getElement());
 };
 
 

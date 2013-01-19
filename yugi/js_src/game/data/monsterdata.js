@@ -80,6 +80,6 @@ yugi.game.data.MonsterData.createFromCard = function(card) {
  * @param {!yugi.game.data.MonsterData} data The data to set on the card.
  */
 yugi.game.data.MonsterData.setCardFromData = function(card, data) {
+  yugi.game.data.CardData.setCardFromData(card, data);
   card.setPosition(data.getPosition());
-  card.setCounters(data.getCounters());
 };

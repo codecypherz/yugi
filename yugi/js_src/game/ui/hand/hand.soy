@@ -2,6 +2,18 @@
 {namespace yugi.game.ui.hand.soy}
 
 
+/**
+ * The HTML for the opponent's hand.
+ * @param ids The IDs used in the template.
+ */
+{template .OPPONENT_HAND}
+  <div id="{$ids.CARDS|id}">
+  </div>
+  <div id="{$ids.ATTACK_OVERLAY|id}" class="{css yugi-opp-attack-overlay}">
+    Attack Directly
+  </div>
+{/template}
+
 
 /**
  * The HTML for a card in the hand.

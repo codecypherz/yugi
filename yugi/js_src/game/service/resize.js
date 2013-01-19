@@ -4,7 +4,6 @@
 
 goog.provide('yugi.game.service.Resize');
 
-goog.require('goog.Disposable');
 goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.cssom');
@@ -12,13 +11,15 @@ goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.dom.ViewportSizeMonitor');
 goog.require('goog.dom.classes');
+goog.require('goog.events');
 goog.require('goog.events.EventHandler');
+goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
+goog.require('goog.math.Size');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('yugi.game.ui.Css');
 goog.require('yugi.game.ui.State');
-goog.require('yugi.game.ui.field.Field');
 
 
 
@@ -26,7 +27,7 @@ goog.require('yugi.game.ui.field.Field');
  * Service for updating various things when the window is resized.
  * @param {!yugi.game.ui.State} uiState The state of the game UI.
  * @constructor
- * @extends {goog.Disposable}
+ * @extends {goog.events.EventTarget}
  */
 yugi.game.service.Resize = function(uiState) {
   goog.base(this);
@@ -56,6 +57,13 @@ yugi.game.service.Resize = function(uiState) {
    */
   this.lastCardSizeWidth_ = 0;
 
+  /**
+   * The current size of the card.
+   * @type {!goog.math.Size}
+   * @private
+   */
+  this.cardSize_ = new goog.math.Size(0, 0);
+
   var handler = new goog.events.EventHandler(this);
   this.registerDisposable(handler);
 
@@ -69,7 +77,16 @@ yugi.game.service.Resize = function(uiState) {
   // Initialize.
   this.delayResize_();
 };
-goog.inherits(yugi.game.service.Resize, goog.Disposable);
+goog.inherits(yugi.game.service.Resize, goog.events.EventTarget);
+
+
+/**
+ * Events dispatched by this service.
+ * @enum {string}
+ */
+yugi.game.service.Resize.EventType = {
+  RESIZED: goog.events.getUniqueId('resized')
+};
 
 
 /**
@@ -118,6 +135,14 @@ yugi.game.service.Resize.get = function() {
 
 
 /**
+ * @return {!goog.math.Size} The current size of a card.
+ */
+yugi.game.service.Resize.prototype.getCardSize = function() {
+  return this.cardSize_;
+};
+
+
+/**
  * Delays the resize so that it takes place after the rest of the current thread
  * of JavaScript has executed.
  * @private
@@ -138,15 +163,10 @@ yugi.game.service.Resize.prototype.resize_ = function() {
     return;
   }
 
-  var fieldElement = goog.dom.getElement(yugi.game.ui.field.Field.ID);
-  if (!fieldElement) {
-    this.logger.severe('No field element found.');
-    return; // No field element, then nothing to do.
-  }
-
   // Grab the first card size element.
-  var cardSizeClass = yugi.game.ui.Css.CARD_SIZE;
-  var cardSizeElement = goog.dom.getElementByClass(cardSizeClass, fieldElement);
+  var rootElement = goog.dom.getDocument().body;
+  var cardSizeElement = goog.dom.getElementByClass(
+      yugi.game.ui.Css.CARD_SIZE, rootElement);
   if (!cardSizeElement) {
     this.logger.severe('No card size element found to compute height');
     return; // No card size element yet.
@@ -156,22 +176,24 @@ yugi.game.service.Resize.prototype.resize_ = function() {
   // height of all card size elements.
   var cardSize = goog.style.getSize(cardSizeElement);
   if (this.lastCardSizeWidth_ == cardSize.width) {
-    this.logger.info('Card size width did not change: ' + cardSize.width);
+    this.logger.fine('Card size width did not change: ' + cardSize.width);
     return; // Be efficient and do nothing if nothing changed.
   }
-  this.logger.info('Card size width changed to ' + cardSize + ' pixels');
+  this.logger.fine('Card size width changed to ' + cardSize + ' pixels');
   this.lastCardSizeWidth_ = cardSize.width;
 
   // Make sure to round the new height otherwise the actual card images will
   // sometimes show a gap between the card zone border.
   var newHeight = Math.round(
       cardSize.width / yugi.game.service.Resize.CARD_SIZE_RATIO_);
-  this.logger.info(
+  this.logger.fine(
       'Calculated new card size height to be ' + newHeight + 'px.');
+  this.cardSize_ = new goog.math.Size(cardSize.width, newHeight);
 
+  // TODO Move this to the hand class and listen to the resize event.
   // Adjust the height of the hand containers to match the new card size.
   var handContainers = goog.dom.getElementsByClass(
-      goog.getCssName('yugi-hand-container'), fieldElement);
+      goog.getCssName('yugi-hand-container'), rootElement);
   goog.array.forEach(handContainers, function(handContainer) {
     if (goog.dom.classes.has(handContainer, goog.getCssName('opponent'))) {
       var halfHeight = Math.round(newHeight * 0.5);
@@ -199,6 +221,18 @@ yugi.game.service.Resize.prototype.resize_ = function() {
   // card size class.  This was done instead of modifying the elements
   // themselves because cards added after a resize would be missed which would
   // complicate the implementation.
+  this.changeCardSizeStyle_(newHeight);
+
+  this.dispatchEvent(yugi.game.service.Resize.EventType.RESIZED);
+};
+
+
+/**
+ * Changes the card size style to use the given height.
+ * @param {number} newHeight The new card height.
+ * @private
+ */
+yugi.game.service.Resize.prototype.changeCardSizeStyle_ = function(newHeight) {
   var styleSheet = goog.dom.getDocument().styleSheets[0];
   var cssRuleList = goog.cssom.getCssRulesFromStyleSheet(styleSheet);
   if (!cssRuleList) {
@@ -209,7 +243,7 @@ yugi.game.service.Resize.prototype.resize_ = function() {
   var index = -1;
   var cardSizeRule = goog.array.find(cssRuleList, function(cssRule, i) {
     var found = goog.string.caseInsensitiveCompare(
-        cssRule.selectorText, '.' + cardSizeClass) == 0;
+        cssRule.selectorText, '.' + yugi.game.ui.Css.CARD_SIZE) == 0;
     if (found) {
       index = i;
     }
@@ -222,12 +256,12 @@ yugi.game.service.Resize.prototype.resize_ = function() {
   goog.cssom.removeCssRule(styleSheet, index);
   goog.cssom.addCssRule(
       styleSheet,
-      '.' + cardSizeClass + ' { ' +
+      '.' + yugi.game.ui.Css.CARD_SIZE + ' { ' +
       // Keep the width the same.
       'width: ' + yugi.game.service.Resize.CARD_WIDTH_ + '%; ' +
       // Only the height changes as a function of the width.
       'height: ' + newHeight + 'px; ' +
       '} ',
       index);
-  this.logger.info('Finished changing the card size CSS');
+  this.logger.fine('Finished changing the card size CSS');
 };

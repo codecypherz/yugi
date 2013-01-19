@@ -9,3 +9,21 @@
 .yugi-hand-card {
 	cursor: pointer;
 }
+
+.yugi-opp-attack-overlay {
+	background: #F08080;
+	border: 3px solid #000;
+	border-top: none;
+	color: #000;
+	cursor: pointer;
+	font-size: 24px;
+	height: 30px;
+	left: 50%;
+	line-height: 30px;
+	margin-left: -200px;
+	position: absolute;
+	top: 0;
+	vertical-align: middle;
+	width: 400px;
+	z-index: ATTACK_Z_INDEX;
+}

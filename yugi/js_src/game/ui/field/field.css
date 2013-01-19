@@ -89,6 +89,7 @@
 .yugi-hand-container.opponent {
 	margin-bottom: 16px;
   margin-top: 0px;
+  position: relative;
 }
 
 .yugi-monster-card,
@@ -99,6 +100,8 @@
 
 img.yugi-card-size {
 	cursor: pointer;
+	left: 0;
+	position: absolute;
 	width: 100%;
 	z-index: CARD_Z_INDEX;
 }

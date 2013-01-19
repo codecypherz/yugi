@@ -16,6 +16,7 @@ java -jar ..\closure\soy\SoyToJsSrcCompiler.jar ^
   deck\editor\ui\ui.soy ^
   deck\manager\ui\deck.soy ^
   game\ui\main.soy ^
+  game\ui\attack\attack.soy ^
   game\ui\browser\browser.soy ^
   game\ui\chat\chat.soy ^
   game\ui\deck\select.soy ^

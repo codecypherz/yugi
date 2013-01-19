@@ -130,6 +130,12 @@ yugi.model.Card.prototype.clone = goog.abstractMethod;
 
 
 /**
+ * @return {boolean} True if the card is face up, false otherwise.
+ */
+yugi.model.Card.prototype.isFaceUp = goog.abstractMethod;
+
+
+/**
  * @return {string} The server side key for this card.
  */
 yugi.model.Card.prototype.getKey = function() {

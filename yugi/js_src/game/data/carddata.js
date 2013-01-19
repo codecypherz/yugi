@@ -98,3 +98,26 @@ yugi.game.data.CardData.prototype.setFromJson = function(json) {
     }, this);
   }
 };
+
+
+/**
+ * Static helper function for creating card data from a card.
+ * @param {!yugi.model.Card} card The card.
+ * @return {!yugi.game.data.CardData} The card data for the card.
+ */
+yugi.game.data.CardData.createFromCard = function(card) {
+  var cardData = new yugi.game.data.CardData();
+  cardData.setKey(card.getKey());
+  cardData.setCounters(card.getCounters());
+  return cardData;
+};
+
+
+/**
+ * Static helper function to set values on the card from the data.
+ * @param {!yugi.model.Card} card The card on which to set data.
+ * @param {!yugi.game.data.CardData} data The data to set on the card.
+ */
+yugi.game.data.CardData.setCardFromData = function(card, data) {
+  card.setCounters(data.getCounters());
+};

@@ -46,6 +46,7 @@ button.yugi-link,
 	color: blue;
 	font-weight: normal;
 	text-decoration: underline;
+	text-shadow: none;
 }
 
 button.yugi-link:active,

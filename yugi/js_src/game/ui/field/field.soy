@@ -19,11 +19,13 @@
 /**
  * The HTML for the opponent's zone.
  * @param ids The DOM IDs used in this widget.
+ * @param yugiIds The global IDs.
  */
 {template .OPPONENT_ZONE}
 
   <!-- Opponent's Hand -->
-  <div id="{$ids.HAND|id}" class="{css yugi-hand-container}{sp}{css opponent}">
+  <div id="{$yugiIds.OPP_HAND|id}"
+      class="{css yugi-hand-container}{sp}{css opponent}">
   </div>
 
   <!-- Opponent's Deck, Spell/Trap, and Extra Deck -->
@@ -72,27 +74,27 @@
       {param id}{$ids.GRAVEYARD}{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$ids.MONSTER_5}{/param}
+      {param id}{$yugiIds.ZONE_OPP_MONSTER_5}{/param}
       {param label}Monster 5{/param}
       {param opp}true{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$ids.MONSTER_4}{/param}
+      {param id}{$yugiIds.ZONE_OPP_MONSTER_4}{/param}
       {param label}Monster 4{/param}
       {param opp}true{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$ids.MONSTER_3}{/param}
+      {param id}{$yugiIds.ZONE_OPP_MONSTER_3}{/param}
       {param label}Monster 3{/param}
       {param opp}true{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$ids.MONSTER_2}{/param}
+      {param id}{$yugiIds.ZONE_OPP_MONSTER_2}{/param}
       {param label}Monster 2{/param}
       {param opp}true{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$ids.MONSTER_1}{/param}
+      {param id}{$yugiIds.ZONE_OPP_MONSTER_1}{/param}
       {param label}Monster 1{/param}
       {param opp}true{/param}
     {/call}
@@ -108,6 +110,7 @@
 /**
  * The HTML for the player's zone.
  * @param ids The DOM IDs used in this widget.
+ * @param yugiIds The global IDs.
  */
 {template .PLAYER_ZONE}
 
@@ -118,23 +121,23 @@
       {param id}{$ids.FIELD}{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$ids.MONSTER_1}{/param}
+      {param id}{$yugiIds.ZONE_MONSTER_1}{/param}
       {param label}Monster 1{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$ids.MONSTER_2}{/param}
+      {param id}{$yugiIds.ZONE_MONSTER_2}{/param}
       {param label}Monster 2{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$ids.MONSTER_3}{/param}
+      {param id}{$yugiIds.ZONE_MONSTER_3}{/param}
       {param label}Monster 3{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$ids.MONSTER_4}{/param}
+      {param id}{$yugiIds.ZONE_MONSTER_4}{/param}
       {param label}Monster 4{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$ids.MONSTER_5}{/param}
+      {param id}{$yugiIds.ZONE_MONSTER_5}{/param}
       {param label}Monster 5{/param}
     {/call}
     {call .GRAVEYARD_ZONE_}
@@ -181,7 +184,8 @@
   </div>
 
   <!-- Player's Hand -->
-  <div id="{$ids.HAND|id}" class="{css yugi-hand-container}{sp}{css player}">
+  <div id="{$yugiIds.PLAYER_HAND|id}"
+      class="{css yugi-hand-container}{sp}{css player}">
   </div>
 {/template}
 

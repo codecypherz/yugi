@@ -18,6 +18,7 @@ yugi.game.message.MessageType = {
   CHAT: 'chat',
   CONNECTED: 'connected',
   DECK_SELECTED: 'deck_selected',
+  DECLARE_ATTACK: 'declare_attack',
   DISCONNECTED: 'disconnected',
   JOIN_RESPONSE: 'join_response',
   STATE: 'state',

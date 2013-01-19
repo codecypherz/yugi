@@ -20,6 +20,7 @@ goog.require('yugi.game.message.CardTransfer');
 goog.require('yugi.game.message.Chat');
 goog.require('yugi.game.message.Connected');
 goog.require('yugi.game.message.DeckSelected');
+goog.require('yugi.game.message.DeclareAttack');
 goog.require('yugi.game.message.Disconnected');
 goog.require('yugi.game.message.JoinResponse');
 goog.require('yugi.game.message.Message');
@@ -316,6 +317,9 @@ yugi.game.net.Channel.prototype.onMessage_ = function(channelMessage) {
       break;
     case yugi.game.message.MessageType.DECK_SELECTED:
       message = new yugi.game.message.DeckSelected();
+      break;
+    case yugi.game.message.MessageType.DECLARE_ATTACK:
+      message = new yugi.game.message.DeclareAttack();
       break;
     case yugi.game.message.MessageType.DISCONNECTED:
       message = new yugi.game.message.Disconnected();

@@ -17,6 +17,7 @@ goog.require('yugi.game.handler.State');
 goog.require('yugi.game.handler.SyncRequest');
 goog.require('yugi.game.handler.SyncResponse');
 goog.require('yugi.game.handler.WaitForSync');
+goog.require('yugi.game.model.Attack');
 goog.require('yugi.game.model.Browser');
 goog.require('yugi.game.model.Chat');
 goog.require('yugi.game.model.ChatInterceptor');
@@ -101,6 +102,7 @@ yugi.game.Main = function(signInOutUrl, deckManagerUrl, userJson,
   var synchronization = yugi.game.model.Synchronization.register(game,
       deckService, cardCache);
   var browser = yugi.game.model.Browser.register();
+  var attack = yugi.game.model.Attack.register(chat, this.channel_);
 
   // Register UI models.
   var state = yugi.game.ui.State.register();
@@ -138,6 +140,7 @@ yugi.game.Main = function(signInOutUrl, deckManagerUrl, userJson,
   this.registerDisposable(decksModel);
   this.registerDisposable(synchronization);
   this.registerDisposable(browser);
+  this.registerDisposable(attack);
   this.registerDisposable(deckService);
   this.registerDisposable(decksService);
   this.registerDisposable(syncService);

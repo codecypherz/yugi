@@ -438,6 +438,15 @@ yugi.model.MonsterCard.prototype.setEffectFromString_ = function(effectString) {
 
 
 /**
+ * @return {boolean} True if the monster card is in face up attack or defense.
+ */
+yugi.model.MonsterCard.prototype.isFaceUp = function() {
+  return this.position_ == yugi.model.MonsterCard.Position.FACE_UP_ATTACK ||
+      this.position_ == yugi.model.MonsterCard.Position.FACE_UP_DEFENSE;
+};
+
+
+/**
  * @return {!yugi.model.MonsterCard.Position} The position.
  */
 yugi.model.MonsterCard.prototype.getPosition = function() {

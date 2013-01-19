@@ -10,6 +10,8 @@ goog.require('goog.soy');
 goog.require('goog.ui.Component');
 goog.require('yugi.game.model.Field');
 goog.require('yugi.game.model.Game');
+goog.require('yugi.game.ui');
+goog.require('yugi.game.ui.Id');
 goog.require('yugi.game.ui.field.Banish');
 goog.require('yugi.game.ui.field.Deck');
 goog.require('yugi.game.ui.field.ExtraDeck');
@@ -106,12 +108,6 @@ yugi.game.ui.field.OpponentZone.Id_ = {
   EXTRA_DECK: 'extra-deck',
   FIELD: 'field',
   GRAVEYARD: 'graveyard',
-  HAND: 'hand',
-  MONSTER_1: 'monster-1',
-  MONSTER_2: 'monster-2',
-  MONSTER_3: 'monster-3',
-  MONSTER_4: 'monster-4',
-  MONSTER_5: 'monster-5',
   SPELL_TRAP_1: 'spell-trap-1',
   SPELL_TRAP_2: 'spell-trap-2',
   SPELL_TRAP_3: 'spell-trap-3',
@@ -124,7 +120,8 @@ yugi.game.ui.field.OpponentZone.Id_ = {
 yugi.game.ui.field.OpponentZone.prototype.createDom = function() {
   this.setElementInternal(goog.soy.renderAsElement(
       yugi.game.ui.field.soy.OPPONENT_ZONE, {
-        ids: this.makeIds(yugi.game.ui.field.OpponentZone.Id_)
+        ids: this.makeIds(yugi.game.ui.field.OpponentZone.Id_),
+        yugiIds: yugi.game.ui.Id
       }));
 };
 
@@ -141,8 +138,7 @@ yugi.game.ui.field.OpponentZone.prototype.enterDocument = function() {
       yugi.game.ui.field.OpponentZone.Id_.GRAVEYARD));
   this.banish_.render(this.getElementByFragment(
       yugi.game.ui.field.OpponentZone.Id_.BANISH));
-  this.hand_.render(this.getElementByFragment(
-      yugi.game.ui.field.OpponentZone.Id_.HAND));
+  this.hand_.render(goog.dom.getElement(yugi.game.ui.Id.OPP_HAND));
   this.fieldCard_.render(this.getElementByFragment(
       yugi.game.ui.field.OpponentZone.Id_.FIELD));
 
@@ -178,7 +174,7 @@ yugi.game.ui.field.OpponentZone.prototype.onMonstersChanged_ = function() {
     var monsterCard = monsterCards[i];
     if (monsterCard) {
       var monster = new yugi.game.ui.field.Monster(monsterCard, i, opponent);
-      var element = this.getElementByFragment(this.getMonsterFragment_(i));
+      var element = yugi.game.ui.getMonsterZoneElement(i, true);
       monster.render(element);
       this.monsters_.push(monster);
     }
@@ -209,29 +205,6 @@ yugi.game.ui.field.OpponentZone.prototype.onSpellsTrapsChanged_ = function() {
       spellTrap.render(element);
       this.spellTraps_.push(spellTrap);
     }
-  }
-};
-
-
-/**
- * Figures out the monster fragment associated with the zone ID.
- * @param {number} zone The zone ID.
- * @return {!yugi.game.ui.field.OpponentZone.Id_} The ID for the zone.
- * @private
- */
-yugi.game.ui.field.OpponentZone.prototype.getMonsterFragment_ = function(zone) {
-  switch (zone) {
-    case 0:
-      return yugi.game.ui.field.OpponentZone.Id_.MONSTER_1;
-    case 1:
-      return yugi.game.ui.field.OpponentZone.Id_.MONSTER_2;
-    case 2:
-      return yugi.game.ui.field.OpponentZone.Id_.MONSTER_3;
-    case 3:
-      return yugi.game.ui.field.OpponentZone.Id_.MONSTER_4;
-    case 4:
-    default:
-      return yugi.game.ui.field.OpponentZone.Id_.MONSTER_5;
   }
 };
 

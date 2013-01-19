@@ -13,6 +13,7 @@ java -jar ..\..\closure\gss\closure-stylesheets-20111230.jar ^
   ..\..\js_src\ui\selection\selection.css ^
   ..\..\js_src\ui\browser\cardbrowser.css ^
   ..\..\js_src\game\ui\main.css ^
+  ..\..\js_src\game\ui\attack\attack.css ^
   ..\..\js_src\game\ui\browser\browser.css ^
   ..\..\js_src\game\ui\chat\chat.css ^
   ..\..\js_src\game\ui\connection\status.css ^

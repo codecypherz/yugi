@@ -4,7 +4,9 @@
 
 goog.provide('yugi.game.ui.field.Monster');
 
+goog.require('goog.asserts');
 goog.require('goog.debug.Logger');
+goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classes');
 goog.require('goog.events.EventHandler');
@@ -13,10 +15,14 @@ goog.require('goog.ui.Component');
 goog.require('yugi.game.action.CardTransfer');
 goog.require('yugi.game.action.FieldToList');
 goog.require('yugi.game.action.field.AddCounter');
+goog.require('yugi.game.action.field.DeclareAttack');
 goog.require('yugi.game.action.field.MonsterPosition');
 goog.require('yugi.game.message.CardTransfer');
+goog.require('yugi.game.model.Attack');
 goog.require('yugi.game.ui');
 goog.require('yugi.game.ui.Css');
+goog.require('yugi.game.ui.ZIndex');
+goog.require('yugi.game.ui.attack.Sword');
 goog.require('yugi.game.ui.counters.Counters');
 goog.require('yugi.model.Card');
 goog.require('yugi.model.InformationCard');
@@ -70,6 +76,12 @@ yugi.game.ui.field.Monster = function(monsterCard, zone, player) {
   this.selection_ = yugi.model.Selection.get();
 
   /**
+   * @type {!yugi.game.model.Attack}
+   * @private
+   */
+  this.attack_ = yugi.game.model.Attack.get();
+
+  /**
    * @type {!yugi.model.InformationCard}
    * @private
    */
@@ -84,11 +96,16 @@ yugi.game.ui.field.Monster = function(monsterCard, zone, player) {
   this.registerDisposable(this.imageHandler_);
 
   /**
-   * @type {!yugi.game.ui.counters.Counters}
+   * @type {yugi.game.ui.counters.Counters}
    * @private
    */
-  this.counters_ = new yugi.game.ui.counters.Counters(monsterCard, player);
-  this.addChild(this.counters_);
+  this.counters_ = null;
+
+  /**
+   * @type {yugi.game.ui.attack.Sword}
+   * @private
+   */
+  this.sword_ = null;
 };
 goog.inherits(yugi.game.ui.field.Monster, goog.ui.Component);
 
@@ -119,7 +136,7 @@ yugi.game.ui.field.Monster.prototype.createDom = function() {
   goog.dom.classes.enable(el, yugi.game.ui.Css.OPPONENT,
       this.player_.isOpponent());
 
-  this.counters_.render(el);
+  // Further rendering happens later.
 };
 
 
@@ -127,11 +144,44 @@ yugi.game.ui.field.Monster.prototype.createDom = function() {
 yugi.game.ui.field.Monster.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
 
+  // Update the z-index when attack state changes.
+  this.getHandler().listen(this.attack_,
+      [yugi.game.model.Attack.EventType.CANCELED,
+       yugi.game.model.Attack.EventType.CARD_DECLARED,
+       yugi.game.model.Attack.EventType.DECLARATION_STARTED,
+       yugi.game.model.Attack.EventType.PLAYER_DECLARED],
+      this.updateImageZIndex_);
+
   this.getHandler().listen(this.monsterCard_,
       yugi.model.Card.EventType.POSITION_CHANGED,
       this.onPositionChanged_);
 
   this.onPositionChanged_();
+};
+
+
+/**
+ * Sets the z-index of the image based on the state of an attack declaration.
+ * @private
+ */
+yugi.game.ui.field.Monster.prototype.updateImageZIndex_ = function() {
+  var imageElement = this.getImageElement_();
+  if (this.attack_.getState() == yugi.game.model.Attack.State.DECLARING &&
+      (this.attack_.getDeclaringCard() == this.monsterCard_ ||
+       this.player_.isOpponent())) {
+    imageElement.style.zIndex = yugi.game.ui.ZIndex.ATTACK;
+  } else {
+    imageElement.style.zIndex = yugi.game.ui.ZIndex.CARD;
+  }
+};
+
+
+/**
+ * @return {!Element} The monster image element.
+ * @private
+ */
+yugi.game.ui.field.Monster.prototype.getImageElement_ = function() {
+  return goog.asserts.assert(goog.dom.getFirstElementChild(this.getElement()));
 };
 
 
@@ -147,6 +197,7 @@ yugi.game.ui.field.Monster.prototype.onPositionChanged_ = function() {
   this.imageHandler_.removeAll();
   goog.dispose(this.menu_);
   goog.dispose(this.counters_);
+  goog.dispose(this.sword_);
 
   var dom = this.getDomHelper();
   var img = dom.createDom(goog.dom.TagName.IMG, yugi.game.ui.Css.CARD_SIZE);
@@ -171,6 +222,9 @@ yugi.game.ui.field.Monster.prototype.onPositionChanged_ = function() {
   goog.dom.classes.add(img, position);
   dom.append(element, img);
 
+  // Update the z-index now in case there is an attack declaration in progress.
+  this.updateImageZIndex_();
+
   // Set up menu actions.
   var actions = [];
 
@@ -187,6 +241,10 @@ yugi.game.ui.field.Monster.prototype.onPositionChanged_ = function() {
           'a card' : cName;
 
   if (!player.isOpponent()) {
+
+    if (card.isFaceUp()) {
+      actions.push(new yugi.game.action.field.DeclareAttack(card, zone));
+    }
 
     // Add actions based on position.
     switch (position) {
@@ -283,6 +341,10 @@ yugi.game.ui.field.Monster.prototype.onPositionChanged_ = function() {
   this.counters_ = new yugi.game.ui.counters.Counters(card, player);
   this.addChild(this.counters_, true);
 
+  // Render the sword.
+  this.sword_ = new yugi.game.ui.attack.Sword(card, zone);
+  this.addChild(this.sword_, true);
+
   // Listen for image selection.
   this.imageHandler_.listen(img,
       goog.events.EventType.CLICK,
@@ -296,16 +358,37 @@ yugi.game.ui.field.Monster.prototype.onPositionChanged_ = function() {
  * @private
  */
 yugi.game.ui.field.Monster.prototype.onImageClick_ = function(image) {
-  if (this.player_.isOpponent()) {
-    // We don't want to show the player the opponent's face down monster.
-    if (this.monsterCard_.getPosition() ==
-        yugi.model.MonsterCard.Position.FACE_DOWN_DEFENSE) {
-      this.selection_.setSelected(this.opponentCard_, image);
+
+  // Clicks are different if an attack is being declared.
+  if (this.attack_.getState() == yugi.game.model.Attack.State.DECLARING) {
+    if (this.player_.isOpponent()) {
+
+      // Opponent monster!  This means an attack declaration has been made.
+      this.attack_.declareCard(
+          this.monsterCard_,
+          this.zone_,
+          goog.asserts.assert(goog.dom.getParentElement(this.getElement())));
+
+    } else {
+
+      // Player monster, so cancel the attack.
+      this.attack_.cancel();
+    }
+  } else {
+
+    // No attack going on, so just select the card.
+    if (this.player_.isOpponent()) {
+
+      // We don't want to show the player the opponent's face down monster.
+      if (this.monsterCard_.getPosition() ==
+          yugi.model.MonsterCard.Position.FACE_DOWN_DEFENSE) {
+        this.selection_.setSelected(this.opponentCard_, image);
+      } else {
+        this.selection_.setSelected(this.monsterCard_, image);
+      }
     } else {
       this.selection_.setSelected(this.monsterCard_, image);
     }
-  } else {
-    this.selection_.setSelected(this.monsterCard_, image);
   }
 };
 

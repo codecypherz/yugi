@@ -80,6 +80,6 @@ yugi.game.data.SpellTrapData.createFromCard = function(card) {
  * @param {!yugi.game.data.SpellTrapData} data The data to set on the card.
  */
 yugi.game.data.SpellTrapData.setCardFromData = function(card, data) {
+  yugi.game.data.CardData.setCardFromData(card, data);
   card.setFaceUp(data.isFaceUp());
-  card.setCounters(data.getCounters());
 };

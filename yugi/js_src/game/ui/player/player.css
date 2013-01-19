@@ -91,7 +91,7 @@
 	position: absolute;
 	text-align: left;
 	width: 121px;
-	z-index: 100;
+	z-index: MENU_ACTION_Z_INDEX;
 	@mixin border_radius(2px);
 }
 

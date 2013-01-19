@@ -1,0 +1,27 @@
+/**
+ * Styles for the attack sword.
+ */
+
+.yugi-attack-mask {
+	background-color: #000;
+	bottom: 0;
+	left: 0;
+	opacity: 0.3;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: ATTACK_MASK_Z_INDEX;
+}
+
+.yugi-sword {
+	bottom: 0;
+	cursor: pointer;
+	left: 0;
+	height: 90%;
+	margin-left: 36%;
+  margin-top: 5%;
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: ATTACK_Z_INDEX;
+}
