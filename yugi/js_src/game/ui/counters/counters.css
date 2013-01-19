@@ -4,6 +4,7 @@
 
 .yugi-counters {
 	position: absolute;
+	z-index: CARD_Z_INDEX;
 }
 
 .yugi-counter {
