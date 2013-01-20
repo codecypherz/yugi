@@ -20,9 +20,11 @@
     </div>
     <div id="{$ids.PLAYER_DECKS|id}" class="{css yugi-decks}">
       {if $signedIn}
-        Loading...
+        <div class="{css yugi-deck-select-text}">
+          Loading...
+        </div>
       {else}
-        <div class="{css yugi-deck-select-sign-in}">
+        <div class="{css yugi-deck-select-text}">
           You must be signed in if you want to use your own set of decks.<br>
         </div>
       {/if}
@@ -32,7 +34,9 @@
       Structure Decks
     </div>
     <div id="{$ids.STRUCTURE_DECKS|id}" class="{css yugi-decks}">
-      Loading...
+      <div class="{css yugi-deck-select-text}">
+        Loading...
+      </div>
     </div>
   </div>
 {/template}
