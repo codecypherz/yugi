@@ -168,7 +168,9 @@ yugi.game.ui.field.FieldCard.prototype.onFieldCardChanged_ = function() {
   }
 
   this.getElement().appendChild(img);
-  this.dragDropService_.addSource(img, fieldCard);
+  if (!this.player_.isOpponent()) {
+    this.dragDropService_.addSource(img, fieldCard);
+  }
 
   // Attach menu actions to the card.
   var actions = [];

@@ -218,7 +218,9 @@ yugi.game.ui.field.Stack.prototype.setCards = function(cards) {
         goog.bind(this.onImageClick_, this, this.lastImage_, cardOnTop));
 
     // Make the top item draggable.
-    this.dragDropService_.addSource(this.lastImage_, cardOnTop);
+    if (!this.isOpponent_) {
+      this.dragDropService_.addSource(this.lastImage_, cardOnTop);
+    }
 
     // Attach a menu if there are any actions.
     if (this.actions_.length > 0) {

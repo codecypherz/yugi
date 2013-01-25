@@ -290,7 +290,10 @@ yugi.game.ui.zone.Monster.prototype.renderCard_ = function() {
       img, yugi.game.ui.zone.Monster.Css_.ROTATED, card.isRotated());
   element.appendChild(img);
 
-  this.dragDropService_.addSource(img, card);
+  // Only add as a source if this is a player monster.
+  if (!this.player_.isOpponent()) {
+    this.dragDropService_.addSource(img, card);
+  }
 
   // Update the z-index now in case there is an attack declaration in progress.
   this.updateImageZIndex_();

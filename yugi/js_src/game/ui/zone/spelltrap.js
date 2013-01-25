@@ -220,7 +220,9 @@ yugi.game.ui.zone.SpellTrap.prototype.renderCard_ = function() {
   }
 
   this.getElement().appendChild(img);
-  this.dragDropService_.addSource(img, this.card_);
+  if (!this.player_.isOpponent()) {
+    this.dragDropService_.addSource(img, this.card_);
+  }
 
   // Attach menu actions to the card.
   var actions = [];
