@@ -163,17 +163,17 @@ yugi.game.ui.field.Deck.prototype.createActions_ = function(card) {
         'Special Summon in face-up attack',
         card, player, mainCards,
         pName + ' Special Summoned ' + cName + ' from their deck',
-        undefined, yugi.model.MonsterCard.Position.FACE_UP_ATTACK));
+        true, false));
     actions.push(new yugi.game.action.ListToField(
         'Special Summon in face-up defense',
         card, player, mainCards,
         pName + ' Special Summoned ' + cName + ' from their deck',
-        undefined, yugi.model.MonsterCard.Position.FACE_UP_DEFENSE));
+        true, true));
     actions.push(new yugi.game.action.ListToField(
         'Special Summon in face-down defense',
         card, player, mainCards,
         pName + ' Special Summoned ' + cName + ' from their deck',
-        undefined, yugi.model.MonsterCard.Position.FACE_DOWN_DEFENSE));
+        false, true));
   }
 
   actions.push(new yugi.game.action.ListToList('Bring to hand',

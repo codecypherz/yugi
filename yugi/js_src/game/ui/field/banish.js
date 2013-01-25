@@ -101,19 +101,19 @@ yugi.game.ui.field.Banish.prototype.createActions_ = function(card) {
         card, player, banish,
         pName + ' Special Summoned ' + cName +
         ' from the banish pile',
-        undefined, yugi.model.MonsterCard.Position.FACE_UP_ATTACK));
+        true, false));
     actions.push(new yugi.game.action.ListToField(
         'Special Summon in face-up defense',
         card, player, banish,
         pName + ' Special Summoned ' + cName +
         ' from the banish pile',
-        undefined, yugi.model.MonsterCard.Position.FACE_UP_DEFENSE));
+        true, true));
     actions.push(new yugi.game.action.ListToField(
         'Special Summon in face-down defense',
         card, player, banish,
         pName + ' Special Summoned ' + cName +
         ' from the banish pile',
-        undefined, yugi.model.MonsterCard.Position.FACE_DOWN_DEFENSE));
+        false, true));
   }
 
   // Extra deck cards can not enter the hand.

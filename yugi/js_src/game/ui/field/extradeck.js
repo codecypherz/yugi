@@ -135,17 +135,17 @@ yugi.game.ui.field.ExtraDeck.prototype.createActions_ = function(card) {
         'Summon in face-up attack',
         card, player, extraCards,
         pName + ' summoned ' + cName + ' from their extra deck',
-        undefined, yugi.model.MonsterCard.Position.FACE_UP_ATTACK));
+        true, false));
     actions.push(new yugi.game.action.ListToField(
         'Summon in face-up defense',
         card, player, extraCards,
         pName + ' summoned ' + cName + ' from their extra deck',
-        undefined, yugi.model.MonsterCard.Position.FACE_UP_DEFENSE));
+        true, true));
     actions.push(new yugi.game.action.ListToField(
         'Summon in face-down defense',
         card, player, extraCards,
         pName + ' summoned ' + cName + ' from their extra deck',
-        undefined, yugi.model.MonsterCard.Position.FACE_DOWN_DEFENSE));
+        false, true));
   }
 
   actions.push(new yugi.game.action.ListToList('Send to graveyard',

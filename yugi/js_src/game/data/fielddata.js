@@ -6,8 +6,7 @@ goog.provide('yugi.game.data.FieldData');
 
 goog.require('goog.Disposable');
 goog.require('yugi.data.CardListData');
-goog.require('yugi.game.data.MonsterData');
-goog.require('yugi.game.data.SpellTrapData');
+goog.require('yugi.game.data.CardData');
 goog.require('yugi.model.Serializable');
 goog.require('yugi.model.util');
 
@@ -23,13 +22,13 @@ yugi.game.data.FieldData = function() {
   goog.base(this);
 
   /**
-   * @type {!Array.<!yugi.game.data.MonsterData>}
+   * @type {!Array.<!yugi.game.data.CardData>}
    * @private
    */
   this.monsters_ = new Array(5);
 
   /**
-   * @type {!Array.<!yugi.game.data.SpellTrapData>}
+   * @type {!Array.<!yugi.game.data.CardData>}
    * @private
    */
   this.spellTraps_ = new Array(5);
@@ -47,7 +46,7 @@ yugi.game.data.FieldData = function() {
   this.banishData_ = new yugi.data.CardListData();
 
   /**
-   * @type {yugi.game.data.SpellTrapData}
+   * @type {yugi.game.data.CardData}
    * @private
    */
   this.fieldCardData_ = null;
@@ -56,7 +55,7 @@ goog.inherits(yugi.game.data.FieldData, goog.Disposable);
 
 
 /**
- * @return {!Array.<!yugi.game.data.MonsterData>} The monster data.
+ * @return {!Array.<!yugi.game.data.CardData>} The monster data.
  */
 yugi.game.data.FieldData.prototype.getMonsters = function() {
   return this.monsters_;
@@ -64,7 +63,7 @@ yugi.game.data.FieldData.prototype.getMonsters = function() {
 
 
 /**
- * @param {!Array.<!yugi.game.data.MonsterData>} monsters The monster data.
+ * @param {!Array.<!yugi.game.data.CardData>} monsters The monster data.
  */
 yugi.game.data.FieldData.prototype.setMonsters = function(monsters) {
   this.monsters_ = monsters;
@@ -72,7 +71,7 @@ yugi.game.data.FieldData.prototype.setMonsters = function(monsters) {
 
 
 /**
- * @return {!Array.<!yugi.game.data.SpellTrapData>} The spell/trap data.
+ * @return {!Array.<!yugi.game.data.CardData>} The spell/trap data.
  */
 yugi.game.data.FieldData.prototype.getSpellTraps = function() {
   return this.spellTraps_;
@@ -80,7 +79,7 @@ yugi.game.data.FieldData.prototype.getSpellTraps = function() {
 
 
 /**
- * @param {!Array.<!yugi.game.data.SpellTrapData>} spellTraps The data.
+ * @param {!Array.<!yugi.game.data.CardData>} spellTraps The data.
  */
 yugi.game.data.FieldData.prototype.setSpellTraps = function(spellTraps) {
   this.spellTraps_ = spellTraps;
@@ -120,7 +119,7 @@ yugi.game.data.FieldData.prototype.setBanishData = function(banishData) {
 
 
 /**
- * @return {yugi.game.data.SpellTrapData} The player's field card.
+ * @return {yugi.game.data.CardData} The player's field card.
  */
 yugi.game.data.FieldData.prototype.getFieldCardData = function() {
   return this.fieldCardData_;
@@ -128,7 +127,7 @@ yugi.game.data.FieldData.prototype.getFieldCardData = function() {
 
 
 /**
- * @param {yugi.game.data.SpellTrapData} fieldCardData The player's field card.
+ * @param {yugi.game.data.CardData} fieldCardData The player's field card.
  */
 yugi.game.data.FieldData.prototype.setFieldCardData = function(fieldCardData) {
   this.fieldCardData_ = fieldCardData;
@@ -156,9 +155,9 @@ yugi.game.data.FieldData.prototype.setFromJson = function(json) {
   for (var i = 0; i < monsterJsonArr.length; i++) {
     var monsterJson = monsterJsonArr[i];
     if (monsterJson) {
-      var monsterData = new yugi.game.data.MonsterData();
-      monsterData.setFromJson(monsterJson);
-      monsters[i] = monsterData;
+      var data = new yugi.game.data.CardData();
+      data.setFromJson(monsterJson);
+      monsters[i] = data;
     } else {
       monsters[i] = null;
     }
@@ -171,9 +170,9 @@ yugi.game.data.FieldData.prototype.setFromJson = function(json) {
   for (var i = 0; i < spellTrapJsonArr.length; i++) {
     var spellTrapJson = spellTrapJsonArr[i];
     if (spellTrapJson) {
-      var spellTrapData = new yugi.game.data.SpellTrapData();
-      spellTrapData.setFromJson(spellTrapJson);
-      spellTraps[i] = spellTrapData;
+      var data = new yugi.game.data.CardData();
+      data.setFromJson(spellTrapJson);
+      spellTraps[i] = data;
     } else {
       spellTraps[i] = null;
     }
@@ -193,9 +192,9 @@ yugi.game.data.FieldData.prototype.setFromJson = function(json) {
   // Field card
   var fieldCardDataJson = json['f'];
   if (fieldCardDataJson) {
-    var fieldCardData = new yugi.game.data.SpellTrapData();
-    fieldCardData.setFromJson(fieldCardDataJson);
-    this.fieldCardData_ = fieldCardData;
+    var data = new yugi.game.data.CardData();
+    data.setFromJson(fieldCardDataJson);
+    this.fieldCardData_ = data;
   } else {
     this.fieldCardData_ = null;
   }

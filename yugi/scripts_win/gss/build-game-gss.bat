@@ -18,9 +18,11 @@ java -jar ..\..\closure\gss\closure-stylesheets-20111230.jar ^
   ..\..\js_src\game\ui\chat\chat.css ^
   ..\..\js_src\game\ui\connection\status.css ^
   ..\..\js_src\game\ui\deck\select.css ^
+  ..\..\js_src\game\ui\dragdrop\dragdrop.css ^
   ..\..\js_src\game\ui\field\field.css ^
   ..\..\js_src\game\ui\counters\counters.css ^
   ..\..\js_src\game\ui\hand\hand.css ^
   ..\..\js_src\game\ui\player\player.css ^
   ..\..\js_src\game\ui\sync\sync.css ^
-  ..\..\js_src\game\ui\waiting\waiting.css
+  ..\..\js_src\game\ui\waiting\waiting.css ^
+  ..\..\js_src\game\ui\zone\zone.css

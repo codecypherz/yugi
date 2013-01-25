@@ -27,6 +27,12 @@ goog.require('yugi.ui.Image');
 yugi.model.Deck = function() {
 
   /**
+   * @type {!goog.debug.Logger}
+   * @protected
+   */
+  this.logger = goog.debug.Logger.getLogger('yugi.model.Deck');
+
+  /**
    * The key for this deck on the server.
    * @type {string}
    * @private
@@ -103,14 +109,6 @@ yugi.model.Deck.EventType = {
 
 
 /**
- * @type {!goog.debug.Logger}
- * @protected
- */
-yugi.model.Deck.prototype.logger =
-    goog.debug.Logger.getLogger('yugi.model.Deck');
-
-
-/**
  * Returns a new copy of the deck.  This is a deep copy.
  * @return {!yugi.model.Deck} The deck copy.
  */
@@ -128,21 +126,6 @@ yugi.model.Deck.prototype.clone = function() {
   deck.setSideCardList(this.sideCardList_.clone());
 
   return deck;
-};
-
-
-/**
- * Clones the given array of cards.
- * @param {!Array.<!yugi.model.Card>} cards The cards to clone.
- * @return {!Array.<!yugi.model.Card>} The cloned cards.
- * @private
- */
-yugi.model.Deck.prototype.cloneCards_ = function(cards) {
-  var clonedCards = [];
-  goog.array.forEach(cards, function(card) {
-    clonedCards.push(card.clone());
-  });
-  return clonedCards;
 };
 
 

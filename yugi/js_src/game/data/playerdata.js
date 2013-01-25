@@ -22,6 +22,40 @@ yugi.game.data.PlayerData = function() {
   goog.base(this);
 
   /**
+   * The name of the player.
+   * @type {string}
+   * @private
+   */
+  this.name_ = '';
+
+  /**
+   * The connection status of this player.
+   * @type {boolean}
+   * @private
+   */
+  this.connected_ = false;
+
+  /**
+   * True if the player has selected their deck or not.
+   * @type {boolean}
+   * @private
+   */
+  this.deckSelected_ = false;
+
+  /**
+   * True if this player is the opponent, false otherwise.
+   * @type {boolean}
+   * @private
+   */
+  this.isOpponent_ = false;
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.lifePoints_ = 0;
+
+  /**
    * @type {!yugi.game.data.DeckData}
    * @private
    */
@@ -40,45 +74,6 @@ yugi.game.data.PlayerData = function() {
   this.fieldData_ = new yugi.game.data.FieldData();
 };
 goog.inherits(yugi.game.data.PlayerData, goog.Disposable);
-
-
-/**
- * The name of the player.
- * @type {string}
- * @private
- */
-yugi.game.data.PlayerData.prototype.name_ = '';
-
-
-/**
- * The connection status of this player.
- * @type {boolean}
- * @private
- */
-yugi.game.data.PlayerData.prototype.connected_ = false;
-
-
-/**
- * True if the player has selected their deck or not.
- * @type {boolean}
- * @private
- */
-yugi.game.data.PlayerData.prototype.deckSelected_ = false;
-
-
-/**
- * True if this player is the opponent, false otherwise.
- * @type {boolean}
- * @private
- */
-yugi.game.data.PlayerData.prototype.isOpponent_ = false;
-
-
-/**
- * @type {number}
- * @private
- */
-yugi.game.data.PlayerData.prototype.lifePoints_ = 0;
 
 
 /**

@@ -31,14 +31,6 @@ yugi.model.SpellCard.prototype.spellType_;
 
 
 /**
- * Whether the card is face up or not.
- * @type {boolean}
- * @private
- */
-yugi.model.SpellCard.prototype.isFaceUp_ = false;
-
-
-/**
  * The set of spell card types.
  * @enum {string}
  */
@@ -92,31 +84,10 @@ yugi.model.SpellCard.prototype.setSpellTypeFromString_ = function(typeString) {
 };
 
 
-/**
- * @return {boolean} True if the card is face up or not.
- */
-yugi.model.SpellCard.prototype.isFaceUp = function() {
-  return this.isFaceUp_;
-};
-
-
-/**
- * @param {boolean} isFaceUp True if the card is face up or not.
- */
-yugi.model.SpellCard.prototype.setFaceUp = function(isFaceUp) {
-  if (this.isFaceUp_ == isFaceUp) {
-    return;
-  }
-  this.isFaceUp_ = isFaceUp;
-  this.dispatchEvent(yugi.model.Card.EventType.POSITION_CHANGED);
-};
-
-
 /** @override */
 yugi.model.SpellCard.prototype.toJson = function() {
   var json = goog.base(this, 'toJson');
   json['spell-type'] = this.getSpellType();
-  json['fup'] = this.isFaceUp_;
   return json;
 };
 
@@ -125,7 +96,6 @@ yugi.model.SpellCard.prototype.toJson = function() {
 yugi.model.SpellCard.prototype.setFromJson = function(json) {
   goog.base(this, 'setFromJson', json);
   this.setSpellTypeFromString_(json['spell-type']);
-  this.isFaceUp_ = json['fup'] || false;
 };
 
 
@@ -135,5 +105,4 @@ yugi.model.SpellCard.prototype.setFromCard = function(card) {
 
   card = /** @type {!yugi.model.SpellCard} */ (card);
   this.setSpellType(card.spellType_);
-  this.setFaceUp(card.isFaceUp_);
 };

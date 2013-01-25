@@ -102,19 +102,19 @@ yugi.game.ui.field.Graveyard.prototype.createActions_ = function(card) {
         card, player, graveyard,
         pName + ' Special Summoned ' + cName +
         ' from the graveyard',
-        undefined, yugi.model.MonsterCard.Position.FACE_UP_ATTACK));
+        true, false));
     actions.push(new yugi.game.action.ListToField(
         'Special Summon in face-up defense',
         card, player, graveyard,
         pName + ' Special Summoned ' + cName +
         ' from the graveyard',
-        undefined, yugi.model.MonsterCard.Position.FACE_UP_DEFENSE));
+        true, false));
     actions.push(new yugi.game.action.ListToField(
         'Special Summon in face-down defense',
         card, player, graveyard,
         pName + ' Special Summoned ' + cName +
         ' from the graveyard',
-        undefined, yugi.model.MonsterCard.Position.FACE_DOWN_DEFENSE));
+        false, true));
   }
 
   // Extra deck cards cannot enter the hand.

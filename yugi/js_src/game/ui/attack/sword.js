@@ -23,8 +23,8 @@ goog.require('yugi.game.model.Attack');
 goog.require('yugi.game.net.Channel');
 goog.require('yugi.game.service.Resize');
 goog.require('yugi.game.ui');
-goog.require('yugi.game.ui.Id');
 goog.require('yugi.game.ui.attack.soy');
+goog.require('yugi.model.Area');
 goog.require('yugi.ui.style');
 
 
@@ -209,7 +209,7 @@ yugi.game.ui.attack.Sword.prototype.onOpponentDeclared_ = function() {
   }
 
   var targetElement = goog.asserts.assert(
-      goog.dom.getElement(yugi.game.ui.Id.OPP_HAND));
+      this.getDomHelper().getElement(yugi.model.Area.OPP_HAND));
   this.animate_(targetElement);
 };
 
@@ -235,7 +235,7 @@ yugi.game.ui.attack.Sword.prototype.onDeclareAttackMessage_ = function(e) {
       targetElement = yugi.game.ui.getMonsterZoneElement(
           message.getTargetZone());
     } else {
-      targetElement = goog.dom.getElement(yugi.game.ui.Id.PLAYER_HAND);
+      targetElement = goog.dom.getElement(yugi.model.Area.PLAYER_HAND);
     }
     this.animate_(goog.asserts.assert(targetElement));
   }

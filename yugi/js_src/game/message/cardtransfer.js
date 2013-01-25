@@ -8,11 +8,8 @@ goog.provide('yugi.game.message.CardTransfer.Location');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('yugi.game.data.CardData');
-goog.require('yugi.game.data.MonsterData');
-goog.require('yugi.game.data.SpellTrapData');
 goog.require('yugi.game.message.Message');
 goog.require('yugi.game.message.MessageType');
-goog.require('yugi.model.Card');
 
 
 
@@ -32,20 +29,14 @@ yugi.game.message.CardTransfer = function() {
    */
   this.cardData_ = new yugi.game.data.CardData();
 
+  // TODO This should be refactored to use yugi.model.Area.
+
   /**
    * The place the card should end up for the opponent.
    * @type {!yugi.game.message.CardTransfer.Location}
    * @private
    */
   this.destination_ = yugi.game.message.CardTransfer.Location.HAND;
-
-  /**
-   * The type of card being transferred.  This is required to properly
-   * deserialize the card data object.
-   * @type {!yugi.model.Card.Type}
-   * @private
-   */
-  this.cardType_ = yugi.model.Card.Type.MONSTER;
 };
 goog.inherits(yugi.game.message.CardTransfer, yugi.game.message.Message);
 
@@ -94,27 +85,10 @@ yugi.game.message.CardTransfer.prototype.setDestination =
 };
 
 
-/**
- * @return {!yugi.model.Card.Type} The card type.
- */
-yugi.game.message.CardTransfer.prototype.getCardType = function() {
-  return this.cardType_;
-};
-
-
-/**
- * @param {!yugi.model.Card.Type} cardType The card type.
- */
-yugi.game.message.CardTransfer.prototype.setCardType = function(cardType) {
-  this.cardType_ = cardType;
-};
-
-
 /** @override */
 yugi.game.message.CardTransfer.prototype.toJson = function() {
   var message = goog.base(this, 'toJson');
 
-  message['ct'] = this.cardType_;
   message['c'] = this.cardData_.toJson();
   message['d'] = this.destination_;
 
@@ -126,13 +100,7 @@ yugi.game.message.CardTransfer.prototype.toJson = function() {
 yugi.game.message.CardTransfer.prototype.setFromJson = function(json) {
   goog.base(this, 'setFromJson', json);
 
-  if (json['ct'] == yugi.model.Card.Type.MONSTER) {
-    this.cardData_ = new yugi.game.data.MonsterData();
-  } else {
-    this.cardData_ = new yugi.game.data.SpellTrapData();
-  }
-  this.cardData_.setFromJson(json['c']);
-
+  this.cardData_ = yugi.game.data.CardData.createFromJson(json['c']);
   this.setDestinationFromString_(json['d']);
 };
 

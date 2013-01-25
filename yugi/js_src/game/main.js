@@ -30,6 +30,8 @@ goog.require('yugi.game.service.Resize');
 goog.require('yugi.game.service.Sync');
 goog.require('yugi.game.ui.Main');
 goog.require('yugi.game.ui.State');
+goog.require('yugi.game.ui.dragdrop.DragDrop');
+goog.require('yugi.game.ui.dragdrop.DropHandler');
 goog.require('yugi.model.CardCache');
 goog.require('yugi.model.Notifier');
 goog.require('yugi.model.Selection');
@@ -104,9 +106,10 @@ yugi.game.Main = function(signInOutUrl, deckManagerUrl, userJson,
   var browser = yugi.game.model.Browser.register();
   var attack = yugi.game.model.Attack.register(chat, this.channel_);
 
-  // Register UI models.
+  // Register UI models/services/stuff.
   var state = yugi.game.ui.State.register();
   var resizeService = yugi.game.service.Resize.register(state);
+  var dragDropService = yugi.game.ui.dragdrop.DragDrop.register(state);
 
   // Register handlers.
   var handlers = [
@@ -118,7 +121,8 @@ yugi.game.Main = function(signInOutUrl, deckManagerUrl, userJson,
     new yugi.game.handler.JoinResponse(this.channel_, game, chat),
     new yugi.game.handler.SyncRequest(this.channel_, game),
     new yugi.game.handler.SyncResponse(this.channel_, synchronization),
-    new yugi.game.handler.WaitForSync(this.channel_, synchronization)
+    new yugi.game.handler.WaitForSync(this.channel_, synchronization),
+    new yugi.game.ui.dragdrop.DropHandler()
   ];
 
   // Render the main element.
@@ -135,6 +139,7 @@ yugi.game.Main = function(signInOutUrl, deckManagerUrl, userJson,
   this.registerDisposable(chat);
   this.registerDisposable(chatInterceptor);
   this.registerDisposable(resizeService);
+  this.registerDisposable(dragDropService);
   this.registerDisposable(state);
   this.registerDisposable(game);
   this.registerDisposable(decksModel);

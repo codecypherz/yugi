@@ -5,6 +5,7 @@
 goog.provide('yugi.game.ui.field.FieldCard');
 
 goog.require('goog.debug.Logger');
+goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classes');
 goog.require('goog.events.EventHandler');
@@ -15,6 +16,7 @@ goog.require('yugi.game.model.Field');
 goog.require('yugi.game.ui');
 goog.require('yugi.game.ui.Css');
 goog.require('yugi.game.ui.counters.Counters');
+goog.require('yugi.game.ui.dragdrop.DragDrop');
 goog.require('yugi.model.Card');
 goog.require('yugi.model.InformationCard');
 goog.require('yugi.model.Selection');
@@ -33,6 +35,12 @@ yugi.game.ui.field.FieldCard = function(player) {
   goog.base(this);
 
   /**
+   * @type {!goog.debug.Logger}
+   * @protected
+   */
+  this.logger = goog.debug.Logger.getLogger('yugi.game.ui.field.FieldCard');
+
+  /**
    * @type {!yugi.game.model.Player}
    * @private
    */
@@ -43,6 +51,12 @@ yugi.game.ui.field.FieldCard = function(player) {
    * @private
    */
   this.selection_ = yugi.model.Selection.get();
+
+  /**
+   * @type {!yugi.game.ui.dragdrop.DragDrop}
+   * @private
+   */
+  this.dragDropService_ = yugi.game.ui.dragdrop.DragDrop.get();
 
   /**
    * @type {!yugi.model.InformationCard}
@@ -57,30 +71,20 @@ yugi.game.ui.field.FieldCard = function(player) {
    */
   this.cardHandler_ = new goog.events.EventHandler(this);
   this.registerDisposable(this.cardHandler_);
+
+  /**
+   * @type {yugi.ui.menu.Menu}
+   * @private
+   */
+  this.menu_ = null;
+
+  /**
+   * @type {yugi.game.ui.counters.Counters}
+   * @private
+   */
+  this.counters_ = null;
 };
 goog.inherits(yugi.game.ui.field.FieldCard, goog.ui.Component);
-
-
-/**
- * @type {yugi.ui.menu.Menu}
- * @private
- */
-yugi.game.ui.field.FieldCard.prototype.menu_ = null;
-
-
-/**
- * @type {yugi.game.ui.counters.Counters}
- * @private
- */
-yugi.game.ui.field.FieldCard.prototype.counters_ = null;
-
-
-/**
- * @type {!goog.debug.Logger}
- * @protected
- */
-yugi.game.ui.field.FieldCard.prototype.logger =
-    goog.debug.Logger.getLogger('yugi.game.ui.field.FieldCard');
 
 
 /**
@@ -118,31 +122,42 @@ yugi.game.ui.field.FieldCard.prototype.enterDocument = function() {
 
 
 /**
+ * Clears any stuff that was for the previous card.
+ * @private
+ */
+yugi.game.ui.field.FieldCard.prototype.clearCard_ = function() {
+  var image = goog.dom.getFirstElementChild(this.getElement());
+  if (image) {
+    this.dragDropService_.removeSource(image);
+  }
+  this.getElement().innerHTML = '';
+  this.cardHandler_.removeAll();
+  goog.dispose(this.menu_);
+  goog.dispose(this.counters_);
+};
+
+
+/**
  * Called when the field card changes.
  * @private
  */
 yugi.game.ui.field.FieldCard.prototype.onFieldCardChanged_ = function() {
 
-  // Reset.
-  var element = this.getElement();
-  element.innerHTML = '';
-  this.cardHandler_.removeAll();
-  goog.dispose(this.menu_);
-  goog.dispose(this.counters_);
+  this.clearCard_();
 
-  var dom = this.getDomHelper();
+  // Make sure there's a field card to render.
   var fieldCard = this.player_.getField().getFieldCard();
-
   if (!fieldCard) {
     return;
   }
 
-  // Listen to position changes.
+  // Listen to flip changes.
   this.cardHandler_.listen(fieldCard,
-      yugi.model.Card.EventType.POSITION_CHANGED,
+      yugi.model.Card.EventType.FLIPPED,
       this.onFieldCardChanged_);
 
-  var img = dom.createDom(goog.dom.TagName.IMG, yugi.game.ui.Css.CARD_SIZE);
+  var img = this.getDomHelper().createDom(
+      goog.dom.TagName.IMG, yugi.game.ui.Css.CARD_SIZE);
 
   // Set the image based on position.
   if (fieldCard.isFaceUp()) {
@@ -152,7 +167,8 @@ yugi.game.ui.field.FieldCard.prototype.onFieldCardChanged_ = function() {
     img.src = yugi.ui.Image.CARD_BACK;
   }
 
-  dom.append(element, img);
+  this.getElement().appendChild(img);
+  this.dragDropService_.addSource(img, fieldCard);
 
   // Attach menu actions to the card.
   var actions = [];
@@ -164,7 +180,7 @@ yugi.game.ui.field.FieldCard.prototype.onFieldCardChanged_ = function() {
   // Don't render the menu unless there are actions.
   if (actions.length > 0) {
     this.menu_ = new yugi.ui.menu.Menu(actions);
-    this.menu_.render(element);
+    this.menu_.render(this.getElement());
   }
 
   // Render the counters.

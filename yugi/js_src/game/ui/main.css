@@ -2,11 +2,13 @@
  * Styles for the main portion of the game.
  */
 
+/* Keep these z-indices in sync with yugi.game.ui.ZIndex. */
 @def CARD_Z_INDEX                         10;
 /*   MENU_ICON_Z_INDEX                    99;  // set in menu.css */
 /*   MENU_ACTION_Z_INDEX                  100; // set in menu.css */
 @def ATTACK_MASK_Z_INDEX                  200;
 @def ATTACK_Z_INDEX                       210;
+@def DRAG_Z_INDEX                         250;
 
 body {
 	margin: 0;

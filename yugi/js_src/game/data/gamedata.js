@@ -22,6 +22,19 @@ yugi.game.data.GameData = function() {
   goog.base(this);
 
   /**
+   * The game's key on the server.
+   * @type {string}
+   * @private
+   */
+  this.key_ = '';
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.opponentJoined_ = false;
+
+  /**
    * The "self" player or this client's player.
    * @type {!yugi.game.data.PlayerData}
    * @private
@@ -36,21 +49,6 @@ yugi.game.data.GameData = function() {
   this.opponentData_ = new yugi.game.data.PlayerData();
 };
 goog.inherits(yugi.game.data.GameData, goog.Disposable);
-
-
-/**
- * The game's key on the server.
- * @type {string}
- * @private
- */
-yugi.game.data.GameData.prototype.key_ = '';
-
-
-/**
- * @type {boolean}
- * @private
- */
-yugi.game.data.GameData.prototype.opponentJoined_ = false;
 
 
 /**
@@ -121,25 +119,25 @@ yugi.game.data.GameData.prototype.setOpponentJoined =
 /** @override */
 yugi.game.data.GameData.prototype.toJson = function() {
   var json = {};
-  json['key'] = this.key_;
-  json['player'] = this.playerData_.toJson();
-  json['opponent'] = this.opponentData_.toJson();
-  json['opponent-joined'] = this.opponentJoined_;
+  json['k'] = this.key_;
+  json['p'] = this.playerData_.toJson();
+  json['o'] = this.opponentData_.toJson();
+  json['oj'] = this.opponentJoined_;
   return json;
 };
 
 
 /** @override */
 yugi.game.data.GameData.prototype.setFromJson = function(json) {
-  this.key_ = json['key'];
+  this.key_ = json['k'];
 
   var playerData = new yugi.game.data.PlayerData();
-  playerData.setFromJson(json['player']);
+  playerData.setFromJson(json['p']);
   this.playerData_ = playerData;
 
   var opponentData = new yugi.game.data.PlayerData();
-  opponentData.setFromJson(json['opponent']);
+  opponentData.setFromJson(json['o']);
   this.opponentData_ = opponentData;
 
-  this.opponentJoined_ = json['opponent-joined'];
+  this.opponentJoined_ = json['oj'];
 };

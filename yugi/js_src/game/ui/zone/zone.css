@@ -1,0 +1,19 @@
+/**
+ * CSS for zones.
+ */
+
+.yugi-monster-rotated {
+  @mixin transform(rotate(-90deg));
+}
+
+.yugi-field-card.opponent > img,
+.yugi-monster-zone.opponent > img,
+.yugi-spell-trap-zone.opponent > img {
+  @mixin transform(rotate(180deg));
+}
+
+.yugi-field-card.opponent > img.yugi-monster-rotated,
+.yugi-monster-zone.opponent > img.yugi-monster-rotated,
+.yugi-spell-trap-zone.opponent > img.yugi-monster-rotated {
+  @mixin transform(rotate(90deg));
+}

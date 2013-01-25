@@ -5,6 +5,7 @@
 goog.provide('yugi.data.CardListData');
 
 goog.require('goog.Disposable');
+goog.require('yugi.model.Area');
 goog.require('yugi.model.Serializable');
 
 
@@ -23,6 +24,12 @@ yugi.data.CardListData = function() {
    * @private
    */
   this.cardKeys_ = [];
+
+  /**
+   * @type {!yugi.model.Area}
+   * @private
+   */
+  this.area_ = yugi.model.Area.UNSPECIFIED;
 };
 goog.inherits(yugi.data.CardListData, goog.Disposable);
 
@@ -43,15 +50,33 @@ yugi.data.CardListData.prototype.setCardKeys = function(cardKeys) {
 };
 
 
+/**
+ * @return {!yugi.model.Area} The area for the card list.
+ */
+yugi.data.CardListData.prototype.getArea = function() {
+  return this.area_;
+};
+
+
+/**
+ * @param {!yugi.model.Area} area The area for the card list.
+ */
+yugi.data.CardListData.prototype.setArea = function(area) {
+  this.area_ = area;
+};
+
+
 /** @override */
 yugi.data.CardListData.prototype.toJson = function() {
   var json = {};
   json['keys'] = this.cardKeys_;
+  json['a'] = this.area_;
   return json;
 };
 
 
 /** @override */
 yugi.data.CardListData.prototype.setFromJson = function(json) {
+  this.area_ = json['a'];
   this.cardKeys_ = json['keys'];
 };

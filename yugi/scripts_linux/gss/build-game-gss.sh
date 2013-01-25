@@ -21,4 +21,5 @@ java -jar ../../Closure/gss/closure-stylesheets-20111118.jar \
   ../js_src/game/ui/hand/hand.css \
   ../js_src/game/ui/player/player.css \
   ../js_src/game/ui/sync/sync.css \
-  ../js_src/game/ui/waiting/waiting.css
+  ../js_src/game/ui/waiting/waiting.css \
+  ../js_src/game/ui/zone/zone.css

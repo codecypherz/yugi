@@ -52,6 +52,13 @@ yugi.game.ui.field.Field = function() {
    */
   this.fieldCardHandler_ = new goog.events.EventHandler(this);
   this.registerDisposable(this.fieldCardHandler_);
+
+  /**
+   * The container for the field image.
+   * @type {Element}
+   * @private
+   */
+  this.imageDiv_ = null;
 };
 goog.inherits(yugi.game.ui.field.Field, goog.ui.Component);
 
@@ -62,14 +69,6 @@ goog.inherits(yugi.game.ui.field.Field, goog.ui.Component);
  * @const
  */
 yugi.game.ui.field.Field.ID = 'field';
-
-
-/**
- * The container for the field image.
- * @type {Element}
- * @private
- */
-yugi.game.ui.field.Field.prototype.imageDiv_ = null;
 
 
 /**
@@ -146,7 +145,7 @@ yugi.game.ui.field.Field.prototype.onFieldCardChanged_ = function() {
   // If we have a card, listen for when if flips face up or face down.
   if (card) {
     this.fieldCardHandler_.listen(card,
-        yugi.model.Card.EventType.POSITION_CHANGED,
+        yugi.model.Card.EventType.FLIPPED,
         this.onFieldCardChanged_);
 
     // Render the image for the field card.

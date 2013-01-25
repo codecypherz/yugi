@@ -41,14 +41,6 @@ yugi.model.TrapCard.Type = {
 yugi.model.TrapCard.prototype.trapType_;
 
 
-/**
- * Whether the card is face up or not.
- * @type {boolean}
- * @private
- */
-yugi.model.TrapCard.prototype.isFaceUp_ = false;
-
-
 /** @override */
 yugi.model.TrapCard.prototype.clone = function() {
   var card = new yugi.model.TrapCard();
@@ -89,31 +81,10 @@ yugi.model.TrapCard.prototype.setTrapTypeFromString_ = function(typeString) {
 };
 
 
-/**
- * @return {boolean} True if the card is face up or not.
- */
-yugi.model.TrapCard.prototype.isFaceUp = function() {
-  return this.isFaceUp_;
-};
-
-
-/**
- * @param {boolean} isFaceUp True if the card is face up or not.
- */
-yugi.model.TrapCard.prototype.setFaceUp = function(isFaceUp) {
-  if (this.isFaceUp_ == isFaceUp) {
-    return;
-  }
-  this.isFaceUp_ = isFaceUp;
-  this.dispatchEvent(yugi.model.Card.EventType.POSITION_CHANGED);
-};
-
-
 /** @override */
 yugi.model.TrapCard.prototype.toJson = function() {
   var json = goog.base(this, 'toJson');
   json['trap-type'] = this.getTrapType();
-  json['fup'] = this.isFaceUp_;
   return json;
 };
 
@@ -122,7 +93,6 @@ yugi.model.TrapCard.prototype.toJson = function() {
 yugi.model.TrapCard.prototype.setFromJson = function(json) {
   goog.base(this, 'setFromJson', json);
   this.setTrapTypeFromString_(json['trap-type']);
-  this.isFaceUp_ = json['fup'] || false;
 };
 
 
@@ -132,5 +102,4 @@ yugi.model.TrapCard.prototype.setFromCard = function(card) {
 
   card = /** @type {!yugi.model.TrapCard} */ (card);
   this.setTrapType(card.trapType_);
-  this.setFaceUp(card.isFaceUp_);
 };

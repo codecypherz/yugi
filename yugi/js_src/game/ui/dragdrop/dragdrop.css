@@ -1,0 +1,19 @@
+/**
+ * Css for dragging and dropping things.
+ */
+
+.yugi-drag-source {
+}
+
+.yugi-drag-target.yugi-drag-over {
+	outline: 4px solid #90EE90;
+}
+
+.yugi-dragged {
+	opacity: 0.5;
+}
+
+.yugi-drag-item {
+	opacity: 1;
+	@mixin box_shadow(5px 5px 15px #555);
+}

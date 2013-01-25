@@ -12,7 +12,7 @@ goog.require('yugi.model.Action');
 
 /**
  * Action for activating a spell or trap card on the field.
- * @param {!yugi.model.SpellCard|!yugi.model.TrapCard} card The card.
+ * @param {!yugi.model.Card} card The card.
  * @param {!yugi.game.model.Player} player The player model.
  * @constructor
  * @extends {yugi.model.Action}
@@ -21,7 +21,7 @@ yugi.game.action.field.Activate = function(card, player) {
   goog.base(this, 'Activate');
 
   /**
-   * @type {!yugi.model.SpellCard|!yugi.model.TrapCard}
+   * @type {!yugi.model.Card}
    * @private
    */
   this.card_ = card;

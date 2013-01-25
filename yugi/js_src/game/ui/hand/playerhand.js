@@ -18,6 +18,7 @@ goog.require('yugi.game.action.ListToList');
 goog.require('yugi.game.action.Shuffle');
 goog.require('yugi.game.message.CardTransfer');
 goog.require('yugi.game.ui');
+goog.require('yugi.game.ui.dragdrop.DragDrop');
 goog.require('yugi.game.ui.hand.soy');
 goog.require('yugi.model.CardList');
 goog.require('yugi.model.MonsterCard');
@@ -47,6 +48,12 @@ yugi.game.ui.hand.PlayerHand = function(player) {
    * @private
    */
   this.selection_ = yugi.model.Selection.get();
+
+  /**
+   * @type {!yugi.game.ui.dragdrop.DragDrop}
+   * @private
+   */
+  this.dragDropService_ = yugi.game.ui.dragdrop.DragDrop.get();
 
   /**
    * @type {!Array.<!yugi.ui.menu.Menu>}
@@ -91,8 +98,14 @@ yugi.game.ui.hand.PlayerHand.prototype.enterDocument = function() {
  */
 yugi.game.ui.hand.PlayerHand.prototype.onCardsChanged_ = function() {
 
-  // Reset the rendering of the hand.
   var element = this.getElement();
+
+  // Clean up drag sources.
+  goog.array.forEach(goog.dom.getChildren(element), function(child) {
+    this.dragDropService_.removeSource(element);
+  }, this);
+
+  // Reset the rendering of the hand.
   element.innerHTML = '';
   this.cardHandler_.removeAll();
   this.disposeMenus_();
@@ -109,6 +122,8 @@ yugi.game.ui.hand.PlayerHand.prototype.onCardsChanged_ = function() {
         });
     goog.dom.appendChild(element, cardElement);
 
+    this.dragDropService_.addSource(cardElement, card);
+
     var cName = card.getName();
 
     // Attach menu actions to the card.
@@ -116,18 +131,19 @@ yugi.game.ui.hand.PlayerHand.prototype.onCardsChanged_ = function() {
     actions.push(new yugi.game.action.ListToField('Set',
         card, player, hand,
         pName + ' set a card',
-        false, yugi.model.MonsterCard.Position.FACE_DOWN_DEFENSE));
+        false, true));
 
     // Attach monster-specific menu actions.
     if (card instanceof yugi.model.MonsterCard) {
       actions.push(new yugi.game.action.ListToField('Summon',
           card, player, hand,
           pName + ' summoned ' + cName + ' from their hand',
-          undefined, yugi.model.MonsterCard.Position.FACE_UP_ATTACK));
+          true, false));
     } else if (card instanceof yugi.model.SpellCard) {
       actions.push(new yugi.game.action.ListToField('Activate',
           card, player, hand,
-          pName + ' activated ' + cName, true));
+          pName + ' activated ' + cName,
+          true, false));
     }
 
     // Graveyard/Banish

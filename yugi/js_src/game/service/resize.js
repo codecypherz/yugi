@@ -127,7 +127,7 @@ yugi.game.service.Resize.register = function(uiState) {
 
 
 /**
- * @return {!yugi.game.service.Resize} The life point service.
+ * @return {!yugi.game.service.Resize} The service.
  */
 yugi.game.service.Resize.get = function() {
   return yugi.game.service.Resize.instance_;

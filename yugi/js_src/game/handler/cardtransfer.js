@@ -7,8 +7,6 @@ goog.provide('yugi.game.handler.CardTransfer');
 goog.require('goog.Disposable');
 goog.require('goog.debug.Logger');
 goog.require('goog.events.EventHandler');
-goog.require('yugi.game.data.MonsterData');
-goog.require('yugi.game.data.SpellTrapData');
 goog.require('yugi.game.message.CardTransfer');
 goog.require('yugi.game.message.MessageType');
 goog.require('yugi.model.MonsterCard');
@@ -91,14 +89,7 @@ yugi.game.handler.CardTransfer.prototype.onCardTransfer_ = function(e) {
   // Construct a card based on the card data.
   var cardData = message.getCardData();
   var card = this.cardCache_.get(cardData.getKey());
-  if (card instanceof yugi.model.MonsterCard) {
-    yugi.game.data.MonsterData.setCardFromData(card,
-        /** @type {!yugi.game.data.MonsterData} */ (cardData));
-  } else {
-    yugi.game.data.SpellTrapData.setCardFromData(
-        /** @type {!yugi.model.SpellCard|!yugi.model.TrapCard} */ (card),
-        /** @type {!yugi.game.data.SpellTrapData} */ (cardData));
-  }
+  cardData.syncToCard(card);
 
   // Grab references to things for convenience and brevity.
   var player = this.game_.getPlayer();

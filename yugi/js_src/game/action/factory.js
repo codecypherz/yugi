@@ -23,7 +23,7 @@ goog.addSingletonGetter(yugi.game.action.Factory);
 
 /**
  * Creates field actions for spell/trap cards.
- * @param {!yugi.model.SpellCard|!yugi.model.TrapCard} card The card.
+ * @param {!yugi.model.Card} card The card.
  * @param {!yugi.game.model.Player} player The player to which the card belongs.
  * @param {number} zone The zone in which the card resides (ignored for field).
  * @return {!Array.<!yugi.model.Action>} The actions for the card.

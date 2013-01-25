@@ -14,6 +14,7 @@ goog.require('goog.math.Range');
 goog.require('yugi.game.data.DeckData');
 goog.require('yugi.game.data.PlayerData');
 goog.require('yugi.game.model.Field');
+goog.require('yugi.model.Area');
 goog.require('yugi.model.CardList');
 goog.require('yugi.model.Deck');
 goog.require('yugi.service.DeckService');
@@ -29,6 +30,12 @@ goog.require('yugi.service.DeckService');
  */
 yugi.game.model.Player = function(deckService, cardCache) {
   goog.base(this);
+
+  /**
+   * @type {!goog.debug.Logger}
+   * @protected
+   */
+  this.logger = goog.debug.Logger.getLogger('yugi.game.model.Player');
 
   /**
    * This will be used to fetch the full contents of the deck the player chose.
@@ -62,13 +69,63 @@ yugi.game.model.Player = function(deckService, cardCache) {
    * @type {!yugi.model.CardList}
    * @private
    */
-  this.hand_ = new yugi.model.CardList();
+  this.hand_ = new yugi.model.CardList(yugi.model.Area.PLAYER_HAND);
 
   /**
    * @type {!yugi.game.model.Field}
    * @private
    */
   this.field_ = new yugi.game.model.Field();
+
+  /**
+   * The name of the player.
+   * @type {string}
+   * @private
+   */
+  this.name_ = '';
+
+  /**
+   * The connection status of this player.
+   * @type {boolean}
+   * @private
+   */
+  this.connected_ = false;
+
+  /**
+   * True if the player has selected their deck or not.
+   * @type {boolean}
+   * @private
+   */
+  this.deckSelected_ = false;
+
+  /**
+   * True if this player is the opponent, false otherwise.
+   * @type {boolean}
+   * @private
+   */
+  this.isOpponent_ = false;
+
+  /**
+   * True if this player's deck has loaded.  This is not data that needs to be
+   * sent over the wire.  This is used, instead, to keep track of whether or not
+   * game data can be handled by this client.  Overall, all deck data needs to
+   * have been downloaded before any card key lookup is going to succeed.
+   * @private
+   */
+  this.deckLoaded_ = false;
+
+  /**
+   * The ID of the request to load this player's deck.
+   * @type {?string}
+   * @private
+   */
+  this.deckLoadId_ = null;
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.lifePoints_ = yugi.game.model.Player.STARTING_LIFE_POINTS_;
 
   var handler = new goog.events.EventHandler(this);
   this.registerDisposable(handler);
@@ -114,72 +171,6 @@ yugi.game.model.Player.STARTING_LIFE_POINTS_ = 8000;
 
 
 /**
- * The name of the player.
- * @type {string}
- * @private
- */
-yugi.game.model.Player.prototype.name_ = '';
-
-
-/**
- * The connection status of this player.
- * @type {boolean}
- * @private
- */
-yugi.game.model.Player.prototype.connected_ = false;
-
-
-/**
- * True if the player has selected their deck or not.
- * @type {boolean}
- * @private
- */
-yugi.game.model.Player.prototype.deckSelected_ = false;
-
-
-/**
- * True if this player is the opponent, false otherwise.
- * @type {boolean}
- * @private
- */
-yugi.game.model.Player.prototype.isOpponent_ = false;
-
-
-/**
- * True if this player's deck has loaded.  This is not data that needs to be
- * sent over the wire.  This is used, instead, to keep track of whether or not
- * game data can be handled by this client.  Overall, all deck data needs to
- * have been downloaded before any card key lookup is going to succeed.
- * @private
- */
-yugi.game.model.Player.prototype.deckLoaded_ = false;
-
-
-/**
- * The ID of the request to load this player's deck.
- * @type {?string}
- * @private
- */
-yugi.game.model.Player.prototype.deckLoadId_ = null;
-
-
-/**
- * @type {number}
- * @private
- */
-yugi.game.model.Player.prototype.lifePoints_ =
-    yugi.game.model.Player.STARTING_LIFE_POINTS_;
-
-
-/**
- * @type {!goog.debug.Logger}
- * @protected
- */
-yugi.game.model.Player.prototype.logger = goog.debug.Logger.getLogger(
-    'yugi.game.model.Player');
-
-
-/**
  * @param {string} name The name of the player.
  */
 yugi.game.model.Player.prototype.setName = function(name) {
@@ -200,6 +191,11 @@ yugi.game.model.Player.prototype.getName = function() {
  */
 yugi.game.model.Player.prototype.setOpponent = function(isOpponent) {
   this.isOpponent_ = isOpponent;
+
+  // Keeps area in sync.
+  this.field_.setOpponent(isOpponent);
+  this.setDeck(this.deck_);
+  this.setHand(this.hand_);
 };
 
 
@@ -249,6 +245,13 @@ yugi.game.model.Player.prototype.setOriginalDeck = function(originalDeck) {
  */
 yugi.game.model.Player.prototype.setDeck = function(deck) {
   this.deck_ = deck;
+  if (this.isOpponent_) {
+    this.deck_.getMainCardList().setArea(yugi.model.Area.OPP_DECK);
+    this.deck_.getExtraCardList().setArea(yugi.model.Area.OPP_EXTRA_DECK);
+  } else {
+    this.deck_.getMainCardList().setArea(yugi.model.Area.PLAYER_DECK);
+    this.deck_.getExtraCardList().setArea(yugi.model.Area.PLAYER_EXTRA_DECK);
+  }
 };
 
 
@@ -301,6 +304,11 @@ yugi.game.model.Player.prototype.getHand = function() {
  */
 yugi.game.model.Player.prototype.setHand = function(hand) {
   this.hand_ = hand;
+  if (this.isOpponent_) {
+    this.hand_.setArea(yugi.model.Area.OPP_HAND);
+  } else {
+    this.hand_.setArea(yugi.model.Area.PLAYER_HAND);
+  }
 };
 
 
@@ -317,6 +325,7 @@ yugi.game.model.Player.prototype.getField = function() {
  */
 yugi.game.model.Player.prototype.setField = function(field) {
   this.field_ = field;
+  this.field_.setOpponent(this.isOpponent_);
 };
 
 
@@ -435,7 +444,7 @@ yugi.game.model.Player.prototype.onDeckLoaded_ = function(e) {
 
   this.logger.info(this.name_ + '\'s deck finished loading.');
   this.deckLoadId_ = null;
-  this.deck_ = e.deck;
+  this.setDeck(e.deck);
   this.originalDeckReadOnly_ = this.deck_.clone();
   this.markDeckLoaded();
 

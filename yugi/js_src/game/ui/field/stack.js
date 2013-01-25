@@ -14,6 +14,7 @@ goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('yugi.game.ui');
 goog.require('yugi.game.ui.Css');
+goog.require('yugi.game.ui.dragdrop.DragDrop');
 goog.require('yugi.game.ui.field.soy');
 goog.require('yugi.model.InformationCard');
 goog.require('yugi.model.Selection');
@@ -58,6 +59,12 @@ yugi.game.ui.field.Stack = function(isFaceUp, isOpponent, opt_infoText) {
   this.selection_ = yugi.model.Selection.get();
 
   /**
+   * @type {!yugi.game.ui.dragdrop.DragDrop}
+   * @private
+   */
+  this.dragDropService_ = yugi.game.ui.dragdrop.DragDrop.get();
+
+  /**
    * @type {!goog.events.EventHandler}
    * @private
    */
@@ -70,29 +77,32 @@ yugi.game.ui.field.Stack = function(isFaceUp, isOpponent, opt_infoText) {
    */
   this.infoCard_ = new yugi.model.InformationCard(opt_infoText);
   this.registerDisposable(this.infoCard_);
+
+  /**
+   * @type {yugi.ui.menu.Menu}
+   * @private
+   */
+  this.menu_ = null;
+
+  /**
+   * @type {Element}
+   * @private
+   */
+  this.imagesElement_ = null;
+
+  /**
+   * @type {Element}
+   * @private
+   */
+  this.labelElement_ = null;
+
+  /**
+   * @type {Element}
+   * @private
+   */
+  this.lastImage_ = null;
 };
 goog.inherits(yugi.game.ui.field.Stack, goog.ui.Component);
-
-
-/**
- * @type {yugi.ui.menu.Menu}
- * @private
- */
-yugi.game.ui.field.Stack.prototype.menu_ = null;
-
-
-/**
- * @type {Element}
- * @private
- */
-yugi.game.ui.field.Stack.prototype.imagesElement_ = null;
-
-
-/**
- * @type {Element}
- * @private
- */
-yugi.game.ui.field.Stack.prototype.labelElement_ = null;
 
 
 /**
@@ -155,6 +165,9 @@ yugi.game.ui.field.Stack.prototype.setActions = function(actions) {
 yugi.game.ui.field.Stack.prototype.setCards = function(cards) {
 
   // Clear the last rendering.
+  if (this.lastImage_) {
+    this.dragDropService_.removeSource(this.lastImage_);
+  }
   this.imagesElement_.innerHTML = '';
   this.clickHandler_.removeAll();
   goog.dispose(this.menu_);
@@ -178,7 +191,7 @@ yugi.game.ui.field.Stack.prototype.setCards = function(cards) {
 
     // Show fewer images than there are cards.
     var numImages = Math.ceil(numCards / 10);
-    var lastImage = null;
+    this.lastImage_ = null;
     for (var i = 0; i < numImages; i++) {
 
       // Create the image with the source.
@@ -194,15 +207,18 @@ yugi.game.ui.field.Stack.prototype.setCards = function(cards) {
 
       // Add the image.
       goog.dom.appendChild(this.imagesElement_, image);
-      lastImage = image;
+      this.lastImage_ = image;
     }
 
-    if (!lastImage) {
+    if (!this.lastImage_) {
       throw new Error('There are cards in the stack, but no image.');
     }
-    this.clickHandler_.listen(lastImage,
+    this.clickHandler_.listen(this.lastImage_,
         goog.events.EventType.CLICK,
-        goog.bind(this.onImageClick_, this, lastImage, cardOnTop));
+        goog.bind(this.onImageClick_, this, this.lastImage_, cardOnTop));
+
+    // Make the top item draggable.
+    this.dragDropService_.addSource(this.lastImage_, cardOnTop);
 
     // Attach a menu if there are any actions.
     if (this.actions_.length > 0) {

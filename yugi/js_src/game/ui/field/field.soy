@@ -18,13 +18,12 @@
 
 /**
  * The HTML for the opponent's zone.
- * @param ids The DOM IDs used in this widget.
- * @param yugiIds The global IDs.
+ * @param yugiArea The global IDs.
  */
 {template .OPPONENT_ZONE}
 
   <!-- Opponent's Hand -->
-  <div id="{$yugiIds.OPP_HAND|id}"
+  <div id="{$yugiArea.OPP_HAND|id}"
       class="{css yugi-hand-container}{sp}{css opponent}">
   </div>
 
@@ -32,35 +31,35 @@
   <div class="{css yugi-card-row}">
     {call .EMPTY_ZONE_ /}
     {call .DECK_ZONE_}
-      {param id}{$ids.DECK}{/param}
+      {param id}{$yugiArea.OPP_DECK}{/param}
     {/call}
     {call .SPELL_TRAP_ZONE_}
-      {param id}{$ids.SPELL_TRAP_5}{/param}
+      {param id}{$yugiArea.OPP_SPELL_TRAP_5}{/param}
       {param label}Spell/Trap 5{/param}
       {param opp}true{/param}
     {/call}
     {call .SPELL_TRAP_ZONE_}
-      {param id}{$ids.SPELL_TRAP_4}{/param}
+      {param id}{$yugiArea.OPP_SPELL_TRAP_4}{/param}
       {param label}Spell/Trap 4{/param}
       {param opp}true{/param}
     {/call}
     {call .SPELL_TRAP_ZONE_}
-      {param id}{$ids.SPELL_TRAP_3}{/param}
+      {param id}{$yugiArea.OPP_SPELL_TRAP_3}{/param}
       {param label}Spell/Trap 3{/param}
       {param opp}true{/param}
     {/call}
     {call .SPELL_TRAP_ZONE_}
-      {param id}{$ids.SPELL_TRAP_2}{/param}
+      {param id}{$yugiArea.OPP_SPELL_TRAP_2}{/param}
       {param label}Spell/Trap 2{/param}
       {param opp}true{/param}
     {/call}
     {call .SPELL_TRAP_ZONE_}
-      {param id}{$ids.SPELL_TRAP_1}{/param}
+      {param id}{$yugiArea.OPP_SPELL_TRAP_1}{/param}
       {param label}Spell/Trap 1{/param}
       {param opp}true{/param}
     {/call}
     {call .EXTRA_DECK_ZONE_}
-      {param id}{$ids.EXTRA_DECK}{/param}
+      {param id}{$yugiArea.OPP_EXTRA_DECK}{/param}
     {/call}
     {call .EMPTY_ZONE_ /}
   </div>
@@ -68,38 +67,38 @@
   <!-- Opponent's Banish, Graveyard, Monsters, and Field -->
   <div class="{css yugi-card-row}">
     {call .BANISH_ZONE_}
-      {param id}{$ids.BANISH}{/param}
+      {param id}{$yugiArea.OPP_BANISH}{/param}
     {/call}
     {call .GRAVEYARD_ZONE_}
-      {param id}{$ids.GRAVEYARD}{/param}
+      {param id}{$yugiArea.OPP_GRAVEYARD}{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$yugiIds.ZONE_OPP_MONSTER_5}{/param}
+      {param id}{$yugiArea.OPP_MONSTER_5}{/param}
       {param label}Monster 5{/param}
       {param opp}true{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$yugiIds.ZONE_OPP_MONSTER_4}{/param}
+      {param id}{$yugiArea.OPP_MONSTER_4}{/param}
       {param label}Monster 4{/param}
       {param opp}true{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$yugiIds.ZONE_OPP_MONSTER_3}{/param}
+      {param id}{$yugiArea.OPP_MONSTER_3}{/param}
       {param label}Monster 3{/param}
       {param opp}true{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$yugiIds.ZONE_OPP_MONSTER_2}{/param}
+      {param id}{$yugiArea.OPP_MONSTER_2}{/param}
       {param label}Monster 2{/param}
       {param opp}true{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$yugiIds.ZONE_OPP_MONSTER_1}{/param}
+      {param id}{$yugiArea.OPP_MONSTER_1}{/param}
       {param label}Monster 1{/param}
       {param opp}true{/param}
     {/call}
     {call .FIELD_ZONE_}
-      {param id}{$ids.FIELD}{/param}
+      {param id}{$yugiArea.OPP_FIELD}{/param}
       {param opp}true{/param}
     {/call}
     {call .EMPTY_ZONE_ /}
@@ -110,7 +109,7 @@
 /**
  * The HTML for the player's zone.
  * @param ids The DOM IDs used in this widget.
- * @param yugiIds The global IDs.
+ * @param yugiArea The global IDs.
  */
 {template .PLAYER_ZONE}
 
@@ -118,33 +117,33 @@
   <div class="{css yugi-card-row}">
     {call .EMPTY_ZONE_ /}
     {call .FIELD_ZONE_}
-      {param id}{$ids.FIELD}{/param}
+      {param id}{$yugiArea.PLAYER_FIELD}{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$yugiIds.ZONE_MONSTER_1}{/param}
+      {param id}{$yugiArea.PLAYER_MONSTER_1}{/param}
       {param label}Monster 1{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$yugiIds.ZONE_MONSTER_2}{/param}
+      {param id}{$yugiArea.PLAYER_MONSTER_2}{/param}
       {param label}Monster 2{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$yugiIds.ZONE_MONSTER_3}{/param}
+      {param id}{$yugiArea.PLAYER_MONSTER_3}{/param}
       {param label}Monster 3{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$yugiIds.ZONE_MONSTER_4}{/param}
+      {param id}{$yugiArea.PLAYER_MONSTER_4}{/param}
       {param label}Monster 4{/param}
     {/call}
     {call .MONSTER_ZONE_}
-      {param id}{$yugiIds.ZONE_MONSTER_5}{/param}
+      {param id}{$yugiArea.PLAYER_MONSTER_5}{/param}
       {param label}Monster 5{/param}
     {/call}
     {call .GRAVEYARD_ZONE_}
-      {param id}{$ids.GRAVEYARD}{/param}
+      {param id}{$yugiArea.PLAYER_GRAVEYARD}{/param}
     {/call}
     {call .BANISH_ZONE_}
-      {param id}{$ids.BANISH}{/param}
+      {param id}{$yugiArea.PLAYER_BANISH}{/param}
     {/call}
   </div>
 
@@ -152,30 +151,30 @@
   <div class="{css yugi-card-row}">
     {call .EMPTY_ZONE_ /}
     {call .EXTRA_DECK_ZONE_}
-      {param id}{$ids.EXTRA_DECK}{/param}
+      {param id}{$yugiArea.PLAYER_EXTRA_DECK}{/param}
     {/call}
     {call .SPELL_TRAP_ZONE_}
-      {param id}{$ids.SPELL_TRAP_1}{/param}
+      {param id}{$yugiArea.PLAYER_SPELL_TRAP_1}{/param}
       {param label}Spell/Trap 1{/param}
     {/call}
     {call .SPELL_TRAP_ZONE_}
-      {param id}{$ids.SPELL_TRAP_2}{/param}
+      {param id}{$yugiArea.PLAYER_SPELL_TRAP_2}{/param}
       {param label}Spell/Trap 2{/param}
     {/call}
     {call .SPELL_TRAP_ZONE_}
-      {param id}{$ids.SPELL_TRAP_3}{/param}
+      {param id}{$yugiArea.PLAYER_SPELL_TRAP_3}{/param}
       {param label}Spell/Trap 3{/param}
     {/call}
     {call .SPELL_TRAP_ZONE_}
-      {param id}{$ids.SPELL_TRAP_4}{/param}
+      {param id}{$yugiArea.PLAYER_SPELL_TRAP_4}{/param}
       {param label}Spell/Trap 4{/param}
     {/call}
     {call .SPELL_TRAP_ZONE_}
-      {param id}{$ids.SPELL_TRAP_5}{/param}
+      {param id}{$yugiArea.PLAYER_SPELL_TRAP_5}{/param}
       {param label}Spell/Trap 5{/param}
     {/call}
     {call .DECK_ZONE_}
-      {param id}{$ids.DECK}{/param}
+      {param id}{$yugiArea.PLAYER_DECK}{/param}
     {/call}
     <div id="{$ids.CONTROLS|id}" class="{css yugi-player-control-container}{sp}
         {css yugi-empty-zone}{sp}{css yugi-card-size}{sp}
@@ -184,7 +183,7 @@
   </div>
 
   <!-- Player's Hand -->
-  <div id="{$yugiIds.PLAYER_HAND|id}"
+  <div id="{$yugiArea.PLAYER_HAND|id}"
       class="{css yugi-hand-container}{sp}{css player}">
   </div>
 {/template}

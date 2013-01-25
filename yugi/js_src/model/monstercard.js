@@ -5,7 +5,6 @@
 goog.provide('yugi.model.MonsterCard');
 goog.provide('yugi.model.MonsterCard.Attribute');
 goog.provide('yugi.model.MonsterCard.ExtraType');
-goog.provide('yugi.model.MonsterCard.Position');
 goog.provide('yugi.model.MonsterCard.Type');
 
 goog.require('goog.object');
@@ -21,6 +20,34 @@ goog.require('yugi.model.Card');
  */
 yugi.model.MonsterCard = function() {
   goog.base(this, yugi.model.Card.Type.MONSTER);
+
+  /**
+   * The level of the monster.
+   * @type {number}
+   * @private
+   */
+  this.level_ = 0;
+
+  /**
+   * True if the monster is an effect monster, false otherwise.
+   * @type {boolean}
+   * @private
+   */
+  this.effect_ = false;
+
+  /**
+   * The monster's attack.
+   * @type {number}
+   * @private
+   */
+  this.attack_ = yugi.model.MonsterCard.VARIABLE_NUMBER;
+
+  /**
+   * The monster's defense.
+   * @type {number}
+   * @private
+   */
+  this.defense_ = yugi.model.MonsterCard.VARIABLE_NUMBER;
 };
 goog.inherits(yugi.model.MonsterCard, yugi.model.Card);
 
@@ -34,14 +61,6 @@ yugi.model.MonsterCard.prototype.attribute_;
 
 
 /**
- * The level of the monster.
- * @type {number}
- * @private
- */
-yugi.model.MonsterCard.prototype.level_ = 0;
-
-
-/**
  * The type of monster card (i.e. spellcaster or zombie).
  * @type {!yugi.model.MonsterCard.Type}
  * @private
@@ -50,57 +69,11 @@ yugi.model.MonsterCard.prototype.monsterType_;
 
 
 /**
- * True if the monster is an effect monster, false otherwise.
- * @type {boolean}
- * @private
- */
-yugi.model.MonsterCard.prototype.effect_ = false;
-
-
-/**
  * The extra type for this monster. (i.e. ritual, toon, or xyz)
  * @type {!yugi.model.MonsterCard.ExtraType}
  * @private
  */
 yugi.model.MonsterCard.prototype.extraType_;
-
-
-/**
- * The monster's attack.
- * @type {number}
- * @private
- */
-yugi.model.MonsterCard.prototype.attack_ =
-    yugi.model.MonsterCard.VARIABLE_NUMBER;
-
-
-/**
- * The monster's defense.
- * @type {number}
- * @private
- */
-yugi.model.MonsterCard.prototype.defense_ =
-    yugi.model.MonsterCard.VARIABLE_NUMBER;
-
-
-/**
- * The monster card's position.
- * @type {!yugi.model.MonsterCard.Position}
- * @private
- */
-yugi.model.MonsterCard.prototype.position_;
-
-
-/**
- * Monster positions.
- * @enum {string}
- */
-yugi.model.MonsterCard.Position = {
-  FACE_DOWN_DEFENSE: 'face-down-defense',
-  FACE_UP_ATTACK: 'face-up-attack',
-  FACE_UP_DEFENSE: 'face-up-defense',
-  UNKNOWN: 'unknown'
-};
 
 
 /**
@@ -437,53 +410,6 @@ yugi.model.MonsterCard.prototype.setEffectFromString_ = function(effectString) {
 };
 
 
-/**
- * @return {boolean} True if the monster card is in face up attack or defense.
- */
-yugi.model.MonsterCard.prototype.isFaceUp = function() {
-  return this.position_ == yugi.model.MonsterCard.Position.FACE_UP_ATTACK ||
-      this.position_ == yugi.model.MonsterCard.Position.FACE_UP_DEFENSE;
-};
-
-
-/**
- * @return {!yugi.model.MonsterCard.Position} The position.
- */
-yugi.model.MonsterCard.prototype.getPosition = function() {
-  return this.position_;
-};
-
-
-/**
- * @param {!yugi.model.MonsterCard.Position} position The position.
- */
-yugi.model.MonsterCard.prototype.setPosition = function(position) {
-  if (this.position_ == position) {
-    return;
-  }
-  this.position_ = position;
-  this.dispatchEvent(yugi.model.Card.EventType.POSITION_CHANGED);
-};
-
-
-/**
- * Sets the monster position from the string.
- * @param {string} positionStr The monster position as a string.
- * @private
- */
-yugi.model.MonsterCard.prototype.setPositionFromString_ =
-    function(positionStr) {
-  var position = /** @type {yugi.model.MonsterCard.Position} */ (
-      goog.object.findValue(yugi.model.MonsterCard.Position,
-          function(value, key, object) {
-            return goog.string.caseInsensitiveCompare(value, positionStr) == 0;
-          }));
-  if (position) {
-    this.setPosition(position);
-  }
-};
-
-
 /** @override */
 yugi.model.MonsterCard.prototype.toJson = function() {
   var json = goog.base(this, 'toJson');
@@ -494,7 +420,6 @@ yugi.model.MonsterCard.prototype.toJson = function() {
   json['attack'] = this.getAttack();
   json['defense'] = this.getDefense();
   json['effect'] = this.isEffect();
-  json['position'] = this.getPosition();
   return json;
 };
 
@@ -509,7 +434,6 @@ yugi.model.MonsterCard.prototype.setFromJson = function(json) {
   this.setEffectFromString_(json['effect']);
   this.setAttackFromString_(json['attack']);
   this.setDefenseFromString_(json['defense']);
-  this.setPositionFromString_(json['position']);
 };
 
 
@@ -525,7 +449,6 @@ yugi.model.MonsterCard.prototype.setFromCard = function(card) {
   this.setEffect(card.effect_);
   this.setAttack(card.attack_);
   this.setDefense(card.defense_);
-  this.setPosition(card.position_);
 };
 
 

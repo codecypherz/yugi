@@ -93,29 +93,12 @@
   position: relative;
 }
 
-.yugi-monster-card,
-.yugi-spell-trap-card,
-.yugi-field-card {
-  z-index: CARD_Z_INDEX;
-}
-
 img.yugi-card-size {
 	cursor: pointer;
 	left: 0;
 	position: absolute;
 	width: 100%;
 	z-index: CARD_Z_INDEX;
-}
-
-.yugi-monster-card > img.face-down-defense,
-.yugi-monster-card > img.face-up-defense {
-	@mixin transform(rotate(-90deg));
-}
-
-.yugi-field-card.opponent > img,
-.yugi-monster-card.opponent > img.face-up-attack,
-.yugi-spell-trap-card.opponent > img.face-up {
-	@mixin transform(rotate(180deg));
 }
 
 .yugi-card-stack {

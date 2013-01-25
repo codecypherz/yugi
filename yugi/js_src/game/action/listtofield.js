@@ -8,7 +8,6 @@ goog.require('yugi.game.model.Chat');
 goog.require('yugi.game.service.Sync');
 goog.require('yugi.model.Action');
 goog.require('yugi.model.Card');
-goog.require('yugi.model.MonsterCard');
 goog.require('yugi.model.SpellCard');
 
 
@@ -21,14 +20,14 @@ goog.require('yugi.model.SpellCard');
  * @param {!yugi.model.CardList} source The source list.
  * @param {string} chatText The text to chat after the action is performed.
  * @param {boolean=} opt_faceUp True if face up or not after action fires.
- * @param {yugi.model.MonsterCard.Position=} opt_position The position.
+ * @param {boolean=} opt_rotated True if rotated or not after action fires.
  * @param {boolean=} opt_shuffle True if the source list should be shuffled
  *     after.  This is false by default.
  * @constructor
  * @extends {yugi.model.Action}
  */
 yugi.game.action.ListToField = function(title, card, player, source, chatText,
-    opt_faceUp, opt_position, opt_shuffle) {
+    opt_faceUp, opt_rotated, opt_shuffle) {
   goog.base(this, title);
 
   /**
@@ -62,11 +61,10 @@ yugi.game.action.ListToField = function(title, card, player, source, chatText,
   this.faceUp_ = opt_faceUp || false;
 
   /**
-   * @type {!yugi.model.MonsterCard.Position}
+   * @type {boolean}
    * @private
    */
-  this.position_ = opt_position ||
-      yugi.model.MonsterCard.Position.FACE_DOWN_DEFENSE;
+  this.rotated_ = opt_rotated || false;
 
   /**
    * @type {boolean}
@@ -106,15 +104,12 @@ yugi.game.action.ListToField.prototype.fire = function() {
       return;
     }
 
-    var monsterCard = /** @type {!yugi.model.MonsterCard} */ (this.card_);
-    monsterCard.setPosition(this.position_);
-    var zone = field.setMonsterCard(monsterCard);
+    var zone = field.setMonsterCard(this.card_);
     chatText = this.chatText_ + ' in monster zone ' + (zone + 1);
 
   } else {
     var spellTrapCard =
         /** @type {!yugi.model.SpellCard|!yugi.model.TrapCard} */ (this.card_);
-    spellTrapCard.setFaceUp(this.faceUp_);
 
     // Special case for field card.
     if (spellTrapCard instanceof yugi.model.SpellCard &&
@@ -162,6 +157,9 @@ yugi.game.action.ListToField.prototype.fire = function() {
     chatText += ' and shuffled';
   }
   chatText += '.';
+
+  this.card_.setFaceUp(this.faceUp_);
+  this.card_.setRotated(this.rotated_);
 
   this.chat_.sendSystemRemote(chatText);
 

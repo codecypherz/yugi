@@ -259,6 +259,8 @@ yugi.game.model.Synchronization.prototype.isWaiting = function() {
  */
 yugi.game.model.Synchronization.prototype.onDeckLoaded_ = function(e) {
 
+  var deck = e.deck;
+
   // Make sure this load event is for this model.
   var player = null;
   if (this.playerDeckRequestId_ == e.id) {
@@ -283,7 +285,6 @@ yugi.game.model.Synchronization.prototype.onDeckLoaded_ = function(e) {
 
   // Whenever a deck loads, put all cards into the card cache and set the
   // original on the player for accurate resets.
-  var deck = e.deck;
   player.setOriginalDeck(deck);
   goog.array.forEach(deck.getAllCards(), function(card) {
     this.cardCache_.put(card);

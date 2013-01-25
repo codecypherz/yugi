@@ -5,11 +5,13 @@
 goog.provide('yugi.model.CardList');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.debug.Logger');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.string');
 goog.require('yugi.data.CardListData');
+goog.require('yugi.model.Area');
 goog.require('yugi.model.Card');
 goog.require('yugi.model.util');
 
@@ -17,17 +19,30 @@ goog.require('yugi.model.util');
 
 /**
  * Keeps state for list of cards.
+ * @param {yugi.model.Area=} opt_area The area of the card list.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-yugi.model.CardList = function() {
+yugi.model.CardList = function(opt_area) {
   goog.base(this);
+
+  /**
+   * @type {!goog.debug.Logger}
+   * @protected
+   */
+  this.logger = goog.debug.Logger.getLogger('yugi.model.CardList');
 
   /**
    * @type {!Array.<!yugi.model.Card>}
    * @private
    */
   this.cards_ = [];
+
+  /**
+   * @type {!yugi.model.Area}
+   * @private
+   */
+  this.area_ = opt_area || yugi.model.Area.UNSPECIFIED;
 };
 goog.inherits(yugi.model.CardList, goog.events.EventTarget);
 
@@ -42,19 +57,11 @@ yugi.model.CardList.EventType = {
 
 
 /**
- * @type {!goog.debug.Logger}
- * @protected
- */
-yugi.model.CardList.prototype.logger = goog.debug.Logger.getLogger(
-    'yugi.model.CardList');
-
-
-/**
  * Creates a copy of this card list.  This is a deep copy.
  * @return {!yugi.model.CardList} The copy of this card list.
  */
 yugi.model.CardList.prototype.clone = function() {
-  var cardList = new yugi.model.CardList();
+  var cardList = new yugi.model.CardList(this.area_);
   var cards = [];
   goog.array.forEach(this.cards_, function(card) {
     cards.push(card.clone());
@@ -77,7 +84,35 @@ yugi.model.CardList.prototype.getCards = function() {
  */
 yugi.model.CardList.prototype.setCards = function(cards) {
   this.cards_ = cards;
+  goog.array.forEach(this.cards_, function(card, i, cards) {
+    var location = card.getLocation();
+    location.setIndex(i);
+    location.setArea(this.area_);
+  }, this);
   this.dispatchEvent(yugi.model.CardList.EventType.CARDS_CHANGED);
+};
+
+
+/**
+ * @return {!yugi.model.Area} The area for the card list.
+ */
+yugi.model.CardList.prototype.getArea = function() {
+  return this.area_;
+};
+
+
+/**
+ * This will update the area for all cards in the card list.
+ * @param {!yugi.model.Area} area The area for the card list.
+ */
+yugi.model.CardList.prototype.setArea = function(area) {
+  if (this.area_ == area) {
+    return; // No change, so no need to loop over the list.
+  }
+  this.area_ = area;
+  goog.array.forEach(this.cards_, function(card) {
+    card.getLocation().setArea(area);
+  });
 };
 
 
@@ -89,9 +124,12 @@ yugi.model.CardList.prototype.setCards = function(cards) {
 yugi.model.CardList.prototype.add = function(card, opt_front) {
   if (opt_front) {
     goog.array.insertAt(this.cards_, card, 0);
+    this.updateCardIndices_();
   } else {
     this.cards_.push(card);
+    card.getLocation().setIndex(this.cards_.length - 1);
   }
+  card.getLocation().setArea(this.area_);
   this.dispatchEvent(yugi.model.CardList.EventType.CARDS_CHANGED);
 };
 
@@ -122,6 +160,7 @@ yugi.model.CardList.prototype.remove = function(cardToRemove) {
 
   // If it was removed, dispatch the event.
   if (removed) {
+    this.updateCardIndices_();
     this.dispatchEvent(yugi.model.CardList.EventType.CARDS_CHANGED);
   }
   return removed;
@@ -142,10 +181,7 @@ yugi.model.CardList.prototype.removeFirst = function() {
 
   // Remove the card.
   var card = this.cards_[0];
-  goog.array.removeAt(this.cards_, 0);
-
-  // Dispatch, then return.
-  this.dispatchEvent(yugi.model.CardList.EventType.CARDS_CHANGED);
+  goog.asserts.assert(this.remove(card));
   return card;
 };
 
@@ -155,6 +191,7 @@ yugi.model.CardList.prototype.removeFirst = function() {
  */
 yugi.model.CardList.prototype.shuffle = function() {
   goog.array.shuffle(this.cards_);
+  this.updateCardIndices_();
   this.dispatchEvent(yugi.model.CardList.EventType.CARDS_CHANGED);
 };
 
@@ -218,6 +255,7 @@ yugi.model.CardList.prototype.sort = function() {
     }
     return typeComparison;
   });
+  this.updateCardIndices_();
   this.dispatchEvent(yugi.model.CardList.EventType.CARDS_CHANGED);
 };
 
@@ -227,9 +265,10 @@ yugi.model.CardList.prototype.sort = function() {
  * @return {!yugi.data.CardListData} The converted data object.
  */
 yugi.model.CardList.prototype.toData = function() {
-  var handData = new yugi.data.CardListData();
-  handData.setCardKeys(yugi.model.util.cardsToCardKeys(this.cards_));
-  return handData;
+  var data = new yugi.data.CardListData();
+  data.setArea(this.area_);
+  data.setCardKeys(yugi.model.util.cardsToCardKeys(this.cards_));
+  return data;
 };
 
 
@@ -239,6 +278,7 @@ yugi.model.CardList.prototype.toData = function() {
  * @param {!yugi.model.CardCache} cardCache The cache of cards.
  */
 yugi.model.CardList.prototype.setFromData = function(cardListData, cardCache) {
+  this.setArea(cardListData.getArea());
   this.setCards(cardCache.getList(cardListData.getCardKeys()));
 };
 
@@ -248,5 +288,17 @@ yugi.model.CardList.prototype.setFromData = function(cardListData, cardCache) {
  * @param {!yugi.model.CardList} cardList The card list.
  */
 yugi.model.CardList.prototype.setFromCardList = function(cardList) {
+  this.setArea(cardList.getArea());
   this.setCards(cardList.getCards());
+};
+
+
+/**
+ * Updates the card indices to match the position in the array.
+ * @private
+ */
+yugi.model.CardList.prototype.updateCardIndices_ = function() {
+  goog.array.forEach(this.cards_, function(card, i) {
+    card.getLocation().setIndex(i);
+  });
 };

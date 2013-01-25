@@ -19,6 +19,13 @@ goog.require('yugi.model.Serializable');
 yugi.game.data.DeckData = function() {
 
   /**
+   * The key for this deck on the server.
+   * @type {string}
+   * @private
+   */
+  this.key_ = '';
+
+  /**
    * @type {!yugi.data.CardListData}
    * @private
    */
@@ -37,14 +44,6 @@ yugi.game.data.DeckData = function() {
   this.sideCardData_ = new yugi.data.CardListData();
 };
 goog.inherits(yugi.game.data.DeckData, goog.Disposable);
-
-
-/**
- * The key for this deck on the server.
- * @type {string}
- * @private
- */
-yugi.game.data.DeckData.prototype.key_ = '';
 
 
 /**

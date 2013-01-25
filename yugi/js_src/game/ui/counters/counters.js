@@ -10,7 +10,6 @@ goog.require('goog.dom.TagName');
 goog.require('goog.ui.Component');
 goog.require('yugi.game.ui.counters.Counter');
 goog.require('yugi.model.Card');
-goog.require('yugi.model.MonsterCard');
 
 
 
@@ -70,7 +69,7 @@ yugi.game.ui.counters.Counters.prototype.enterDocument = function() {
       yugi.model.Card.EventType.COUNTERS_CHANGED,
       this.updateCounters_);
   this.getHandler().listen(this.card_,
-      yugi.model.Card.EventType.POSITION_CHANGED,
+      yugi.model.Card.EventType.ROTATED,
       this.updatePosition_);
 
   // Sync up the UI with the current list of counters.
@@ -99,7 +98,7 @@ yugi.game.ui.counters.Counters.prototype.updateCounters_ = function() {
 
 
 /**
- * Updates the position of the counters based on card position.
+ * Updates the position of the counters based on card rotated.
  * @private
  */
 yugi.game.ui.counters.Counters.prototype.updatePosition_ = function() {
@@ -109,14 +108,9 @@ yugi.game.ui.counters.Counters.prototype.updatePosition_ = function() {
 
   var element = this.getElement();
 
-  if (this.card_ instanceof yugi.model.MonsterCard) {
-    var monsterCard = /** @type {!yugi.model.MonsterCard} */ (this.card_);
-    var position = monsterCard.getPosition();
-    if (position == yugi.model.MonsterCard.Position.FACE_DOWN_DEFENSE ||
-        position == yugi.model.MonsterCard.Position.FACE_UP_DEFENSE) {
-      x = -15;
-      y = 14;
-    }
+  if (this.card_.isRotated()) {
+    x = -15;
+    y = 14;
   }
 
   if (this.player_.isOpponent()) {

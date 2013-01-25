@@ -8,11 +8,12 @@ goog.provide('yugi.model.Card.Type');
 
 goog.require('goog.array');
 goog.require('goog.debug.Logger');
-goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.object');
 goog.require('goog.string');
+goog.require('yugi');
 goog.require('yugi.model.Counter');
+goog.require('yugi.model.Location');
 goog.require('yugi.model.Selectable');
 goog.require('yugi.model.Serializable');
 goog.require('yugi.ui.Image');
@@ -29,6 +30,33 @@ goog.require('yugi.ui.Image');
  */
 yugi.model.Card = function(type) {
   goog.base(this);
+
+  /**
+   * @type {!goog.debug.Logger}
+   * @protected
+   */
+  this.logger = goog.debug.Logger.getLogger('yugi.model.Card');
+
+  /**
+   * The server side key for this card.
+   * @type {string}
+   * @private
+   */
+  this.key_ = '';
+
+  /**
+   * The name of the card.
+   * @type {string}
+   * @private
+   */
+  this.name_ = '';
+
+  /**
+   * The description of the card.
+   * @type {string}
+   * @private
+   */
+  this.description_ = '';
 
   /**
    * @type {!yugi.model.Card.Type}
@@ -56,6 +84,26 @@ yugi.model.Card = function(type) {
    * @private
    */
   this.counters_ = [];
+
+  /**
+   * @type {!yugi.model.Location}
+   * @private
+   */
+  this.location_ = new yugi.model.Location();
+
+  /**
+   * True if the card is face up.
+   * @type {boolean}
+   * @private
+   */
+  this.isFaceUp_ = true;
+
+  /**
+   * True if the card is rotated.
+   * @type {boolean}
+   * @private
+   */
+  this.isRotated_ = false;
 };
 goog.inherits(yugi.model.Card, goog.events.EventTarget);
 
@@ -67,38 +115,6 @@ goog.inherits(yugi.model.Card, goog.events.EventTarget);
  * @private
  */
 yugi.model.Card.uniqueIdCounter_ = 0;
-
-
-/**
- * The server side key for this card.
- * @type {string}
- * @private
- */
-yugi.model.Card.prototype.key_ = '';
-
-
-/**
- * The name of the card.
- * @type {string}
- * @private
- */
-yugi.model.Card.prototype.name_ = '';
-
-
-/**
- * The description of the card.
- * @type {string}
- * @private
- */
-yugi.model.Card.prototype.description_ = '';
-
-
-/**
- * @type {!goog.debug.Logger}
- * @protected
- */
-yugi.model.Card.prototype.logger = goog.debug.Logger.getLogger(
-    'yugi.model.Card');
 
 
 /**
@@ -117,8 +133,9 @@ yugi.model.Card.Type = {
  * @enum {string}
  */
 yugi.model.Card.EventType = {
-  COUNTERS_CHANGED: goog.events.getUniqueId('counters-changed'),
-  POSITION_CHANGED: goog.events.getUniqueId('position-changed')
+  COUNTERS_CHANGED: yugi.uniqueId('counters-changed'),
+  FLIPPED: yugi.uniqueId('flipped'),
+  ROTATED: yugi.uniqueId('rotated')
 };
 
 
@@ -127,12 +144,6 @@ yugi.model.Card.EventType = {
  * @return {!yugi.model.Card} The card copy.
  */
 yugi.model.Card.prototype.clone = goog.abstractMethod;
-
-
-/**
- * @return {boolean} True if the card is face up, false otherwise.
- */
-yugi.model.Card.prototype.isFaceUp = goog.abstractMethod;
 
 
 /**
@@ -184,6 +195,26 @@ yugi.model.Card.prototype.setDescription = function(description) {
 
 
 /**
+ * @return {boolean} True if the card is face up or not.
+ */
+yugi.model.Card.prototype.isFaceUp = function() {
+  return this.isFaceUp_;
+};
+
+
+/**
+ * @param {boolean} isFaceUp True if the card is face up or not.
+ */
+yugi.model.Card.prototype.setFaceUp = function(isFaceUp) {
+  if (this.isFaceUp_ == isFaceUp) {
+    return;
+  }
+  this.isFaceUp_ = isFaceUp;
+  this.dispatchEvent(yugi.model.Card.EventType.FLIPPED);
+};
+
+
+/**
  * @param {number} height The desired height of the image.
  * @param {boolean=} opt_crop True if the image should be cropped or not.
  * @return {string} The image source of the card.
@@ -202,6 +233,26 @@ yugi.model.Card.prototype.getImageSource = function(height, opt_crop) {
  */
 yugi.model.Card.prototype.setImageSource = function(imageSource) {
   this.imageSource_ = imageSource;
+};
+
+
+/**
+ * @return {boolean} True if the card is rotated or not.
+ */
+yugi.model.Card.prototype.isRotated = function() {
+  return this.isRotated_;
+};
+
+
+/**
+ * @param {boolean} isRotated True if the card is rotated or not.
+ */
+yugi.model.Card.prototype.setRotated = function(isRotated) {
+  if (this.isRotated_ == isRotated) {
+    return;
+  }
+  this.isRotated_ = isRotated;
+  this.dispatchEvent(yugi.model.Card.EventType.ROTATED);
 };
 
 
@@ -283,6 +334,22 @@ yugi.model.Card.prototype.clearCounters = function() {
 
 
 /**
+ * @return {!yugi.model.Location} The current card location.
+ */
+yugi.model.Card.prototype.getLocation = function() {
+  return this.location_;
+};
+
+
+/**
+ * @param {!yugi.model.Location} location The new location.
+ */
+yugi.model.Card.prototype.setLocation = function(location) {
+  this.location_ = location;
+};
+
+
+/**
  * Checks to see if the other card is equal to this one.
  * @param {!yugi.model.Card} card The other card.
  * @return {boolean} True if the cards are equal or not.
@@ -298,7 +365,9 @@ yugi.model.Card.prototype.toJson = function() {
     'key': this.getKey(),
     'name': this.getName(),
     'description': this.getDescription(),
+    'fup': this.isFaceUp_,
     'image-source': this.imageSource_,
+    'rut': this.isRotated_,
     'type': this.getType()
   };
 };
@@ -309,7 +378,9 @@ yugi.model.Card.prototype.setFromJson = function(json) {
   this.setKey(json['key']);
   this.setName(json['name']);
   this.setDescription(json['description']);
+  this.setFaceUp(json['fup'] || false);
   this.setImageSource(json['image-source']);
+  this.setRotated(json['rot'] || false);
 };
 
 
@@ -321,7 +392,10 @@ yugi.model.Card.prototype.setFromCard = function(card) {
   this.setKey(card.key_);
   this.setName(card.name_);
   this.setDescription(card.description_);
+  this.setFaceUp(card.isFaceUp_);
   this.setImageSource(card.imageSource_);
+  this.setLocation(card.location_.clone());
+  this.setRotated(card.isRotated_);
 
   var counters = [];
   goog.array.forEach(card.counters_, function(counter) {
