@@ -90,29 +90,22 @@ goog.inherits(yugi.game.action.FieldToList, yugi.model.Action);
 yugi.game.action.FieldToList.prototype.fire = function() {
 
   // Figure out where the card is and remove it.
-  var field = this.player_.getField();
   var area = this.card_.getLocation().getArea();
 
   if (yugi.model.Area.PLAYER_MONSTER_ZONES.contains(area)) {
-
-    field.removeCardInZone(area);
     this.chat_.sendSystemRemote(this.chatText_ +
         ' from monster zone ' + (this.zone_ + 1) + '.');
-
   } else if (yugi.model.Area.PLAYER_SPELL_TRAP_ZONES.contains(area)) {
-
-    field.removeCardInZone(area);
     this.chat_.sendSystemRemote(this.chatText_ +
         ' from spell/trap zone ' + (this.zone_ + 1) + '.');
-
   } else if (yugi.model.Area.PLAYER_FIELD == area) {
-
-    field.setFieldCard(null);
     this.chat_.sendSystemRemote(this.chatText_ + '.');
-
   } else {
     throw Error('Invalid area for the field to list action.');
   }
+
+  // Remove the card from the field.
+  this.player_.getField().setCard(area, null);
 
   // Add the card to the list, but remove counters first.
   this.card_.clearCounters();

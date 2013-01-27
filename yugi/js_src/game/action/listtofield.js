@@ -7,6 +7,7 @@ goog.provide('yugi.game.action.ListToField');
 goog.require('yugi.game.model.Chat');
 goog.require('yugi.game.service.Sync');
 goog.require('yugi.model.Action');
+goog.require('yugi.model.Area');
 goog.require('yugi.model.Card');
 goog.require('yugi.model.SpellCard');
 
@@ -95,6 +96,7 @@ yugi.game.action.ListToField.prototype.fire = function() {
   // Set the card in the first monster zone or first spell/trap zone depending
   // on the card.
   var field = this.player_.getField();
+
   if (this.card_.getType() == yugi.model.Card.Type.MONSTER) {
 
     // Make sure there's room for the card.
@@ -115,16 +117,17 @@ yugi.game.action.ListToField.prototype.fire = function() {
     if (spellTrapCard instanceof yugi.model.SpellCard &&
         spellTrapCard.getSpellType() == yugi.model.SpellCard.Type.FIELD) {
 
-      // Send the old field card to the graveyard, if there was one..
-      var oldFieldCard = field.getFieldCard();
+      // Send the old field card to the graveyard, if there was one.
+      var fieldArea = yugi.model.Area.PLAYER_FIELD;
+      var oldFieldCard = field.setCard(fieldArea, null);
       if (oldFieldCard) {
-        field.getGraveyard().add(oldFieldCard, true);
+        field.getGraveyard().add(oldFieldCard);
         chatText = this.player_.getName() + ' sent ' + this.card_.getName() +
             ' to the graveyard';
       }
 
       // Set the new field card.
-      field.setFieldCard(spellTrapCard);
+      field.setCard(fieldArea, spellTrapCard);
 
       // Chat about the change.
       if (this.faceUp_) {

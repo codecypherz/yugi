@@ -9,6 +9,7 @@ goog.require('goog.debug.Logger');
 goog.require('goog.events.EventHandler');
 goog.require('yugi.game.message.CardTransfer');
 goog.require('yugi.game.message.MessageType');
+goog.require('yugi.model.Area');
 goog.require('yugi.model.MonsterCard');
 goog.require('yugi.model.SpellCard');
 
@@ -109,9 +110,8 @@ yugi.game.handler.CardTransfer.prototype.onCardTransfer_ = function(e) {
       if (card instanceof yugi.model.MonsterCard) {
         if (field.hasEmptyMonsterZone()) {
           var zone = field.setMonsterCard(card);
-          zone++; // Make the zone in sync with what the UI shows.
           this.chat_.sendSystemRemote(oName + ' transferred ' + cName +
-              ' to ' + pName + '\'s monster zone ' + zone + '.');
+              ' to ' + pName + '\'s monster zone ' + (zone + 1) + '.');
         } else {
           hand.add(card);
           this.chat_.sendSystemRemote(oName + ' transferred ' + cName +
@@ -120,9 +120,10 @@ yugi.game.handler.CardTransfer.prototype.onCardTransfer_ = function(e) {
         }
       } else if (card instanceof yugi.model.SpellCard &&
           card.getSpellType() == yugi.model.SpellCard.Type.FIELD) {
-        var oldFieldCard = field.getFieldCard();
+        var fieldArea = yugi.model.Area.PLAYER_FIELD;
+        var oldFieldCard = field.setCard(fieldArea, null);
         if (oldFieldCard) {
-          field.getGraveyard().add(oldFieldCard, true);
+          field.getGraveyard().add(oldFieldCard);
           this.chat_.sendSystemRemote(oName + ' transferred ' + cName +
               ' to ' + pName + '\'s field zone which sent ' +
               oldFieldCard.getName() + ' to the graveyard.');
@@ -130,14 +131,13 @@ yugi.game.handler.CardTransfer.prototype.onCardTransfer_ = function(e) {
           this.chat_.sendSystemRemote(oName + ' transferred ' + cName +
               ' to ' + pName + '\'s field zone.');
         }
-        field.setFieldCard(card);
+        field.setCard(fieldArea, card);
       } else {
         if (field.hasEmptySpellTrapZone()) {
           var zone = field.setSpellTrapCard(
               /** @type {!yugi.model.SpellCard|!yugi.model.TrapCard} */ (card));
-          zone++; // Make the zone in sync with what the UI shows.
           this.chat_.sendSystemRemote(oName + ' transferred ' + cName +
-              ' to ' + pName + '\'s spell/trap zone ' + zone + '.');
+              ' to ' + pName + '\'s spell/trap zone ' + (zone + 1) + '.');
         } else {
           hand.add(card);
           this.chat_.sendSystemRemote(oName + ' transferred ' + cName +

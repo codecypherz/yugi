@@ -226,7 +226,7 @@ yugi.game.ui.zone.Monster.prototype.getImageElement_ = function() {
 yugi.game.ui.zone.Monster.prototype.setUpCard_ = function() {
   this.cardHandler_.removeAll();
 
-  this.card_ = this.player_.getField().getCardInZone(this.area_);
+  this.card_ = this.player_.getField().getCard(this.area_);
 
   if (this.card_) {
     this.cardHandler_.listen(this.card_,

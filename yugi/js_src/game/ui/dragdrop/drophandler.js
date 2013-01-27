@@ -110,12 +110,12 @@ yugi.game.ui.dragdrop.DropHandler.prototype.onZoneDrop_ = function(
 
   // Do nothing unless the target zone is empty.
   var field = this.game_.getPlayer().getField();
-  if (!field.isZoneEmpty(targetArea)) {
+  if (!field.isEmpty(targetArea)) {
     return;
   }
 
   // First, remove the card.
-  this.removeCard_(sourceCard);
+  this.game_.getPlayer().removeCard(sourceCard);
 
   // Do card transfer if one of the opponent monster zones was the target.
   if (yugi.model.Area.OPP_MONSTER_ZONES.contains(targetArea)) {
@@ -144,7 +144,7 @@ yugi.game.ui.dragdrop.DropHandler.prototype.onZoneDrop_ = function(
   }
 
   // Set the new card.
-  field.setCardInZone(targetArea, sourceCard);
+  field.setCard(targetArea, sourceCard);
 };
 
 
@@ -157,6 +157,12 @@ yugi.game.ui.dragdrop.DropHandler.prototype.onZoneDrop_ = function(
 yugi.game.ui.dragdrop.DropHandler.prototype.onFieldCardDrop_ = function(
     sourceCard, targetArea) {
 
+  // Make sure there's nothing there.
+  var field = this.game_.getPlayer().getField();
+  if (!field.isEmpty(targetArea)) {
+    return;
+  }
+
   // Only a field card can be dropped onto the field card area.
   if (!(sourceCard instanceof yugi.model.SpellCard) ||
       sourceCard.getSpellType() != yugi.model.SpellCard.Type.FIELD) {
@@ -164,19 +170,12 @@ yugi.game.ui.dragdrop.DropHandler.prototype.onFieldCardDrop_ = function(
   }
 
   // Remove the card.
-  this.removeCard_(sourceCard);
-
-  // Send the old field card to the graveyard if there was already one there.
-  var field = this.game_.getPlayer().getField();
-  var existingFieldCard = field.getFieldCard();
-  if (existingFieldCard) {
-    field.getGraveyard().add(existingFieldCard, true);
-  }
+  this.game_.getPlayer().removeCard(sourceCard);
 
   // The new field card is placed face up and not rotated.
   sourceCard.setFaceUp(true);
   sourceCard.setRotated(false);
-  field.setFieldCard(sourceCard);
+  field.setCard(yugi.model.Area.PLAYER_FIELD, sourceCard);
 };
 
 
@@ -190,7 +189,7 @@ yugi.game.ui.dragdrop.DropHandler.prototype.onListDrop_ = function(
     sourceCard, targetArea) {
 
   // Remove the card since no list has a limit.
-  this.removeCard_(sourceCard);
+  this.game_.getPlayer().removeCard(sourceCard);
 
   // No list has rotated cards.
   sourceCard.setRotated(false);
@@ -222,44 +221,5 @@ yugi.game.ui.dragdrop.DropHandler.prototype.onListDrop_ = function(
       var extraCards = player.getDeck().getExtraCardList();
       extraCards.add(sourceCard);
       break;
-  }
-};
-
-
-/**
- * Removes the card from it's current location as part of the move.
- * @param {!yugi.model.Card} card The card to remove.
- * @private
- */
-yugi.game.ui.dragdrop.DropHandler.prototype.removeCard_ = function(card) {
-
-  var area = card.getLocation().getArea();
-  var game = this.game_;
-  var player = game.getPlayer();
-  var field = player.getField();
-
-  if (field.isZone(area)) {
-    field.removeCardInZone(area);
-  } else {
-    switch (card.getLocation().getArea()) {
-      case yugi.model.Area.PLAYER_BANISH:
-        field.getBanish().remove(card);
-        break;
-      case yugi.model.Area.PLAYER_DECK:
-        player.getDeck().getMainCardList().remove(card);
-        break;
-      case yugi.model.Area.PLAYER_EXTRA_DECK:
-        player.getDeck().getExtraCardList().remove(card);
-        break;
-      case yugi.model.Area.PLAYER_FIELD:
-        field.setFieldCard(null);
-        break;
-      case yugi.model.Area.PLAYER_GRAVEYARD:
-        field.getGraveyard().remove(card);
-        break;
-      case yugi.model.Area.PLAYER_HAND:
-        player.getHand().remove(card);
-        break;
-    }
   }
 };
