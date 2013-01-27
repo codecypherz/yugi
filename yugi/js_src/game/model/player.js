@@ -25,10 +25,11 @@ goog.require('yugi.service.DeckService');
  * Keeps state for a given player.
  * @param {!yugi.service.DeckService} deckService The deck service.
  * @param {!yugi.model.CardCache} cardCache The cache of cards.
+ * @param {boolean} isOpponent True if the player is the opponent.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-yugi.game.model.Player = function(deckService, cardCache) {
+yugi.game.model.Player = function(deckService, cardCache, isOpponent) {
   goog.base(this);
 
   /**
@@ -64,18 +65,24 @@ yugi.game.model.Player = function(deckService, cardCache) {
    * @private
    */
   this.deck_ = new yugi.model.Deck();
+  this.setDeckArea_();
 
   /**
    * @type {!yugi.model.CardList}
    * @private
    */
-  this.hand_ = new yugi.model.CardList(yugi.model.Area.PLAYER_HAND);
+  this.hand_ = new yugi.model.CardList();
+  if (isOpponent) {
+    this.hand_.setArea(yugi.model.Area.OPP_HAND);
+  } else {
+    this.hand_.setArea(yugi.model.Area.PLAYER_HAND);
+  }
 
   /**
    * @type {!yugi.game.model.Field}
    * @private
    */
-  this.field_ = new yugi.game.model.Field();
+  this.field_ = new yugi.game.model.Field(isOpponent);
 
   /**
    * The name of the player.
@@ -103,7 +110,7 @@ yugi.game.model.Player = function(deckService, cardCache) {
    * @type {boolean}
    * @private
    */
-  this.isOpponent_ = false;
+  this.isOpponent_ = isOpponent;
 
   /**
    * True if this player's deck has loaded.  This is not data that needs to be
@@ -187,19 +194,6 @@ yugi.game.model.Player.prototype.getName = function() {
 
 
 /**
- * @param {boolean} isOpponent True if this player is the opponent or not.
- */
-yugi.game.model.Player.prototype.setOpponent = function(isOpponent) {
-  this.isOpponent_ = isOpponent;
-
-  // Keeps area in sync.
-  this.field_.setOpponent(isOpponent);
-  this.setDeck(this.deck_);
-  this.setHand(this.hand_);
-};
-
-
-/**
  * @return {boolean} True if this player is the opponent or not.
  */
 yugi.game.model.Player.prototype.isOpponent = function() {
@@ -237,21 +231,6 @@ yugi.game.model.Player.prototype.selectDeck = function(deckKey) {
  */
 yugi.game.model.Player.prototype.setOriginalDeck = function(originalDeck) {
   this.originalDeckReadOnly_ = originalDeck;
-};
-
-
-/**
- * @param {!yugi.model.Deck} deck The deck to set.
- */
-yugi.game.model.Player.prototype.setDeck = function(deck) {
-  this.deck_ = deck;
-  if (this.isOpponent_) {
-    this.deck_.getMainCardList().setArea(yugi.model.Area.OPP_DECK);
-    this.deck_.getExtraCardList().setArea(yugi.model.Area.OPP_EXTRA_DECK);
-  } else {
-    this.deck_.getMainCardList().setArea(yugi.model.Area.PLAYER_DECK);
-    this.deck_.getExtraCardList().setArea(yugi.model.Area.PLAYER_EXTRA_DECK);
-  }
 };
 
 
@@ -300,32 +279,10 @@ yugi.game.model.Player.prototype.getHand = function() {
 
 
 /**
- * @param {!yugi.model.CardList} hand The player's hand.
- */
-yugi.game.model.Player.prototype.setHand = function(hand) {
-  this.hand_ = hand;
-  if (this.isOpponent_) {
-    this.hand_.setArea(yugi.model.Area.OPP_HAND);
-  } else {
-    this.hand_.setArea(yugi.model.Area.PLAYER_HAND);
-  }
-};
-
-
-/**
  * @return {!yugi.game.model.Field} The player's field.
  */
 yugi.game.model.Player.prototype.getField = function() {
   return this.field_;
-};
-
-
-/**
- * @param {!yugi.game.model.Field} field The player's field.
- */
-yugi.game.model.Player.prototype.setField = function(field) {
-  this.field_ = field;
-  this.field_.setOpponent(this.isOpponent_);
 };
 
 
@@ -444,7 +401,8 @@ yugi.game.model.Player.prototype.onDeckLoaded_ = function(e) {
 
   this.logger.info(this.name_ + '\'s deck finished loading.');
   this.deckLoadId_ = null;
-  this.setDeck(e.deck);
+  this.deck_ = e.deck;
+  this.setDeckArea_();
   this.originalDeckReadOnly_ = this.deck_.clone();
   this.markDeckLoaded();
 
@@ -514,4 +472,19 @@ yugi.game.model.Player.prototype.setFromData = function(playerData, cardCache) {
 
   // Note: The opponent flag is not set since we are relying on the game object
   // to set that flag properly during construction.
+};
+
+
+/**
+ * Updates the deck area based on if this player is the opponent or not.
+ * @private
+ */
+yugi.game.model.Player.prototype.setDeckArea_ = function() {
+  if (this.isOpponent_) {
+    this.deck_.getMainCardList().setArea(yugi.model.Area.OPP_DECK);
+    this.deck_.getExtraCardList().setArea(yugi.model.Area.OPP_EXTRA_DECK);
+  } else {
+    this.deck_.getMainCardList().setArea(yugi.model.Area.PLAYER_DECK);
+    this.deck_.getExtraCardList().setArea(yugi.model.Area.PLAYER_EXTRA_DECK);
+  }
 };

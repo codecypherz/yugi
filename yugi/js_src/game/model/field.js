@@ -18,10 +18,11 @@ goog.require('yugi.model.CardList');
 
 /**
  * Keeps state for a player's side of the field.
+ * @param {boolean} isOpponent True if the player is the opponent.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-yugi.game.model.Field = function() {
+yugi.game.model.Field = function(isOpponent) {
   goog.base(this);
 
   /**
@@ -52,19 +53,29 @@ yugi.game.model.Field = function() {
    * @type {!yugi.model.CardList}
    * @private
    */
-  this.graveyard_ = new yugi.model.CardList(yugi.model.Area.PLAYER_GRAVEYARD);
+  this.graveyard_ = new yugi.model.CardList();
+  if (isOpponent) {
+    this.graveyard_.setArea(yugi.model.Area.OPP_GRAVEYARD);
+  } else {
+    this.graveyard_.setArea(yugi.model.Area.PLAYER_GRAVEYARD);
+  }
 
   /**
    * @type {!yugi.model.CardList}
    * @private
    */
-  this.banishedCards_ = new yugi.model.CardList(yugi.model.Area.PLAYER_BANISH);
+  this.banishedCards_ = new yugi.model.CardList();
+  if (isOpponent) {
+    this.banishedCards_.setArea(yugi.model.Area.OPP_BANISH);
+  } else {
+    this.banishedCards_.setArea(yugi.model.Area.PLAYER_BANISH);
+  }
 
   /**
    * @type {boolean}
    * @private
    */
-  this.isOpponent_ = false;
+  this.isOpponent_ = isOpponent;
 
   /**
    * @type {yugi.model.SpellCard}
@@ -112,21 +123,6 @@ yugi.game.model.Field.AREAS_ = new goog.structs.Set(goog.array.flatten(
     yugi.model.Area.MONSTER_ZONES.getValues(),
     yugi.model.Area.SPELL_TRAP_ZONES.getValues(),
     yugi.game.model.Field.NON_ZONES_.getValues()));
-
-
-/**
- * @param {boolean} isOpponent True if this field belongs to the opponent.
- */
-yugi.game.model.Field.prototype.setOpponent = function(isOpponent) {
-  this.isOpponent_ = isOpponent;
-  if (isOpponent) {
-    this.graveyard_.setArea(yugi.model.Area.OPP_GRAVEYARD);
-    this.banishedCards_.setArea(yugi.model.Area.OPP_BANISH);
-  } else {
-    this.graveyard_.setArea(yugi.model.Area.PLAYER_GRAVEYARD);
-    this.banishedCards_.setArea(yugi.model.Area.PLAYER_BANISH);
-  }
-};
 
 
 /**

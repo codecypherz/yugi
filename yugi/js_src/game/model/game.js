@@ -28,15 +28,14 @@ yugi.game.model.Game = function(deckService, cardCache) {
    * @type {!yugi.game.model.Player}
    * @private
    */
-  this.player_ = new yugi.game.model.Player(deckService, cardCache);
+  this.player_ = new yugi.game.model.Player(deckService, cardCache, false);
 
   /**
    * The player's opponent.
    * @type {!yugi.game.model.Player}
    * @private
    */
-  this.opponent_ = new yugi.game.model.Player(deckService, cardCache);
-  this.opponent_.setOpponent(true);
+  this.opponent_ = new yugi.game.model.Player(deckService, cardCache, true);
 };
 goog.inherits(yugi.game.model.Game, goog.events.EventTarget);
 
