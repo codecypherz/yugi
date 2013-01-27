@@ -13,7 +13,7 @@ goog.require('goog.math');
 goog.require('goog.math.Range');
 goog.require('yugi.game.data.DeckData');
 goog.require('yugi.game.data.PlayerData');
-goog.require('yugi.game.model.Field');
+goog.require('yugi.game.model.field.Field');
 goog.require('yugi.model.Area');
 goog.require('yugi.model.CardList');
 goog.require('yugi.model.Deck');
@@ -79,10 +79,10 @@ yugi.game.model.Player = function(deckService, cardCache, isOpponent) {
   }
 
   /**
-   * @type {!yugi.game.model.Field}
+   * @type {!yugi.game.model.field.Field}
    * @private
    */
-  this.field_ = new yugi.game.model.Field(isOpponent);
+  this.field_ = new yugi.game.model.field.Field(isOpponent);
 
   /**
    * The name of the player.
@@ -279,7 +279,7 @@ yugi.game.model.Player.prototype.getHand = function() {
 
 
 /**
- * @return {!yugi.game.model.Field} The player's field.
+ * @return {!yugi.game.model.field.Field} The player's field.
  */
 yugi.game.model.Player.prototype.getField = function() {
   return this.field_;

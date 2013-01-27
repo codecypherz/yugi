@@ -12,7 +12,7 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
 goog.require('yugi.game.action.Factory');
-goog.require('yugi.game.model.Field');
+goog.require('yugi.game.model.field.Field');
 goog.require('yugi.game.ui');
 goog.require('yugi.game.ui.Css');
 goog.require('yugi.game.ui.counters.Counters');
@@ -114,7 +114,7 @@ yugi.game.ui.field.FieldCard.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
 
   this.getHandler().listen(this.player_.getField(),
-      yugi.game.model.Field.EventType.FIELD_CARD_CHANGED,
+      yugi.game.model.field.Field.EventType.FIELD_CARD_CHANGED,
       this.onFieldCardChanged_);
 
   this.onFieldCardChanged_();
