@@ -11,6 +11,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.structs.Set');
 goog.require('yugi.game.data.CardData');
 goog.require('yugi.game.data.FieldData');
+goog.require('yugi.game.model.Graveyard');
 goog.require('yugi.model.Area');
 goog.require('yugi.model.CardList');
 
@@ -50,15 +51,10 @@ yugi.game.model.Field = function(isOpponent) {
   }
 
   /**
-   * @type {!yugi.model.CardList}
+   * @type {!yugi.game.model.Graveyard}
    * @private
    */
-  this.graveyard_ = new yugi.model.CardList();
-  if (isOpponent) {
-    this.graveyard_.setArea(yugi.model.Area.OPP_GRAVEYARD);
-  } else {
-    this.graveyard_.setArea(yugi.model.Area.PLAYER_GRAVEYARD);
-  }
+  this.graveyard_ = new yugi.game.model.Graveyard(isOpponent);
 
   /**
    * @type {!yugi.model.CardList}
@@ -313,7 +309,7 @@ yugi.game.model.Field.prototype.removeSpellTrapCard = function(zone) {
 
 
 /**
- * @return {!yugi.model.CardList} The graveyard.
+ * @return {!yugi.game.model.Graveyard} The graveyard.
  */
 yugi.game.model.Field.prototype.getGraveyard = function() {
   return this.graveyard_;

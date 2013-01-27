@@ -7,8 +7,7 @@ goog.provide('yugi.game.action.FieldToList');
 goog.require('yugi.game.model.Chat');
 goog.require('yugi.game.service.Sync');
 goog.require('yugi.model.Action');
-goog.require('yugi.model.Card');
-goog.require('yugi.model.SpellCard');
+goog.require('yugi.model.Area');
 
 
 
@@ -92,27 +91,27 @@ yugi.game.action.FieldToList.prototype.fire = function() {
 
   // Figure out where the card is and remove it.
   var field = this.player_.getField();
-  if (this.card_.getType() == yugi.model.Card.Type.MONSTER) {
+  var area = this.card_.getLocation().getArea();
 
-    var monsterCard = /** @type {!yugi.model.MonsterCard} */ (this.card_);
-    field.removeMonsterCard(this.zone_);
+  if (yugi.model.Area.PLAYER_MONSTER_ZONES.contains(area)) {
+
+    field.removeCardInZone(area);
     this.chat_.sendSystemRemote(this.chatText_ +
         ' from monster zone ' + (this.zone_ + 1) + '.');
 
-  } else {
-    var spellTrapCard =
-        /** @type {!yugi.model.SpellCard|!yugi.model.TrapCard} */ (this.card_);
+  } else if (yugi.model.Area.PLAYER_SPELL_TRAP_ZONES.contains(area)) {
 
-    // Special case for field card.
-    if (spellTrapCard instanceof yugi.model.SpellCard &&
-        spellTrapCard.getSpellType() == yugi.model.SpellCard.Type.FIELD) {
-      field.setFieldCard(null);
-      this.chat_.sendSystemRemote(this.chatText_ + '.');
-    } else {
-      field.removeSpellTrapCard(this.zone_);
-      this.chat_.sendSystemRemote(this.chatText_ +
-          ' from spell/trap zone ' + (this.zone_ + 1) + '.');
-    }
+    field.removeCardInZone(area);
+    this.chat_.sendSystemRemote(this.chatText_ +
+        ' from spell/trap zone ' + (this.zone_ + 1) + '.');
+
+  } else if (yugi.model.Area.PLAYER_FIELD == area) {
+
+    field.setFieldCard(null);
+    this.chat_.sendSystemRemote(this.chatText_ + '.');
+
+  } else {
+    throw Error('Invalid area for the field to list action.');
   }
 
   // Add the card to the list, but remove counters first.
