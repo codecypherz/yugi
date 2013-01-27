@@ -153,7 +153,7 @@ yugi.game.ui.field.ExtraDeck.prototype.createActions_ = function(card) {
       pName + ' sent ' + cName + ' from their extra deck to the graveyard.',
       true));
   actions.push(new yugi.game.action.ListToList('Banish',
-      card, extraCards, player.getField().getBanishedCards(),
+      card, extraCards, player.getField().getBanish(),
       pName + ' banished ' + cName + ' from their extra deck.',
       true));
 

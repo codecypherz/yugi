@@ -11,9 +11,9 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.structs.Set');
 goog.require('yugi.game.data.CardData');
 goog.require('yugi.game.data.FieldData');
+goog.require('yugi.game.model.field.Banish');
 goog.require('yugi.game.model.field.Graveyard');
 goog.require('yugi.model.Area');
-goog.require('yugi.model.CardList');
 
 
 
@@ -57,15 +57,10 @@ yugi.game.model.field.Field = function(isOpponent) {
   this.graveyard_ = new yugi.game.model.field.Graveyard(isOpponent);
 
   /**
-   * @type {!yugi.model.CardList}
+   * @type {!yugi.game.model.field.Banish}
    * @private
    */
-  this.banishedCards_ = new yugi.model.CardList();
-  if (isOpponent) {
-    this.banishedCards_.setArea(yugi.model.Area.OPP_BANISH);
-  } else {
-    this.banishedCards_.setArea(yugi.model.Area.PLAYER_BANISH);
-  }
+  this.banish_ = new yugi.game.model.field.Banish(isOpponent);
 
   /**
    * @type {boolean}
@@ -320,10 +315,10 @@ yugi.game.model.field.Field.prototype.getGraveyard = function() {
 
 
 /**
- * @return {!yugi.model.CardList} The banished cards.
+ * @return {!yugi.game.model.field.Banish} The banished cards.
  */
-yugi.game.model.field.Field.prototype.getBanishedCards = function() {
-  return this.banishedCards_;
+yugi.game.model.field.Field.prototype.getBanish = function() {
+  return this.banish_;
 };
 
 
@@ -392,7 +387,7 @@ yugi.game.model.field.Field.prototype.removeAll = function() {
   });
 
   // Remove all the banished cards.
-  goog.array.forEach(this.banishedCards_.removeAll(), function(card) {
+  goog.array.forEach(this.banish_.removeAll(), function(card) {
     cards.push(card);
   });
 
@@ -450,7 +445,7 @@ yugi.game.model.field.Field.prototype.removeCard = function(cardToRemove) {
 
   // Now check the banished cards.
   if (!removed) {
-    removed = this.banishedCards_.remove(cardToRemove);
+    removed = this.banish_.remove(cardToRemove);
   }
 
   return removed;
@@ -497,7 +492,7 @@ yugi.game.model.field.Field.prototype.toData = function() {
 
   // Fill in other data.
   fieldData.setGraveyardData(this.graveyard_.toData());
-  fieldData.setBanishData(this.banishedCards_.toData());
+  fieldData.setBanishData(this.banish_.toData());
 
   return fieldData;
 };
@@ -548,7 +543,7 @@ yugi.game.model.field.Field.prototype.setFromData = function(
   this.graveyard_.setFromData(fieldData.getGraveyardData(), cardCache);
 
   // Banish
-  this.banishedCards_.setFromData(fieldData.getBanishData(), cardCache);
+  this.banish_.setFromData(fieldData.getBanishData(), cardCache);
 
   // Grab the field card.
   var fieldCardData = fieldData.getFieldCardData();

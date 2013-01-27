@@ -349,7 +349,7 @@ yugi.game.ui.zone.Monster.prototype.renderCard_ = function() {
 
     // Banish.
     actions.push(new yugi.game.action.FieldToList(
-        'Banish', card, zone, player, field.getBanishedCards(),
+        'Banish', card, zone, player, field.getBanish(),
         pName + ' banished ' + cName, true));
 
     // Add counter.

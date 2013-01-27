@@ -126,7 +126,7 @@ yugi.game.ui.field.Graveyard.prototype.createActions_ = function(card) {
 
   // You can banish every card.
   actions.push(new yugi.game.action.ListToList('Banish',
-      card, graveyard, player.getField().getBanishedCards(),
+      card, graveyard, player.getField().getBanish(),
       pName + ' banished ' + cName + ' from the graveyard.', true));
 
   // Return to deck.

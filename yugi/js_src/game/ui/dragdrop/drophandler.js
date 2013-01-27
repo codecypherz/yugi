@@ -209,7 +209,7 @@ yugi.game.ui.dragdrop.DropHandler.prototype.onListDrop_ = function(
       player.getHand().add(sourceCard);
       break;
     case yugi.model.Area.PLAYER_BANISH:
-      field.getBanishedCards().add(sourceCard, true);
+      field.getBanish().add(sourceCard, true);
       break;
     case yugi.model.Area.PLAYER_DECK:
       sourceCard.setFaceUp(false);
@@ -243,7 +243,7 @@ yugi.game.ui.dragdrop.DropHandler.prototype.removeCard_ = function(card) {
   } else {
     switch (card.getLocation().getArea()) {
       case yugi.model.Area.PLAYER_BANISH:
-        field.getBanishedCards().remove(card);
+        field.getBanish().remove(card);
         break;
       case yugi.model.Area.PLAYER_DECK:
         player.getDeck().getMainCardList().remove(card);

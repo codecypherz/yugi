@@ -187,7 +187,7 @@ yugi.game.ui.field.Deck.prototype.createActions_ = function(card) {
       pName + ' sent ' + cName +
           ' to the graveyard from their deck.', true));
   actions.push(new yugi.game.action.ListToList('Banish',
-      card, mainCards, player.getField().getBanishedCards(),
+      card, mainCards, player.getField().getBanish(),
       pName + ' banished ' + cName + ' from their deck.', true));
 
   return actions;

@@ -41,7 +41,7 @@ goog.inherits(yugi.game.ui.field.Banish, yugi.game.ui.field.Stack);
 yugi.game.ui.field.Banish.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
 
-  this.getHandler().listen(this.player_.getField().getBanishedCards(),
+  this.getHandler().listen(this.player_.getField().getBanish(),
       yugi.model.CardList.EventType.CARDS_CHANGED,
       this.onCardsChanged_);
 
@@ -60,7 +60,7 @@ yugi.game.ui.field.Banish.prototype.getLabel = function() {
  * @private
  */
 yugi.game.ui.field.Banish.prototype.onCardsChanged_ = function() {
-  var banishedCards = this.player_.getField().getBanishedCards();
+  var banishedCards = this.player_.getField().getBanish();
 
   var actions = [];
 
@@ -90,7 +90,7 @@ yugi.game.ui.field.Banish.prototype.createActions_ = function(card) {
   }
 
   var actions = [];
-  var banish = player.getField().getBanishedCards();
+  var banish = player.getField().getBanish();
   var cName = card.getName();
   var pName = player.getName();
 

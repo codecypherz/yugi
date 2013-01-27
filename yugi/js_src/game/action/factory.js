@@ -44,7 +44,7 @@ yugi.game.action.Factory.prototype.createFieldSpellTrapActions =
       pName + ' sent ' + card.getName() + ' to the graveyard', true);
 
   var banish = new yugi.game.action.FieldToList(
-      'Banish', card, zone, player, field.getBanishedCards(),
+      'Banish', card, zone, player, field.getBanish(),
       pName + ' banished ' + card.getName(), true);
 
   var returnToHand = new yugi.game.action.FieldToList(
