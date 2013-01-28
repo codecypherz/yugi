@@ -16,8 +16,8 @@ goog.require('yugi.game.data.PlayerData');
 goog.require('yugi.game.model.player.Banish');
 goog.require('yugi.game.model.player.Field');
 goog.require('yugi.game.model.player.Graveyard');
+goog.require('yugi.game.model.player.Hand');
 goog.require('yugi.model.Area');
-goog.require('yugi.model.CardList');
 goog.require('yugi.model.Deck');
 goog.require('yugi.service.DeckService');
 
@@ -76,18 +76,11 @@ yugi.game.model.player.Player = function(deckService, cardCache, isOpponent) {
   this.deck_ = new yugi.model.Deck();
   this.setDeckArea_();
 
-  // TODO Move hand into its own class.
-
   /**
-   * @type {!yugi.model.CardList}
+   * @type {!yugi.game.model.player.Hand}
    * @private
    */
-  this.hand_ = new yugi.model.CardList();
-  if (isOpponent) {
-    this.hand_.setArea(yugi.model.Area.OPP_HAND);
-  } else {
-    this.hand_.setArea(yugi.model.Area.PLAYER_HAND);
-  }
+  this.hand_ = new yugi.game.model.player.Hand(isOpponent);
 
   /**
    * @type {!yugi.game.model.player.Graveyard}
