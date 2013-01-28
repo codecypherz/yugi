@@ -2,7 +2,7 @@
  * The graveyard for a player.
  */
 
-goog.provide('yugi.game.model.field.Graveyard');
+goog.provide('yugi.game.model.player.Graveyard');
 
 goog.require('goog.debug.Logger');
 goog.require('yugi.model.Area');
@@ -16,14 +16,14 @@ goog.require('yugi.model.CardList');
  * @constructor
  * @extends {yugi.model.CardList}
  */
-yugi.game.model.field.Graveyard = function(isOpponent) {
+yugi.game.model.player.Graveyard = function(isOpponent) {
   goog.base(this);
 
   /**
    * @type {!goog.debug.Logger}
    * @protected
    */
-  this.logger = goog.debug.Logger.getLogger('yugi.game.model.field.Graveyard');
+  this.logger = goog.debug.Logger.getLogger('yugi.game.model.player.Graveyard');
 
   // Set the area for the graveyard.
   if (isOpponent) {
@@ -32,11 +32,11 @@ yugi.game.model.field.Graveyard = function(isOpponent) {
     this.setArea(yugi.model.Area.PLAYER_GRAVEYARD);
   }
 };
-goog.inherits(yugi.game.model.field.Graveyard, yugi.model.CardList);
+goog.inherits(yugi.game.model.player.Graveyard, yugi.model.CardList);
 
 
 /** @override */
-yugi.game.model.field.Graveyard.prototype.add = function(card, opt_front) {
+yugi.game.model.player.Graveyard.prototype.add = function(card, opt_front) {
 
   // Cards are added to the top always for the graveyard.
   goog.base(this, 'add', card, true);

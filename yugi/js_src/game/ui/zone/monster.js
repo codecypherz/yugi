@@ -20,7 +20,7 @@ goog.require('yugi.game.action.field.Position');
 goog.require('yugi.game.message.CardTransfer');
 goog.require('yugi.game.model.Attack');
 goog.require('yugi.game.model.Game');
-goog.require('yugi.game.model.field.Field');
+goog.require('yugi.game.model.player.Field');
 goog.require('yugi.game.ui');
 goog.require('yugi.game.ui.Css');
 goog.require('yugi.game.ui.ZIndex');
@@ -183,7 +183,7 @@ yugi.game.ui.zone.Monster.prototype.enterDocument = function() {
       this.updateImageZIndex_);
 
   this.getHandler().listen(this.player_.getField(),
-      yugi.game.model.field.Field.EventType.MONSTERS_CHANGED,
+      yugi.game.model.player.Field.EventType.MONSTERS_CHANGED,
       this.setUpCard_);
 
   this.setUpCard_();

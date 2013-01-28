@@ -2,7 +2,7 @@
  * Keeps state for a player's side of the field.
  */
 
-goog.provide('yugi.game.model.field.Field');
+goog.provide('yugi.game.model.player.Field');
 
 goog.require('goog.array');
 goog.require('goog.debug.Logger');
@@ -21,14 +21,14 @@ goog.require('yugi.model.Area');
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-yugi.game.model.field.Field = function(isOpponent) {
+yugi.game.model.player.Field = function(isOpponent) {
   goog.base(this);
 
   /**
    * @type {!goog.debug.Logger}
    * @protected
    */
-  this.logger = goog.debug.Logger.getLogger('yugi.game.model.field.Field');
+  this.logger = goog.debug.Logger.getLogger('yugi.game.model.player.Field');
 
   /**
    * @type {!Array.<yugi.model.Card>}
@@ -60,14 +60,14 @@ yugi.game.model.field.Field = function(isOpponent) {
    */
   this.fieldCard_ = null;
 };
-goog.inherits(yugi.game.model.field.Field, goog.events.EventTarget);
+goog.inherits(yugi.game.model.player.Field, goog.events.EventTarget);
 
 
 /**
  * The set of events dispatched by this model.
  * @enum {string}
  */
-yugi.game.model.field.Field.EventType = {
+yugi.game.model.player.Field.EventType = {
   FIELD_CARD_CHANGED: goog.events.getUniqueId('field-card-changed'),
   MONSTERS_CHANGED: goog.events.getUniqueId('monsters-changed'),
   SPELLS_TRAPS_CHANGED: goog.events.getUniqueId('spell-trap-changed')
@@ -80,7 +80,7 @@ yugi.game.model.field.Field.EventType = {
  * @private
  * @const
  */
-yugi.game.model.field.Field.ZONES_ = new goog.structs.Set(goog.array.flatten(
+yugi.game.model.player.Field.ZONES_ = new goog.structs.Set(goog.array.flatten(
     yugi.model.Area.MONSTER_ZONES.getValues(),
     yugi.model.Area.SPELL_TRAP_ZONES.getValues(),
     yugi.model.Area.PLAYER_FIELD,
@@ -92,8 +92,8 @@ yugi.game.model.field.Field.ZONES_ = new goog.structs.Set(goog.array.flatten(
  * @param {!yugi.model.Area} area The area to check.
  * @return {boolean} True if the area is a field area zone.
  */
-yugi.game.model.field.Field.prototype.isZone = function(area) {
-  return yugi.game.model.field.Field.ZONES_.contains(area);
+yugi.game.model.player.Field.prototype.isZone = function(area) {
+  return yugi.game.model.player.Field.ZONES_.contains(area);
 };
 
 
@@ -103,7 +103,7 @@ yugi.game.model.field.Field.prototype.isZone = function(area) {
  * @param {!yugi.model.Area} area The area to check.
  * @return {boolean} True if the area is empty.
  */
-yugi.game.model.field.Field.prototype.isEmpty = function(area) {
+yugi.game.model.player.Field.prototype.isEmpty = function(area) {
   var index = yugi.model.Area.getZoneIndex(area);
   if (yugi.model.Area.MONSTER_ZONES.contains(area)) {
     return !this.monsterZone_[index];
@@ -118,7 +118,7 @@ yugi.game.model.field.Field.prototype.isEmpty = function(area) {
 /**
  * @return {!Array.<!yugi.model.MonsterCard>} The monster cards on the field.
  */
-yugi.game.model.field.Field.prototype.getMonsterZone = function() {
+yugi.game.model.player.Field.prototype.getMonsterZone = function() {
   return this.monsterZone_;
 };
 
@@ -127,7 +127,7 @@ yugi.game.model.field.Field.prototype.getMonsterZone = function() {
  * @return {!Array.<!yugi.model.SpellCard|!yugi.model.TrapCard>} The spell or
  *     trap cards on the field.
  */
-yugi.game.model.field.Field.prototype.getSpellTrapZone = function() {
+yugi.game.model.player.Field.prototype.getSpellTrapZone = function() {
   return this.spellTrapZone_;
 };
 
@@ -136,7 +136,7 @@ yugi.game.model.field.Field.prototype.getSpellTrapZone = function() {
  * Checks to see if there is a free monster zone.
  * @return {boolean} True if there is a free monster zone or not.
  */
-yugi.game.model.field.Field.prototype.hasEmptyMonsterZone = function() {
+yugi.game.model.player.Field.prototype.hasEmptyMonsterZone = function() {
   for (var i = 0; i < 5; i++) {
     if (!this.monsterZone_[i]) {
       return true;
@@ -150,7 +150,7 @@ yugi.game.model.field.Field.prototype.hasEmptyMonsterZone = function() {
  * Checks to see if there is a free spell/trap zone.
  * @return {boolean} True if there is a free spell/trap zone or not.
  */
-yugi.game.model.field.Field.prototype.hasEmptySpellTrapZone = function() {
+yugi.game.model.player.Field.prototype.hasEmptySpellTrapZone = function() {
   for (var i = 0; i < 5; i++) {
     if (!this.spellTrapZone_[i]) {
       return true;
@@ -166,7 +166,7 @@ yugi.game.model.field.Field.prototype.hasEmptySpellTrapZone = function() {
  * @param {yugi.model.Card} card The card to set.
  * @return {yugi.model.Card} The card that used to be in the area, if any.
  */
-yugi.game.model.field.Field.prototype.setCard = function(area, card) {
+yugi.game.model.player.Field.prototype.setCard = function(area, card) {
   return this.setCard_(area, card);
 };
 
@@ -176,7 +176,7 @@ yugi.game.model.field.Field.prototype.setCard = function(area, card) {
  * @param {!yugi.model.Area} area The area to set.
  * @return {yugi.model.Card} The card in the zone or null if there isn't one.
  */
-yugi.game.model.field.Field.prototype.getCard = function(area) {
+yugi.game.model.player.Field.prototype.getCard = function(area) {
   if (yugi.model.Area.MONSTER_ZONES.contains(area)) {
     return this.monsterZone_[yugi.model.Area.getZoneIndex(area)];
   } else if (yugi.model.Area.SPELL_TRAP_ZONES.contains(area)) {
@@ -194,7 +194,7 @@ yugi.game.model.field.Field.prototype.getCard = function(area) {
  * Convenience method when seeking just the field card.
  * @return {yugi.model.SpellCard} The current field card.
  */
-yugi.game.model.field.Field.prototype.getFieldCard = function() {
+yugi.game.model.player.Field.prototype.getFieldCard = function() {
   return this.fieldCard_;
 };
 
@@ -206,7 +206,7 @@ yugi.game.model.field.Field.prototype.getFieldCard = function() {
  *     exception will be thrown if there are already 5 set.
  * @return {number} The zone in which the card now resides.
  */
-yugi.game.model.field.Field.prototype.setMonsterCard = function(
+yugi.game.model.player.Field.prototype.setMonsterCard = function(
     card, opt_zone) {
   var zone = this.getAvailableIndex_(this.monsterZone_);
   this.setCard(this.getMonsterArea_(zone), card);
@@ -218,7 +218,7 @@ yugi.game.model.field.Field.prototype.setMonsterCard = function(
  * @param {!yugi.model.Card} card The card to set.
  * @return {number} The zone in which the card now resides.
  */
-yugi.game.model.field.Field.prototype.setSpellTrapCard = function(card) {
+yugi.game.model.player.Field.prototype.setSpellTrapCard = function(card) {
   var zone = this.getAvailableIndex_(this.spellTrapZone_);
   this.setCard(this.getSpellTrapArea_(zone), card);
   return zone;
@@ -230,7 +230,7 @@ yugi.game.model.field.Field.prototype.setSpellTrapCard = function(card) {
  * @param {number} zone The zero-relative index into the monster zone array.
  * @return {yugi.model.Card} The card in the zone or null if there wasn't one.
  */
-yugi.game.model.field.Field.prototype.removeMonsterCard = function(zone) {
+yugi.game.model.player.Field.prototype.removeMonsterCard = function(zone) {
   return this.setCard(this.getMonsterArea_(zone), null);
 };
 
@@ -240,7 +240,7 @@ yugi.game.model.field.Field.prototype.removeMonsterCard = function(zone) {
  * @param {number} zone The zero-relative index into the spell/trap zone array.
  * @return {yugi.model.Card} The card in the zone or null if there wasn't one.
  */
-yugi.game.model.field.Field.prototype.removeSpellTrapCard = function(zone) {
+yugi.game.model.player.Field.prototype.removeSpellTrapCard = function(zone) {
   return this.setCard(this.getSpellTrapArea_(zone), null);
 };
 
@@ -248,9 +248,9 @@ yugi.game.model.field.Field.prototype.removeSpellTrapCard = function(zone) {
 /**
  * Removes all the cards from the field.
  */
-yugi.game.model.field.Field.prototype.removeAll = function() {
+yugi.game.model.player.Field.prototype.removeAll = function() {
   goog.array.forEach(
-      yugi.game.model.field.Field.ZONES_.getValues(),
+      yugi.game.model.player.Field.ZONES_.getValues(),
       function(area) {
         this.setCard(area, null);
       }, this);
@@ -263,12 +263,12 @@ yugi.game.model.field.Field.prototype.removeAll = function() {
  * @param {!yugi.model.Card} cardToRemove The card to remove.
  * @return {boolean} True if the card was removed or not.
  */
-yugi.game.model.field.Field.prototype.removeCard = function(cardToRemove) {
+yugi.game.model.player.Field.prototype.removeCard = function(cardToRemove) {
 
   // Find the area for the card.
   var areaWithCard = null;
   var found = goog.array.some(
-      yugi.game.model.field.Field.ZONES_.getValues(),
+      yugi.game.model.player.Field.ZONES_.getValues(),
       function(area) {
         var card = this.getCard(area);
         if (card && card.equals(cardToRemove)) {
@@ -293,7 +293,7 @@ yugi.game.model.field.Field.prototype.removeCard = function(cardToRemove) {
  * Converts this object to a data object.
  * @return {!yugi.game.data.FieldData} The converted data object.
  */
-yugi.game.model.field.Field.prototype.toData = function() {
+yugi.game.model.player.Field.prototype.toData = function() {
   var fieldData = new yugi.game.data.FieldData();
 
   // Fill in the monster data.
@@ -336,7 +336,7 @@ yugi.game.model.field.Field.prototype.toData = function() {
  * @param {!yugi.game.data.FieldData} fieldData The data.
  * @param {!yugi.model.CardCache} cardCache The cache of cards.
  */
-yugi.game.model.field.Field.prototype.setFromData = function(
+yugi.game.model.player.Field.prototype.setFromData = function(
     fieldData, cardCache) {
 
   // Reset the data.
@@ -361,11 +361,11 @@ yugi.game.model.field.Field.prototype.setFromData = function(
 
   // Dispatch all the change events to bring listeners in sync.
   this.dispatchEvent(
-      yugi.game.model.field.Field.EventType.MONSTERS_CHANGED);
+      yugi.game.model.player.Field.EventType.MONSTERS_CHANGED);
   this.dispatchEvent(
-      yugi.game.model.field.Field.EventType.SPELLS_TRAPS_CHANGED);
+      yugi.game.model.player.Field.EventType.SPELLS_TRAPS_CHANGED);
   this.dispatchEvent(
-      yugi.game.model.field.Field.EventType.FIELD_CARD_CHANGED);
+      yugi.game.model.player.Field.EventType.FIELD_CARD_CHANGED);
 };
 
 
@@ -378,7 +378,7 @@ yugi.game.model.field.Field.prototype.setFromData = function(
  * @return {yugi.model.Card} The card that used to be in the area, if any.
  * @private
  */
-yugi.game.model.field.Field.prototype.setCard_ = function(
+yugi.game.model.player.Field.prototype.setCard_ = function(
     area, card, opt_suppressEvent) {
 
   // Set the new location.
@@ -398,7 +398,7 @@ yugi.game.model.field.Field.prototype.setCard_ = function(
     var i = yugi.model.Area.getZoneIndex(area);
     oldCard = this.monsterZone_[i];
     this.monsterZone_[i] = card;
-    event = yugi.game.model.field.Field.EventType.MONSTERS_CHANGED;
+    event = yugi.game.model.player.Field.EventType.MONSTERS_CHANGED;
 
   } else if (yugi.model.Area.SPELL_TRAP_ZONES.contains(area)) {
 
@@ -406,7 +406,7 @@ yugi.game.model.field.Field.prototype.setCard_ = function(
     var i = yugi.model.Area.getZoneIndex(area);
     oldCard = this.spellTrapZone_[i];
     this.spellTrapZone_[yugi.model.Area.getZoneIndex(area)] = card;
-    event = yugi.game.model.field.Field.EventType.SPELLS_TRAPS_CHANGED;
+    event = yugi.game.model.player.Field.EventType.SPELLS_TRAPS_CHANGED;
 
   } else if (yugi.model.Area.PLAYER_FIELD == area ||
              yugi.model.Area.OPP_FIELD == area) {
@@ -414,7 +414,7 @@ yugi.game.model.field.Field.prototype.setCard_ = function(
     // Change the field area.
     oldCard = this.fieldCard_;
     this.fieldCard_ = /** @type {!yugi.model.SpellCard} */ (card);
-    event = yugi.game.model.field.Field.EventType.FIELD_CARD_CHANGED;
+    event = yugi.game.model.player.Field.EventType.FIELD_CARD_CHANGED;
 
   } else {
     throw Error('Area ' + area + ' is not a zone.');
@@ -434,7 +434,7 @@ yugi.game.model.field.Field.prototype.setCard_ = function(
  * @return {number} The first available index in the array or -1 if none.
  * @private
  */
-yugi.game.model.field.Field.prototype.getAvailableIndex_ = function(zoneArr) {
+yugi.game.model.player.Field.prototype.getAvailableIndex_ = function(zoneArr) {
   for (var i = 0; i < zoneArr.length; i++) {
     if (!zoneArr[i]) {
       return i;
@@ -451,7 +451,7 @@ yugi.game.model.field.Field.prototype.getAvailableIndex_ = function(zoneArr) {
  * @return {!yugi.model.Area} area The area the zone represents.
  * @private
  */
-yugi.game.model.field.Field.prototype.getMonsterArea_ = function(zone) {
+yugi.game.model.player.Field.prototype.getMonsterArea_ = function(zone) {
   if (this.isOpponent_) {
     switch (zone) {
       case 0:
@@ -490,7 +490,7 @@ yugi.game.model.field.Field.prototype.getMonsterArea_ = function(zone) {
  * @return {!yugi.model.Area} area The area the zone represents.
  * @private
  */
-yugi.game.model.field.Field.prototype.getSpellTrapArea_ = function(zone) {
+yugi.game.model.player.Field.prototype.getSpellTrapArea_ = function(zone) {
   if (this.isOpponent_) {
     switch (zone) {
       case 0:

@@ -10,7 +10,7 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.soy');
 goog.require('goog.ui.Component');
 goog.require('yugi.game.model.Game');
-goog.require('yugi.game.model.field.Field');
+goog.require('yugi.game.model.player.Field');
 goog.require('yugi.game.ui.field.OpponentZone');
 goog.require('yugi.game.ui.field.PlayerZone');
 goog.require('yugi.game.ui.field.soy');
@@ -117,10 +117,10 @@ yugi.game.ui.field.Field.prototype.enterDocument = function() {
       yugi.game.ui.field.Field.Id_.PLAYER_ZONE));
 
   this.getHandler().listen(this.game_.getPlayer().getField(),
-      yugi.game.model.field.Field.EventType.FIELD_CARD_CHANGED,
+      yugi.game.model.player.Field.EventType.FIELD_CARD_CHANGED,
       this.onFieldCardChanged_);
   this.getHandler().listen(this.game_.getOpponent().getField(),
-      yugi.game.model.field.Field.EventType.FIELD_CARD_CHANGED,
+      yugi.game.model.player.Field.EventType.FIELD_CARD_CHANGED,
       this.onFieldCardChanged_);
 };
 

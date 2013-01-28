@@ -13,9 +13,9 @@ goog.require('goog.math');
 goog.require('goog.math.Range');
 goog.require('yugi.game.data.DeckData');
 goog.require('yugi.game.data.PlayerData');
-goog.require('yugi.game.model.field.Banish');
-goog.require('yugi.game.model.field.Field');
-goog.require('yugi.game.model.field.Graveyard');
+goog.require('yugi.game.model.player.Banish');
+goog.require('yugi.game.model.player.Field');
+goog.require('yugi.game.model.player.Graveyard');
 goog.require('yugi.model.Area');
 goog.require('yugi.model.CardList');
 goog.require('yugi.model.Deck');
@@ -90,22 +90,22 @@ yugi.game.model.Player = function(deckService, cardCache, isOpponent) {
   }
 
   /**
-   * @type {!yugi.game.model.field.Graveyard}
+   * @type {!yugi.game.model.player.Graveyard}
    * @private
    */
-  this.graveyard_ = new yugi.game.model.field.Graveyard(isOpponent);
+  this.graveyard_ = new yugi.game.model.player.Graveyard(isOpponent);
 
   /**
-   * @type {!yugi.game.model.field.Banish}
+   * @type {!yugi.game.model.player.Banish}
    * @private
    */
-  this.banish_ = new yugi.game.model.field.Banish(isOpponent);
+  this.banish_ = new yugi.game.model.player.Banish(isOpponent);
 
   /**
-   * @type {!yugi.game.model.field.Field}
+   * @type {!yugi.game.model.player.Field}
    * @private
    */
-  this.field_ = new yugi.game.model.field.Field(isOpponent);
+  this.field_ = new yugi.game.model.player.Field(isOpponent);
 
   /**
    * The name of the player.
@@ -295,7 +295,7 @@ yugi.game.model.Player.prototype.getHand = function() {
 
 
 /**
- * @return {!yugi.game.model.field.Graveyard} The graveyard.
+ * @return {!yugi.game.model.player.Graveyard} The graveyard.
  */
 yugi.game.model.Player.prototype.getGraveyard = function() {
   return this.graveyard_;
@@ -303,7 +303,7 @@ yugi.game.model.Player.prototype.getGraveyard = function() {
 
 
 /**
- * @return {!yugi.game.model.field.Banish} The banished cards.
+ * @return {!yugi.game.model.player.Banish} The banished cards.
  */
 yugi.game.model.Player.prototype.getBanish = function() {
   return this.banish_;
@@ -311,7 +311,7 @@ yugi.game.model.Player.prototype.getBanish = function() {
 
 
 /**
- * @return {!yugi.game.model.field.Field} The player's field.
+ * @return {!yugi.game.model.player.Field} The player's field.
  */
 yugi.game.model.Player.prototype.getField = function() {
   return this.field_;
