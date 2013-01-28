@@ -17,20 +17,18 @@ goog.require('yugi.model.CardList');
  * @extends {yugi.model.CardList}
  */
 yugi.game.model.player.Graveyard = function(isOpponent) {
-  goog.base(this);
+
+  // Determine the area.
+  var area = isOpponent ?
+      yugi.model.Area.OPP_GRAVEYARD : yugi.model.Area.PLAYER_GRAVEYARD;
+
+  goog.base(this, area);
 
   /**
    * @type {!goog.debug.Logger}
    * @protected
    */
   this.logger = goog.debug.Logger.getLogger('yugi.game.model.player.Graveyard');
-
-  // Set the area for the graveyard.
-  if (isOpponent) {
-    this.setArea(yugi.model.Area.OPP_GRAVEYARD);
-  } else {
-    this.setArea(yugi.model.Area.PLAYER_GRAVEYARD);
-  }
 };
 goog.inherits(yugi.game.model.player.Graveyard, yugi.model.CardList);
 

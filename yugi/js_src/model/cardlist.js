@@ -11,7 +11,6 @@ goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.string');
 goog.require('yugi.data.CardListData');
-goog.require('yugi.model.Area');
 goog.require('yugi.model.Card');
 goog.require('yugi.model.util');
 
@@ -19,11 +18,11 @@ goog.require('yugi.model.util');
 
 /**
  * Keeps state for list of cards.
- * @param {yugi.model.Area=} opt_area The area of the card list.
+ * @param {!yugi.model.Area} area The area of the card list.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-yugi.model.CardList = function(opt_area) {
+yugi.model.CardList = function(area) {
   goog.base(this);
 
   /**
@@ -42,7 +41,7 @@ yugi.model.CardList = function(opt_area) {
    * @type {!yugi.model.Area}
    * @private
    */
-  this.area_ = opt_area || yugi.model.Area.UNSPECIFIED;
+  this.area_ = area;
 };
 goog.inherits(yugi.model.CardList, goog.events.EventTarget);
 
@@ -98,21 +97,6 @@ yugi.model.CardList.prototype.setCards = function(cards) {
  */
 yugi.model.CardList.prototype.getArea = function() {
   return this.area_;
-};
-
-
-/**
- * This will update the area for all cards in the card list.
- * @param {!yugi.model.Area} area The area for the card list.
- */
-yugi.model.CardList.prototype.setArea = function(area) {
-  if (this.area_ == area) {
-    return; // No change, so no need to loop over the list.
-  }
-  this.area_ = area;
-  goog.array.forEach(this.cards_, function(card) {
-    card.getLocation().setArea(area);
-  });
 };
 
 
@@ -278,7 +262,7 @@ yugi.model.CardList.prototype.toData = function() {
  * @param {!yugi.model.CardCache} cardCache The cache of cards.
  */
 yugi.model.CardList.prototype.setFromData = function(cardListData, cardCache) {
-  this.setArea(cardListData.getArea());
+  // Area is intentionally not set here.  Area is considered "final" here.
   this.setCards(cardCache.getList(cardListData.getCardKeys()));
 };
 
@@ -288,7 +272,7 @@ yugi.model.CardList.prototype.setFromData = function(cardListData, cardCache) {
  * @param {!yugi.model.CardList} cardList The card list.
  */
 yugi.model.CardList.prototype.setFromCardList = function(cardList) {
-  this.setArea(cardList.getArea());
+  // Area is intentionally not set here.  Area is considered "final" here.
   this.setCards(cardList.getCards());
 };
 

@@ -17,20 +17,18 @@ goog.require('yugi.model.CardList');
  * @extends {yugi.model.CardList}
  */
 yugi.game.model.player.Banish = function(isOpponent) {
-  goog.base(this);
+
+  // Determine the area.
+  var area = isOpponent ?
+      yugi.model.Area.OPP_BANISH : yugi.model.Area.PLAYER_BANISH;
+
+  goog.base(this, area);
 
   /**
    * @type {!goog.debug.Logger}
    * @protected
    */
   this.logger = goog.debug.Logger.getLogger('yugi.game.model.player.Banish');
-
-  // Set the area for the banish.
-  if (isOpponent) {
-    this.setArea(yugi.model.Area.OPP_BANISH);
-  } else {
-    this.setArea(yugi.model.Area.PLAYER_BANISH);
-  }
 };
 goog.inherits(yugi.game.model.player.Banish, yugi.model.CardList);
 

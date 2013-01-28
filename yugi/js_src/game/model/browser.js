@@ -8,6 +8,7 @@ goog.provide('yugi.game.model.Browser.Type');
 
 goog.require('goog.debug.Logger');
 goog.require('goog.events.EventTarget');
+goog.require('yugi.model.Area');
 goog.require('yugi.model.CardList');
 
 
@@ -25,7 +26,7 @@ yugi.game.model.Browser = function() {
    * @type {!yugi.model.CardList}
    * @private
    */
-  this.cardList_ = new yugi.model.CardList();
+  this.cardList_ = new yugi.model.CardList(yugi.model.Area.UNSPECIFIED);
 
   /**
    * The function that will create actions for cards in the card list.

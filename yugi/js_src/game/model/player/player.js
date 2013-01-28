@@ -17,7 +17,6 @@ goog.require('yugi.game.model.player.Banish');
 goog.require('yugi.game.model.player.Field');
 goog.require('yugi.game.model.player.Graveyard');
 goog.require('yugi.game.model.player.Hand');
-goog.require('yugi.model.Area');
 goog.require('yugi.model.Deck');
 goog.require('yugi.service.DeckService');
 
@@ -67,14 +66,13 @@ yugi.game.model.player.Player = function(deckService, cardCache, isOpponent) {
    * @type {!yugi.model.Deck}
    * @private
    */
-  this.originalDeckReadOnly_ = new yugi.model.Deck();
+  this.originalDeckReadOnly_ = new yugi.model.Deck(isOpponent);
 
   /**
    * @type {!yugi.model.Deck}
    * @private
    */
-  this.deck_ = new yugi.model.Deck();
-  this.setDeckArea_();
+  this.deck_ = new yugi.model.Deck(isOpponent);
 
   /**
    * @type {!yugi.game.model.player.Hand}
@@ -420,8 +418,7 @@ yugi.game.model.player.Player.prototype.onDeckLoaded_ = function(e) {
 
   this.logger.info(this.name_ + '\'s deck finished loading.');
   this.deckLoadId_ = null;
-  this.deck_ = e.deck;
-  this.setDeckArea_();
+  this.deck_.setFromDeck(e.deck);
   this.originalDeckReadOnly_ = this.deck_.clone();
   this.markDeckLoaded();
 
@@ -500,19 +497,4 @@ yugi.game.model.player.Player.prototype.setFromData = function(playerData) {
 
   // Note: The opponent flag is not set since we are relying on the game object
   // to set that flag properly during construction.
-};
-
-
-/**
- * Updates the deck area based on if this player is the opponent or not.
- * @private
- */
-yugi.game.model.player.Player.prototype.setDeckArea_ = function() {
-  if (this.isOpponent_) {
-    this.deck_.getMainCardList().setArea(yugi.model.Area.OPP_DECK);
-    this.deck_.getExtraCardList().setArea(yugi.model.Area.OPP_EXTRA_DECK);
-  } else {
-    this.deck_.getMainCardList().setArea(yugi.model.Area.PLAYER_DECK);
-    this.deck_.getExtraCardList().setArea(yugi.model.Area.PLAYER_EXTRA_DECK);
-  }
 };

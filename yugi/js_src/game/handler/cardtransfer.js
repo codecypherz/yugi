@@ -102,6 +102,10 @@ yugi.game.handler.CardTransfer.prototype.onCardTransfer_ = function(e) {
 
   var destination = message.getDestination();
 
+  // Make the card face up and normal.
+  card.setFaceUp(true);
+  card.setRotated(false);
+
   // Now add the card to the right place.
   switch (destination) {
     case yugi.game.message.CardTransfer.Location.FIELD:

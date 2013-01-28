@@ -11,6 +11,7 @@ goog.require('goog.debug.Logger');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.string');
+goog.require('yugi.model.Area');
 goog.require('yugi.model.CardList');
 goog.require('yugi.model.Serializable');
 goog.require('yugi.model.util');
@@ -20,11 +21,12 @@ goog.require('yugi.ui.Image');
 
 /**
  * The model for a deck in Yugioh.
+ * @param {boolean=} opt_isOpponent True if the deck is an opponent deck.
  * @constructor
  * @implements {yugi.model.Serializable}
  * @extends {goog.events.EventTarget}
  */
-yugi.model.Deck = function() {
+yugi.model.Deck = function(opt_isOpponent) {
 
   /**
    * @type {!goog.debug.Logger}
@@ -60,13 +62,19 @@ yugi.model.Deck = function() {
    */
   this.isStructure_ = false;
 
+  var mainArea = opt_isOpponent ?
+      yugi.model.Area.OPP_DECK : yugi.model.Area.PLAYER_DECK;
+
   /**
    * The list of main cards in this deck.  The official rules at the time of
    * writing this code restrict the number of cards from [40-60].
    * @type {!yugi.model.CardList}
    * @private
    */
-  this.mainCardList_ = new yugi.model.CardList();
+  this.mainCardList_ = new yugi.model.CardList(mainArea);
+
+  var extraArea = opt_isOpponent ?
+      yugi.model.Area.OPP_EXTRA_DECK : yugi.model.Area.PLAYER_EXTRA_DECK;
 
   /**
    * The list of extra cards in this deck.  These are for Fusion, Synchro, and
@@ -74,7 +82,7 @@ yugi.model.Deck = function() {
    * @type {!yugi.model.CardList}
    * @private
    */
-  this.extraCardList_ = new yugi.model.CardList();
+  this.extraCardList_ = new yugi.model.CardList(extraArea);
 
   /**
    * The list of side cards in this deck.  These cards can be swapped with the
@@ -83,7 +91,7 @@ yugi.model.Deck = function() {
    * @type {!yugi.model.CardList}
    * @private
    */
-  this.sideCardList_ = new yugi.model.CardList();
+  this.sideCardList_ = new yugi.model.CardList(yugi.model.Area.UNSPECIFIED);
 };
 goog.inherits(yugi.model.Deck, goog.events.EventTarget);
 
@@ -465,9 +473,9 @@ yugi.model.Deck.prototype.setFromJson = function(json) {
   this.setStructure(
       goog.string.caseInsensitiveCompare(json['is-structure'], 'true') == 0);
 
-  this.mainCardList_ = new yugi.model.CardList();
-  this.extraCardList_ = new yugi.model.CardList();
-  this.sideCardList_ = new yugi.model.CardList();
+  this.mainCardList_.removeAll();
+  this.extraCardList_.removeAll();
+  this.sideCardList_.removeAll();
 
   var mainCardJson = json['main-card'];
   var mainCard = null;
