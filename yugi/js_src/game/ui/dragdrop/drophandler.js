@@ -13,8 +13,6 @@ goog.require('yugi.game.net.Channel');
 goog.require('yugi.game.service.Sync');
 goog.require('yugi.game.ui.dragdrop.DragDrop');
 goog.require('yugi.model.Area');
-goog.require('yugi.model.SpellCard');
-goog.require('yugi.model.TrapCard');
 
 
 
@@ -85,10 +83,10 @@ yugi.game.ui.dragdrop.DropHandler.prototype.onDrop_ = function(e) {
   // graveyard model can do all the correct chat things including always adding
   // to the top or bottom etc.  Do this for all the card stacks and stuff.
 
-  if (this.game_.getPlayer().getField().isZone(targetArea)) {
-    this.onZoneDrop_(sourceCard, targetArea);
-  } else if (targetArea == yugi.model.Area.PLAYER_FIELD) {
-    this.onFieldCardDrop_(sourceCard, targetArea);
+  if (this.game_.getPlayer().getField().hasArea(targetArea)) {
+    this.onFieldDrop_(sourceCard, targetArea);
+  } else if (yugi.model.Area.OPP_MONSTER_ZONES.contains(targetArea)) {
+    this.onOppMonsterDrop_(sourceCard, targetArea);
   } else {
     // The rest of the target areas are lists of cards.
     this.onListDrop_(sourceCard, targetArea);
@@ -100,12 +98,12 @@ yugi.game.ui.dragdrop.DropHandler.prototype.onDrop_ = function(e) {
 
 
 /**
- * Handles dropping the card in a valid zone.
+ * Handles dropping the card on the field.
  * @param {!yugi.model.Card} sourceCard The source card.
  * @param {!yugi.model.Area} targetArea The target area.
  * @private
  */
-yugi.game.ui.dragdrop.DropHandler.prototype.onZoneDrop_ = function(
+yugi.game.ui.dragdrop.DropHandler.prototype.onFieldDrop_ = function(
     sourceCard, targetArea) {
 
   // Do nothing unless the target zone is empty.
@@ -114,32 +112,18 @@ yugi.game.ui.dragdrop.DropHandler.prototype.onZoneDrop_ = function(
     return;
   }
 
-  // First, remove the card.
-  this.game_.getPlayer().removeCard(sourceCard);
-
-  // Do card transfer if one of the opponent monster zones was the target.
-  if (yugi.model.Area.OPP_MONSTER_ZONES.contains(targetArea)) {
-    var cardTransferMessage = new yugi.game.message.CardTransfer();
-    cardTransferMessage.setCardData(
-        yugi.game.data.CardData.createFromCard(sourceCard));
-    cardTransferMessage.setDestination(
-        yugi.game.message.CardTransfer.Location.FIELD);
-    this.channel_.send(cardTransferMessage);
+  // If it is the field card area, then make sure only field cards go there.
+  if (yugi.model.Area.PLAYER_FIELD == targetArea &&
+      !field.isFieldCard(sourceCard)) {
     return;
   }
 
-  // Don't change the card's flipped or rotated value if it's from the field.
-  if (!field.isZone(sourceCard.getLocation().getArea())) {
-    if (yugi.model.Area.SPELL_TRAP_ZONES.contains(targetArea) &&
-        sourceCard instanceof yugi.model.TrapCard) {
-      // Trap cards played in a spell/trap zone are set by default.
-      sourceCard.setFaceUp(false);
-    } else {
-      // Everything else is face up by default.
-      sourceCard.setFaceUp(true);
-    }
+  // First, remove the card.
+  this.game_.getPlayer().removeCard(sourceCard);
 
-    // No card should be rotated by default.
+  // Don't change the card's face up or rotated value if it's from the field.
+  if (!field.hasArea(sourceCard.getLocation().getArea())) {
+    sourceCard.setFaceUp(true);
     sourceCard.setRotated(false);
   }
 
@@ -149,33 +133,29 @@ yugi.game.ui.dragdrop.DropHandler.prototype.onZoneDrop_ = function(
 
 
 /**
- * Handles dropping the card in the field card area.
+ * Handles dropping the card on the opponent's monster zone.
  * @param {!yugi.model.Card} sourceCard The source card.
  * @param {!yugi.model.Area} targetArea The target area.
  * @private
  */
-yugi.game.ui.dragdrop.DropHandler.prototype.onFieldCardDrop_ = function(
+yugi.game.ui.dragdrop.DropHandler.prototype.onOppMonsterDrop_ = function(
     sourceCard, targetArea) {
 
-  // Make sure there's nothing there.
-  var field = this.game_.getPlayer().getField();
-  if (!field.isEmpty(targetArea)) {
+  // Make sure the opponent has room for the card.
+  if (!this.game_.getOpponent().getField().isEmpty(targetArea)) {
     return;
   }
 
-  // Only a field card can be dropped onto the field card area.
-  if (!(sourceCard instanceof yugi.model.SpellCard) ||
-      sourceCard.getSpellType() != yugi.model.SpellCard.Type.FIELD) {
-    return;
-  }
-
-  // Remove the card.
+  // First, remove the card.
   this.game_.getPlayer().removeCard(sourceCard);
 
-  // The new field card is placed face up and not rotated.
-  sourceCard.setFaceUp(true);
-  sourceCard.setRotated(false);
-  field.setCard(yugi.model.Area.PLAYER_FIELD, sourceCard);
+  // Transfer the card to the opponent.
+  var cardTransferMessage = new yugi.game.message.CardTransfer();
+  cardTransferMessage.setCardData(
+      yugi.game.data.CardData.createFromCard(sourceCard));
+  cardTransferMessage.setDestination(
+      yugi.game.message.CardTransfer.Location.FIELD);
+  this.channel_.send(cardTransferMessage);
 };
 
 

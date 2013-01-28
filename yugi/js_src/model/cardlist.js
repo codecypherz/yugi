@@ -39,6 +39,7 @@ yugi.model.CardList = function(area) {
 
   /**
    * @type {!yugi.model.Area}
+   * @const
    * @private
    */
   this.area_ = area;

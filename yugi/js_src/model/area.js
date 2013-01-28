@@ -52,7 +52,7 @@ yugi.model.Area = {
 
 /**
  * The set of areas that are player monster zones.
- * @type {!goog.structs.Set}
+ * @type {!goog.structs.Set.<!yugi.model.Area>}
  * @const
  */
 yugi.model.Area.PLAYER_MONSTER_ZONES = new goog.structs.Set([
@@ -66,7 +66,7 @@ yugi.model.Area.PLAYER_MONSTER_ZONES = new goog.structs.Set([
 
 /**
  * The set of areas that are opponent monster zones.
- * @type {!goog.structs.Set}
+ * @type {!goog.structs.Set.<!yugi.model.Area>}
  * @const
  */
 yugi.model.Area.OPP_MONSTER_ZONES = new goog.structs.Set([
@@ -80,7 +80,7 @@ yugi.model.Area.OPP_MONSTER_ZONES = new goog.structs.Set([
 
 /**
  * The set of areas that are monster zones.
- * @type {!goog.structs.Set}
+ * @type {!goog.structs.Set.<!yugi.model.Area>}
  * @const
  */
 yugi.model.Area.MONSTER_ZONES = new goog.structs.Set(goog.array.flatten(
@@ -90,7 +90,7 @@ yugi.model.Area.MONSTER_ZONES = new goog.structs.Set(goog.array.flatten(
 
 /**
  * The set of areas that are player spell/trap zones.
- * @type {!goog.structs.Set}
+ * @type {!goog.structs.Set.<!yugi.model.Area>}
  * @const
  */
 yugi.model.Area.PLAYER_SPELL_TRAP_ZONES = new goog.structs.Set([
@@ -104,7 +104,7 @@ yugi.model.Area.PLAYER_SPELL_TRAP_ZONES = new goog.structs.Set([
 
 /**
  * The set of areas that are opponent spell/trap zones.
- * @type {!goog.structs.Set}
+ * @type {!goog.structs.Set.<!yugi.model.Area>}
  * @const
  */
 yugi.model.Area.OPP_SPELL_TRAP_ZONES = new goog.structs.Set([
@@ -118,7 +118,7 @@ yugi.model.Area.OPP_SPELL_TRAP_ZONES = new goog.structs.Set([
 
 /**
  * The set of areas that are spell/trap zones.
- * @type {!goog.structs.Set}
+ * @type {!goog.structs.Set.<!yugi.model.Area>}
  * @const
  */
 yugi.model.Area.SPELL_TRAP_ZONES = new goog.structs.Set(goog.array.flatten(
