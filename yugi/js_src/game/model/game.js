@@ -24,6 +24,19 @@ yugi.game.model.Game = function(deckService, cardCache) {
   goog.base(this);
 
   /**
+   * The game's key on the server.
+   * @type {string}
+   * @private
+   */
+  this.key_ = '';
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.opponentJoined_ = false;
+
+  /**
    * The "self" player or this client's player.
    * @type {!yugi.game.model.player.Player}
    * @private
@@ -48,21 +61,6 @@ goog.inherits(yugi.game.model.Game, goog.events.EventTarget);
  */
 yugi.game.model.Game.prototype.logger = goog.debug.Logger.getLogger(
     'yugi.game.model.Game');
-
-
-/**
- * The game's key on the server.
- * @type {string}
- * @private
- */
-yugi.game.model.Game.prototype.key_ = '';
-
-
-/**
- * @type {boolean}
- * @private
- */
-yugi.game.model.Game.prototype.opponentJoined_ = false;
 
 
 /**
@@ -201,9 +199,8 @@ yugi.game.model.Game.prototype.toData = function() {
 /**
  * Sets this game state based on the given game data.
  * @param {!yugi.game.data.GameData} gameData The game data.
- * @param {!yugi.model.CardCache} cardCache The cache of cards.
  */
-yugi.game.model.Game.prototype.setFromData = function(gameData, cardCache) {
+yugi.game.model.Game.prototype.setFromData = function(gameData) {
   this.logger.info('Setting from game data.');
 
   // Sanity check.
@@ -216,8 +213,8 @@ yugi.game.model.Game.prototype.setFromData = function(gameData, cardCache) {
   }
 
   // Flip player/opponent data.
-  this.player_.setFromData(gameData.getOpponentData(), cardCache);
-  this.opponent_.setFromData(gameData.getPlayerData(), cardCache);
+  this.player_.setFromData(gameData.getOpponentData());
+  this.opponent_.setFromData(gameData.getPlayerData());
 
   // The opponent is considered joined because you can't get this game data
   // without the opponent sending it to this client.

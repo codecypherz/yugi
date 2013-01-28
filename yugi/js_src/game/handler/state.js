@@ -16,11 +16,10 @@ goog.require('yugi.game.message.State');
  * Handles the state message.
  * @param {!yugi.game.net.Channel} channel The channel for communication.
  * @param {!yugi.game.model.Game} game The game object.
- * @param {!yugi.model.CardCache} cardCache The card cache.
  * @constructor
  * @extends {goog.Disposable}
  */
-yugi.game.handler.State = function(channel, game, cardCache) {
+yugi.game.handler.State = function(channel, game) {
   goog.base(this);
 
   /**
@@ -28,12 +27,6 @@ yugi.game.handler.State = function(channel, game, cardCache) {
    * @private
    */
   this.game_ = game;
-
-  /**
-   * @type {!yugi.model.CardCache}
-   * @private
-   */
-  this.cardCache_ = cardCache;
 
   var handler = new goog.events.EventHandler(this);
   this.registerDisposable(handler);
@@ -75,15 +68,13 @@ yugi.game.handler.State.prototype.onState_ = function(e) {
     case yugi.game.message.State.Type.GAME:
       this.logger.info('Setting the game state.');
       this.game_.setFromData(
-          /** @type {!yugi.game.data.GameData} */ (data),
-          this.cardCache_);
+          /** @type {!yugi.game.data.GameData} */ (data));
       break;
 
     case yugi.game.message.State.Type.PLAYER:
       this.logger.info('Setting the opponent\'s state.');
       this.game_.getOpponent().setFromData(
-          /** @type {!yugi.game.data.PlayerData} */ (data),
-          this.cardCache_);
+          /** @type {!yugi.game.data.PlayerData} */ (data));
       break;
 
     default:

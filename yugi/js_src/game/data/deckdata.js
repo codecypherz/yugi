@@ -13,8 +13,8 @@ goog.require('yugi.model.Serializable');
 /**
  * The minimum set of data to send when synchronizing game state.
  * @constructor
- * @implements {yugi.model.Serializable}
  * @extends {goog.Disposable}
+ * @implements {yugi.model.Serializable}
  */
 yugi.game.data.DeckData = function() {
 

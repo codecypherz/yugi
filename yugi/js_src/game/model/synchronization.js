@@ -237,7 +237,7 @@ yugi.game.model.Synchronization.prototype.start = function(gameData) {
   if (this.numDecksToLoad_ == 0) {
     this.logger.info(
         'Neither player has selected a deck, so synchronization is finished.');
-    this.game_.setFromData(this.gameData_, this.cardCache_);
+    this.game_.setFromData(this.gameData_);
     this.state_ = yugi.game.model.Synchronization.State.FINISHED;
     this.dispatchEvent(yugi.game.model.Synchronization.EventType.FINISHED);
   }
@@ -311,7 +311,7 @@ yugi.game.model.Synchronization.prototype.maybeFinish_ = function() {
     }
 
     // Set the game info and tell everyone we are done.
-    this.game_.setFromData(this.gameData_, this.cardCache_);
+    this.game_.setFromData(this.gameData_);
     this.state_ = yugi.game.model.Synchronization.State.FINISHED;
     this.dispatchEvent(yugi.game.model.Synchronization.EventType.FINISHED);
   }

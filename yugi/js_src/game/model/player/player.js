@@ -460,10 +460,10 @@ yugi.game.model.player.Player.prototype.toData = function() {
 /**
  * Sets this state based on the given data.
  * @param {!yugi.game.data.PlayerData} playerData The data.
- * @param {!yugi.model.CardCache} cardCache The cache of cards.
  */
-yugi.game.model.player.Player.prototype.setFromData = function(
-    playerData, cardCache) {
+yugi.game.model.player.Player.prototype.setFromData = function(playerData) {
+
+  var cardCache = this.cardCache_;
 
   // Only set the name if it is unknown.
   if (!this.name_) {
