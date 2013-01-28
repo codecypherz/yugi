@@ -123,7 +123,7 @@ yugi.game.handler.CardTransfer.prototype.onCardTransfer_ = function(e) {
         var fieldArea = yugi.model.Area.PLAYER_FIELD;
         var oldFieldCard = field.setCard(fieldArea, null);
         if (oldFieldCard) {
-          field.getGraveyard().add(oldFieldCard);
+          player.getGraveyard().add(oldFieldCard);
           this.chat_.sendSystemRemote(oName + ' transferred ' + cName +
               ' to ' + pName + '\'s field zone which sent ' +
               oldFieldCard.getName() + ' to the graveyard.');

@@ -13,7 +13,9 @@ goog.require('goog.math');
 goog.require('goog.math.Range');
 goog.require('yugi.game.data.DeckData');
 goog.require('yugi.game.data.PlayerData');
+goog.require('yugi.game.model.field.Banish');
 goog.require('yugi.game.model.field.Field');
+goog.require('yugi.game.model.field.Graveyard');
 goog.require('yugi.model.Area');
 goog.require('yugi.model.CardList');
 goog.require('yugi.model.Deck');
@@ -52,6 +54,13 @@ yugi.game.model.Player = function(deckService, cardCache, isOpponent) {
   this.cardCache_ = cardCache;
 
   /**
+   * True if this player is the opponent, false otherwise.
+   * @type {boolean}
+   * @private
+   */
+  this.isOpponent_ = isOpponent;
+
+  /**
    * The original, unmodified deck as defined by the server.  Do not modify this
    * object except when setting it after receiving it from the server.  This is
    * used when resetting the player's cards and is the state authority.
@@ -67,6 +76,8 @@ yugi.game.model.Player = function(deckService, cardCache, isOpponent) {
   this.deck_ = new yugi.model.Deck();
   this.setDeckArea_();
 
+  // TODO Move hand into its own class.
+
   /**
    * @type {!yugi.model.CardList}
    * @private
@@ -77,6 +88,18 @@ yugi.game.model.Player = function(deckService, cardCache, isOpponent) {
   } else {
     this.hand_.setArea(yugi.model.Area.PLAYER_HAND);
   }
+
+  /**
+   * @type {!yugi.game.model.field.Graveyard}
+   * @private
+   */
+  this.graveyard_ = new yugi.game.model.field.Graveyard(isOpponent);
+
+  /**
+   * @type {!yugi.game.model.field.Banish}
+   * @private
+   */
+  this.banish_ = new yugi.game.model.field.Banish(isOpponent);
 
   /**
    * @type {!yugi.game.model.field.Field}
@@ -104,13 +127,6 @@ yugi.game.model.Player = function(deckService, cardCache, isOpponent) {
    * @private
    */
   this.deckSelected_ = false;
-
-  /**
-   * True if this player is the opponent, false otherwise.
-   * @type {boolean}
-   * @private
-   */
-  this.isOpponent_ = isOpponent;
 
   /**
    * True if this player's deck has loaded.  This is not data that needs to be
@@ -279,6 +295,22 @@ yugi.game.model.Player.prototype.getHand = function() {
 
 
 /**
+ * @return {!yugi.game.model.field.Graveyard} The graveyard.
+ */
+yugi.game.model.Player.prototype.getGraveyard = function() {
+  return this.graveyard_;
+};
+
+
+/**
+ * @return {!yugi.game.model.field.Banish} The banished cards.
+ */
+yugi.game.model.Player.prototype.getBanish = function() {
+  return this.banish_;
+};
+
+
+/**
  * @return {!yugi.game.model.field.Field} The player's field.
  */
 yugi.game.model.Player.prototype.getField = function() {
@@ -344,6 +376,8 @@ yugi.game.model.Player.prototype.reset = function() {
   this.setLifePoints(yugi.game.model.Player.STARTING_LIFE_POINTS_);
 
   this.hand_.removeAll();
+  this.graveyard_.removeAll();
+  this.banish_.removeAll();
   this.field_.removeAll();
 
   this.deck_ = this.originalDeckReadOnly_.clone();
@@ -360,24 +394,13 @@ yugi.game.model.Player.prototype.reset = function() {
  * @return {boolean} True if the card was removed or not.
  */
 yugi.game.model.Player.prototype.removeCard = function(card) {
-
-  // Try the field first, then the hand, then the deck.  The order was chosen
-  // based on likelihood use of this feature.
-
-  var removed = this.field_.removeCard(card);
-  if (!removed) {
-    removed = this.hand_.remove(card);
-  }
-  if (!removed) {
-    removed = this.deck_.remove(card, yugi.model.Deck.Type.MAIN);
-  }
-  if (!removed) {
-    removed = this.deck_.remove(card, yugi.model.Deck.Type.EXTRA);
-  }
-  if (!removed) {
-    removed = this.deck_.remove(card, yugi.model.Deck.Type.SIDE);
-  }
-  return removed;
+  return this.field_.removeCard(card) ||
+      this.hand_.remove(card) ||
+      this.graveyard_.remove(card) ||
+      this.banish_.remove(card) ||
+      this.deck_.remove(card, yugi.model.Deck.Type.MAIN) ||
+      this.deck_.remove(card, yugi.model.Deck.Type.EXTRA) ||
+      this.deck_.remove(card, yugi.model.Deck.Type.SIDE);
 };
 
 
@@ -429,6 +452,8 @@ yugi.game.model.Player.prototype.toData = function() {
   playerData.setDeckSelected(this.deckSelected_);
   playerData.setDeckData(deckData);
   playerData.setHandData(this.hand_.toData());
+  playerData.setGraveyardData(this.graveyard_.toData());
+  playerData.setBanishData(this.banish_.toData());
   playerData.setFieldData(this.field_.toData());
   playerData.setLifePoints(this.lifePoints_);
 
@@ -461,6 +486,12 @@ yugi.game.model.Player.prototype.setFromData = function(playerData, cardCache) {
 
   // Synchronize the hand.
   this.hand_.setFromData(playerData.getHandData(), cardCache);
+
+  // Synchronize the graveyard.
+  this.graveyard_.setFromData(playerData.getGraveyardData(), cardCache);
+
+  // Synchronize the banish.
+  this.banish_.setFromData(playerData.getBanishData(), cardCache);
 
   // Synchronize the field.
   this.field_.setFromData(playerData.getFieldData(), cardCache);

@@ -344,12 +344,12 @@ yugi.game.ui.zone.Monster.prototype.renderCard_ = function() {
 
     // Send to graveyard.
     actions.push(new yugi.game.action.FieldToList(
-        'Send to graveyard', card, zone, player, field.getGraveyard(),
+        'Send to graveyard', card, zone, player, player.getGraveyard(),
         pName + ' sent ' + cName + ' to the graveyard', true));
 
     // Banish.
     actions.push(new yugi.game.action.FieldToList(
-        'Banish', card, zone, player, field.getBanish(),
+        'Banish', card, zone, player, player.getBanish(),
         pName + ' banished ' + cName, true));
 
     // Add counter.

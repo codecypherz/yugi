@@ -5,7 +5,6 @@
 goog.provide('yugi.game.data.FieldData');
 
 goog.require('goog.Disposable');
-goog.require('yugi.data.CardListData');
 goog.require('yugi.game.data.CardData');
 goog.require('yugi.model.Serializable');
 goog.require('yugi.model.util');
@@ -32,18 +31,6 @@ yugi.game.data.FieldData = function() {
    * @private
    */
   this.spellTraps_ = new Array(5);
-
-  /**
-   * @type {!yugi.data.CardListData}
-   * @private
-   */
-  this.graveyardData_ = new yugi.data.CardListData();
-
-  /**
-   * @type {!yugi.data.CardListData}
-   * @private
-   */
-  this.banishData_ = new yugi.data.CardListData();
 
   /**
    * @type {yugi.game.data.CardData}
@@ -87,38 +74,6 @@ yugi.game.data.FieldData.prototype.setSpellTraps = function(spellTraps) {
 
 
 /**
- * @return {!yugi.data.CardListData} The player's graveyard.
- */
-yugi.game.data.FieldData.prototype.getGraveyardData = function() {
-  return this.graveyardData_;
-};
-
-
-/**
- * @param {!yugi.data.CardListData} graveyardData The player's graveyard.
- */
-yugi.game.data.FieldData.prototype.setGraveyardData = function(graveyardData) {
-  this.graveyardData_ = graveyardData;
-};
-
-
-/**
- * @return {!yugi.data.CardListData} The player's banish pile.
- */
-yugi.game.data.FieldData.prototype.getBanishData = function() {
-  return this.banishData_;
-};
-
-
-/**
- * @param {!yugi.data.CardListData} banishData The player's banish pile.
- */
-yugi.game.data.FieldData.prototype.setBanishData = function(banishData) {
-  this.banishData_ = banishData;
-};
-
-
-/**
  * @return {yugi.game.data.CardData} The player's field card.
  */
 yugi.game.data.FieldData.prototype.getFieldCardData = function() {
@@ -139,8 +94,6 @@ yugi.game.data.FieldData.prototype.toJson = function() {
   var json = {};
   json['ma'] = yugi.model.util.toJsonArray(this.monsters_);
   json['sta'] = yugi.model.util.toJsonArray(this.spellTraps_);
-  json['g'] = this.graveyardData_.toJson();
-  json['b'] = this.banishData_.toJson();
   json['f'] = this.fieldCardData_ ? this.fieldCardData_.toJson() : null;
   return json;
 };
@@ -178,16 +131,6 @@ yugi.game.data.FieldData.prototype.setFromJson = function(json) {
     }
   }
   this.spellTraps_ = spellTraps;
-
-  // Graveyard
-  var graveyardData = new yugi.data.CardListData();
-  graveyardData.setFromJson(json['g']);
-  this.graveyardData_ = graveyardData;
-
-  // Banish
-  var banishData = new yugi.data.CardListData();
-  banishData.setFromJson(json['b']);
-  this.banishData_ = banishData;
 
   // Field card
   var fieldCardDataJson = json['f'];

@@ -117,17 +117,13 @@ yugi.game.action.ListToField.prototype.fire = function() {
     if (spellTrapCard instanceof yugi.model.SpellCard &&
         spellTrapCard.getSpellType() == yugi.model.SpellCard.Type.FIELD) {
 
-      // Send the old field card to the graveyard, if there was one.
-      var fieldArea = yugi.model.Area.PLAYER_FIELD;
-      var oldFieldCard = field.setCard(fieldArea, null);
-      if (oldFieldCard) {
-        field.getGraveyard().add(oldFieldCard);
-        chatText = this.player_.getName() + ' sent ' + this.card_.getName() +
-            ' to the graveyard';
+      // Make sure the field card spot is open.
+      if (field.getFieldCard()) {
+        this.chat_.sendSystemLocal('Remove the existing field card first.');
       }
 
       // Set the new field card.
-      field.setCard(fieldArea, spellTrapCard);
+      field.setCard(yugi.model.Area.PLAYER_FIELD, spellTrapCard);
 
       // Chat about the change.
       if (this.faceUp_) {

@@ -119,7 +119,7 @@ yugi.game.ui.field.Deck.prototype.onCardsChanged_ = function() {
         pName + ' drew ' + cName + '.'));
 
     actions.push(new yugi.game.action.ListToList('Discard',
-        card, mainCardList, player.getField().getGraveyard(),
+        card, mainCardList, player.getGraveyard(),
         pName + ' discarded ' + cName + ' from the top of their deck.', true));
 
     actions.push(new yugi.game.action.Shuffle('Shuffle',
@@ -183,11 +183,11 @@ yugi.game.ui.field.Deck.prototype.createActions_ = function(card) {
 
   // Graveyard/Banish
   actions.push(new yugi.game.action.ListToList('Send to graveyard',
-      card, mainCards, player.getField().getGraveyard(),
+      card, mainCards, player.getGraveyard(),
       pName + ' sent ' + cName +
           ' to the graveyard from their deck.', true));
   actions.push(new yugi.game.action.ListToList('Banish',
-      card, mainCards, player.getField().getBanish(),
+      card, mainCards, player.getBanish(),
       pName + ' banished ' + cName + ' from their deck.', true));
 
   return actions;

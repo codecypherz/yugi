@@ -42,7 +42,7 @@ goog.inherits(yugi.game.ui.field.Graveyard, yugi.game.ui.field.Stack);
 yugi.game.ui.field.Graveyard.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
 
-  this.getHandler().listen(this.player_.getField().getGraveyard(),
+  this.getHandler().listen(this.player_.getGraveyard(),
       yugi.model.CardList.EventType.CARDS_CHANGED,
       this.onCardsChanged_);
 
@@ -61,7 +61,7 @@ yugi.game.ui.field.Graveyard.prototype.getLabel = function() {
  * @private
  */
 yugi.game.ui.field.Graveyard.prototype.onCardsChanged_ = function() {
-  var graveyard = this.player_.getField().getGraveyard();
+  var graveyard = this.player_.getGraveyard();
 
   var actions = [];
 
@@ -91,7 +91,7 @@ yugi.game.ui.field.Graveyard.prototype.createActions_ = function(card) {
   }
 
   var actions = [];
-  var graveyard = player.getField().getGraveyard();
+  var graveyard = player.getGraveyard();
   var cName = card.getName();
   var pName = player.getName();
 
@@ -126,7 +126,7 @@ yugi.game.ui.field.Graveyard.prototype.createActions_ = function(card) {
 
   // You can banish every card.
   actions.push(new yugi.game.action.ListToList('Banish',
-      card, graveyard, player.getField().getBanish(),
+      card, graveyard, player.getBanish(),
       pName + ' banished ' + cName + ' from the graveyard.', true));
 
   // Return to deck.

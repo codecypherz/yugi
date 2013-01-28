@@ -202,13 +202,13 @@ yugi.game.ui.dragdrop.DropHandler.prototype.onListDrop_ = function(
 
   switch (targetArea) {
     case yugi.model.Area.PLAYER_GRAVEYARD:
-      field.getGraveyard().add(sourceCard, true);
+      player.getGraveyard().add(sourceCard, true);
       break;
     case yugi.model.Area.PLAYER_HAND:
       player.getHand().add(sourceCard);
       break;
     case yugi.model.Area.PLAYER_BANISH:
-      field.getBanish().add(sourceCard, true);
+      player.getBanish().add(sourceCard, true);
       break;
     case yugi.model.Area.PLAYER_DECK:
       sourceCard.setFaceUp(false);

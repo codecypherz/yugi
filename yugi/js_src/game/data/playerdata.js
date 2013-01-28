@@ -68,6 +68,18 @@ yugi.game.data.PlayerData = function() {
   this.handData_ = new yugi.data.CardListData();
 
   /**
+   * @type {!yugi.data.CardListData}
+   * @private
+   */
+  this.graveyardData_ = new yugi.data.CardListData();
+
+  /**
+   * @type {!yugi.data.CardListData}
+   * @private
+   */
+  this.banishData_ = new yugi.data.CardListData();
+
+  /**
    * @type {!yugi.game.data.FieldData}
    * @private
    */
@@ -157,6 +169,38 @@ yugi.game.data.PlayerData.prototype.setHandData = function(handData) {
 
 
 /**
+ * @return {!yugi.data.CardListData} The player's graveyard.
+ */
+yugi.game.data.PlayerData.prototype.getGraveyardData = function() {
+  return this.graveyardData_;
+};
+
+
+/**
+ * @param {!yugi.data.CardListData} graveyardData The player's graveyard.
+ */
+yugi.game.data.PlayerData.prototype.setGraveyardData = function(graveyardData) {
+  this.graveyardData_ = graveyardData;
+};
+
+
+/**
+ * @return {!yugi.data.CardListData} The player's banish pile.
+ */
+yugi.game.data.PlayerData.prototype.getBanishData = function() {
+  return this.banishData_;
+};
+
+
+/**
+ * @param {!yugi.data.CardListData} banishData The player's banish pile.
+ */
+yugi.game.data.PlayerData.prototype.setBanishData = function(banishData) {
+  this.banishData_ = banishData;
+};
+
+
+/**
  * @return {!yugi.game.data.FieldData} The player's field.
  */
 yugi.game.data.PlayerData.prototype.getFieldData = function() {
@@ -212,6 +256,8 @@ yugi.game.data.PlayerData.prototype.toJson = function() {
   json['o'] = this.isOpponent_;
   json['ds'] = this.deckSelected_;
   json['h'] = this.handData_.toJson();
+  json['g'] = this.graveyardData_.toJson();
+  json['b'] = this.banishData_.toJson();
   json['f'] = this.fieldData_.toJson();
   json['c'] = this.connected_;
   json['lp'] = this.lifePoints_;
@@ -223,19 +269,33 @@ yugi.game.data.PlayerData.prototype.toJson = function() {
 yugi.game.data.PlayerData.prototype.setFromJson = function(json) {
   this.name_ = json['n'];
 
+  // Deck
   var deckData = new yugi.game.data.DeckData();
   deckData.setFromJson(json['d']);
   this.deckData_ = deckData;
   this.deckSelected_ = json['ds'];
 
+  // Hand
   var handData = new yugi.data.CardListData();
   handData.setFromJson(json['h']);
   this.handData_ = handData;
 
+  // Graveyard
+  var graveyardData = new yugi.data.CardListData();
+  graveyardData.setFromJson(json['g']);
+  this.graveyardData_ = graveyardData;
+
+  // Banish
+  var banishData = new yugi.data.CardListData();
+  banishData.setFromJson(json['b']);
+  this.banishData_ = banishData;
+
+  // Field
   var fieldData = new yugi.game.data.FieldData();
   fieldData.setFromJson(json['f']);
   this.fieldData_ = fieldData;
 
+  // Other
   this.connected_ = json['c'];
   this.isOpponent_ = json['o'];
   this.lifePoints_ = json['lp'];

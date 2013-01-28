@@ -148,10 +148,10 @@ yugi.game.ui.hand.PlayerHand.prototype.onCardsChanged_ = function() {
 
     // Graveyard/Banish
     actions.push(new yugi.game.action.ListToList('Send to graveyard',
-        card, hand, player.getField().getGraveyard(),
+        card, hand, player.getGraveyard(),
         pName + ' sent ' + cName + ' from their hand to the graveyard.', true));
     actions.push(new yugi.game.action.ListToList('Banish',
-        card, hand, player.getField().getBanish(),
+        card, hand, player.getBanish(),
         pName + ' banished ' + cName + ' from their hand.', true));
 
     // Deck

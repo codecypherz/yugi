@@ -41,7 +41,7 @@ goog.inherits(yugi.game.ui.field.Banish, yugi.game.ui.field.Stack);
 yugi.game.ui.field.Banish.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
 
-  this.getHandler().listen(this.player_.getField().getBanish(),
+  this.getHandler().listen(this.player_.getBanish(),
       yugi.model.CardList.EventType.CARDS_CHANGED,
       this.onCardsChanged_);
 
@@ -60,7 +60,7 @@ yugi.game.ui.field.Banish.prototype.getLabel = function() {
  * @private
  */
 yugi.game.ui.field.Banish.prototype.onCardsChanged_ = function() {
-  var banishedCards = this.player_.getField().getBanish();
+  var banishedCards = this.player_.getBanish();
 
   var actions = [];
 
@@ -90,7 +90,7 @@ yugi.game.ui.field.Banish.prototype.createActions_ = function(card) {
   }
 
   var actions = [];
-  var banish = player.getField().getBanish();
+  var banish = player.getBanish();
   var cName = card.getName();
   var pName = player.getName();
 
@@ -125,7 +125,7 @@ yugi.game.ui.field.Banish.prototype.createActions_ = function(card) {
 
   // You can send any card to the graveyard.
   actions.push(new yugi.game.action.ListToList('Send to graveyard',
-      card, banish, player.getField().getGraveyard(),
+      card, banish, player.getGraveyard(),
       pName + ' sent ' + cName + ' from the banish pile to the graveyard.',
       true));
 

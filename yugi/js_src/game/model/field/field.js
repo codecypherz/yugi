@@ -11,8 +11,6 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.structs.Set');
 goog.require('yugi.game.data.CardData');
 goog.require('yugi.game.data.FieldData');
-goog.require('yugi.game.model.field.Banish');
-goog.require('yugi.game.model.field.Graveyard');
 goog.require('yugi.model.Area');
 
 
@@ -49,21 +47,6 @@ yugi.game.model.field.Field = function(isOpponent) {
     this.monsterZone_[i] = null;
     this.spellTrapZone_[i] = null;
   }
-
-  // TODO Move graveyard and banish up to player.  They are not technically part
-  // of the field.
-
-  /**
-   * @type {!yugi.game.model.field.Graveyard}
-   * @private
-   */
-  this.graveyard_ = new yugi.game.model.field.Graveyard(isOpponent);
-
-  /**
-   * @type {!yugi.game.model.field.Banish}
-   * @private
-   */
-  this.banish_ = new yugi.game.model.field.Banish(isOpponent);
 
   /**
    * @type {boolean}
@@ -263,50 +246,14 @@ yugi.game.model.field.Field.prototype.removeSpellTrapCard = function(zone) {
 
 
 /**
- * @return {!yugi.game.model.field.Graveyard} The graveyard.
- */
-yugi.game.model.field.Field.prototype.getGraveyard = function() {
-  return this.graveyard_;
-};
-
-
-/**
- * @return {!yugi.game.model.field.Banish} The banished cards.
- */
-yugi.game.model.field.Field.prototype.getBanish = function() {
-  return this.banish_;
-};
-
-
-/**
- * Removes all the cards from the field and returns them.
- * @return {!Array.<!yugi.model.Card>} The cards that were removed.
+ * Removes all the cards from the field.
  */
 yugi.game.model.field.Field.prototype.removeAll = function() {
-  var cards = [];
-
-  // Remove all the monster, spell, trap, and field cards.
   goog.array.forEach(
       yugi.game.model.field.Field.ZONES_.getValues(),
       function(area) {
-        var card = this.setCard(area, null);
-        if (card) {
-          cards.push(card);
-        }
+        this.setCard(area, null);
       }, this);
-
-  // Remove everything from the graveyard.
-  goog.array.forEach(this.graveyard_.removeAll(), function(card) {
-    cards.push(card);
-  });
-
-  // Remove all the banished cards.
-  goog.array.forEach(this.banish_.removeAll(), function(card) {
-    cards.push(card);
-  });
-
-  // Return all the cards that were returned.
-  return cards;
 };
 
 
@@ -334,16 +281,6 @@ yugi.game.model.field.Field.prototype.removeCard = function(cardToRemove) {
   // If the card was found, remove it.
   if (found && areaWithCard) {
     this.setCard(areaWithCard, null);
-    return true;
-  }
-
-  // Now check the graveyard.
-  if (this.graveyard_.remove(cardToRemove)) {
-    return true;
-  }
-
-  // Now check the banished cards.
-  if (this.banish_.remove(cardToRemove)) {
     return true;
   }
 
@@ -390,10 +327,6 @@ yugi.game.model.field.Field.prototype.toData = function() {
   }
   fieldData.setFieldCardData(fieldCardData);
 
-  // Fill in other data.
-  fieldData.setGraveyardData(this.graveyard_.toData());
-  fieldData.setBanishData(this.banish_.toData());
-
   return fieldData;
 };
 
@@ -433,12 +366,6 @@ yugi.game.model.field.Field.prototype.setFromData = function(
       yugi.game.model.field.Field.EventType.SPELLS_TRAPS_CHANGED);
   this.dispatchEvent(
       yugi.game.model.field.Field.EventType.FIELD_CARD_CHANGED);
-
-  // Graveyard
-  this.graveyard_.setFromData(fieldData.getGraveyardData(), cardCache);
-
-  // Banish
-  this.banish_.setFromData(fieldData.getBanishData(), cardCache);
 };
 
 
