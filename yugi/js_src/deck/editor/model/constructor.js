@@ -3,12 +3,10 @@
  */
 
 goog.provide('yugi.deck.editor.model.Constructor');
-goog.provide('yugi.deck.editor.model.Constructor.CardsChangedEvent');
 goog.provide('yugi.deck.editor.model.Constructor.EventType');
 
 goog.require('goog.debug.Logger');
 goog.require('goog.events');
-goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('yugi.model.Deck');
@@ -25,6 +23,13 @@ goog.require('yugi.service.DeckService');
  */
 yugi.deck.editor.model.Constructor = function(notifier, deckService) {
   goog.base(this);
+
+  /**
+   * @type {!goog.debug.Logger}
+   * @protected
+   */
+  this.logger = goog.debug.Logger.getLogger(
+      'yugi.deck.editor.model.Constructor');
 
   /**
    * @type {!yugi.model.Notifier}
@@ -78,14 +83,6 @@ goog.inherits(yugi.deck.editor.model.Constructor, goog.events.EventTarget);
 
 
 /**
- * @type {!goog.debug.Logger}
- * @protected
- */
-yugi.deck.editor.model.Constructor.prototype.logger =
-    goog.debug.Logger.getLogger('yugi.deck.editor.model.Constructor');
-
-
-/**
  * @type {!yugi.deck.editor.model.Constructor}
  * @private
  */
@@ -97,8 +94,7 @@ yugi.deck.editor.model.Constructor.instance_;
  * @enum {string}
  */
 yugi.deck.editor.model.Constructor.EventType = {
-  CARDS_CHANGED: goog.events.getUniqueId('cards-changed'),
-  DECK_CHANGED: goog.events.getUniqueId('deck-changed'),
+  DECK_LOADED: goog.events.getUniqueId('deck-changed'),
   STATUS_CHANGED: goog.events.getUniqueId('status-changed')
 };
 
@@ -120,27 +116,6 @@ yugi.deck.editor.model.Constructor.Status = {
  * @const
  */
 yugi.deck.editor.model.Constructor.DEFAULT_NAME = 'Untitled Deck';
-
-
-/**
- * Registers an instance of the model.
- * @param {!yugi.model.Notifier} notifier The notifier.
- * @param {!yugi.service.DeckService} deckService The deck service.
- * @return {!yugi.deck.editor.model.Constructor} The registered instance.
- */
-yugi.deck.editor.model.Constructor.register = function(notifier, deckService) {
-  yugi.deck.editor.model.Constructor.instance_ =
-      new yugi.deck.editor.model.Constructor(notifier, deckService);
-  return yugi.deck.editor.model.Constructor.get();
-};
-
-
-/**
- * @return {!yugi.deck.editor.model.Constructor} The model for the constructor.
- */
-yugi.deck.editor.model.Constructor.get = function() {
-  return yugi.deck.editor.model.Constructor.instance_;
-};
 
 
 /**
@@ -182,8 +157,6 @@ yugi.deck.editor.model.Constructor.prototype.addCard = function(card) {
       this.deckType_ + ' deck.');
   this.deck_.add(card, this.deckType_);
   this.deck_.sort();
-  this.dispatchEvent(
-      new yugi.deck.editor.model.Constructor.CardsChangedEvent(this.deck_));
 
   // Save the deck.
   this.save_();
@@ -206,8 +179,6 @@ yugi.deck.editor.model.Constructor.prototype.removeCard = function(card) {
 
   // Remove the card and dispatch the event.
   this.deck_.remove(card, this.deckType_);
-  this.dispatchEvent(
-      new yugi.deck.editor.model.Constructor.CardsChangedEvent(this.deck_));
 
   // Save the deck.
   this.save_();
@@ -265,12 +236,7 @@ yugi.deck.editor.model.Constructor.prototype.onDeckLoaded_ = function(e) {
   this.deck_ = e.deck;
   this.deck_.sort();
 
-  this.dispatchEvent(yugi.deck.editor.model.Constructor.EventType.DECK_CHANGED);
-
-  // TODO(jdeyerle): Maybe stop dispatching this event here since the deck
-  // changed event could be used instead.
-  this.dispatchEvent(
-      new yugi.deck.editor.model.Constructor.CardsChangedEvent(this.deck_));
+  this.dispatchEvent(yugi.deck.editor.model.Constructor.EventType.DECK_LOADED);
 };
 
 
@@ -327,20 +293,22 @@ yugi.deck.editor.model.Constructor.prototype.setStatus_ = function(status) {
 };
 
 
+/**
+ * Registers an instance of the model.
+ * @param {!yugi.model.Notifier} notifier The notifier.
+ * @param {!yugi.service.DeckService} deckService The deck service.
+ * @return {!yugi.deck.editor.model.Constructor} The registered instance.
+ */
+yugi.deck.editor.model.Constructor.register = function(notifier, deckService) {
+  yugi.deck.editor.model.Constructor.instance_ =
+      new yugi.deck.editor.model.Constructor(notifier, deckService);
+  return yugi.deck.editor.model.Constructor.get();
+};
+
 
 /**
- * This event gets fired when a card in the deck changes.
- * @param {!yugi.model.Deck} deck The deck that changed.
- * @constructor
- * @extends {goog.events.Event}
+ * @return {!yugi.deck.editor.model.Constructor} The model for the constructor.
  */
-yugi.deck.editor.model.Constructor.CardsChangedEvent = function(deck) {
-  goog.base(this, yugi.deck.editor.model.Constructor.EventType.CARDS_CHANGED);
-
-  /**
-   * @type {!yugi.model.Deck}
-   */
-  this.deck = deck;
+yugi.deck.editor.model.Constructor.get = function() {
+  return yugi.deck.editor.model.Constructor.instance_;
 };
-goog.inherits(yugi.deck.editor.model.Constructor.CardsChangedEvent,
-    goog.events.Event);

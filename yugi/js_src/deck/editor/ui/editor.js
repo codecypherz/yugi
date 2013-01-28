@@ -7,6 +7,7 @@ goog.provide('yugi.deck.editor.ui.Editor');
 goog.require('goog.array');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom.classes');
+goog.require('goog.events.EventHandler');
 goog.require('goog.soy');
 goog.require('goog.style');
 goog.require('goog.ui.Button');
@@ -14,6 +15,7 @@ goog.require('goog.ui.Component');
 goog.require('yugi.deck.editor.model.Constructor');
 goog.require('yugi.deck.editor.ui.DeckBrowser');
 goog.require('yugi.deck.editor.ui.soy');
+goog.require('yugi.model.CardList');
 goog.require('yugi.model.Deck');
 
 
@@ -25,6 +27,12 @@ goog.require('yugi.model.Deck');
  */
 yugi.deck.editor.ui.Editor = function() {
   goog.base(this);
+
+  /**
+   * @type {!goog.debug.Logger}
+   * @protected
+   */
+  this.logger = goog.debug.Logger.getLogger('yugi.deck.editor.ui.Editor');
 
   /**
    * @type {!yugi.deck.editor.model.Constructor}
@@ -86,37 +94,33 @@ yugi.deck.editor.ui.Editor = function() {
   this.browsers_.push(this.mainBrowser_);
   this.browsers_.push(this.extraBrowser_);
   this.browsers_.push(this.sideBrowser_);
+
+  /**
+   * @type {Element}
+   * @private
+   */
+  this.mainButtonElement_ = null;
+
+  /**
+   * @type {Element}
+   * @private
+   */
+  this.extraButtonElement_ = null;
+
+  /**
+   * @type {Element}
+   * @private
+   */
+  this.sideButtonElement_ = null;
+
+  /**
+   * @type {!goog.events.EventHandler}
+   * @private
+   */
+  this.deckHandler_ = new goog.events.EventHandler(this);
+  this.registerDisposable(this.deckHandler_);
 };
 goog.inherits(yugi.deck.editor.ui.Editor, goog.ui.Component);
-
-
-/**
- * @type {Element}
- * @private
- */
-yugi.deck.editor.ui.Editor.prototype.mainButtonElement_;
-
-
-/**
- * @type {Element}
- * @private
- */
-yugi.deck.editor.ui.Editor.prototype.extraButtonElement_;
-
-
-/**
- * @type {Element}
- * @private
- */
-yugi.deck.editor.ui.Editor.prototype.sideButtonElement_;
-
-
-/**
- * @type {!goog.debug.Logger}
- * @protected
- */
-yugi.deck.editor.ui.Editor.prototype.logger = goog.debug.Logger.getLogger(
-    'yugi.deck.editor.ui.Editor');
 
 
 /**
@@ -196,12 +200,12 @@ yugi.deck.editor.ui.Editor.prototype.enterDocument = function() {
 
   // Listen for when to refresh the UI.
   this.getHandler().listen(this.constructor_,
-      yugi.deck.editor.model.Constructor.EventType.CARDS_CHANGED,
-      this.onCardsChanged_);
+      yugi.deck.editor.model.Constructor.EventType.DECK_LOADED,
+      this.listenToDeck_);
 
   // Sync the state of things right now.
   this.setDeckType_(yugi.model.Deck.Type.MAIN);
-  this.setButtonText_(this.constructor_.getDeck());
+  this.listenToDeck_();
 };
 
 
@@ -235,21 +239,34 @@ yugi.deck.editor.ui.Editor.prototype.setDeckType_ = function(deckType) {
 
 
 /**
- * Updates the UI to reflect the change in cards.
- * @param {!yugi.deck.editor.model.Constructor.CardsChangedEvent} e The event.
+ * Starts listening to the deck's card lists for changes.
  * @private
  */
-yugi.deck.editor.ui.Editor.prototype.onCardsChanged_ = function(e) {
-  this.setButtonText_(e.deck);
+yugi.deck.editor.ui.Editor.prototype.listenToDeck_ = function() {
+  this.deckHandler_.removeAll();
+
+  var deck = this.constructor_.getDeck();
+
+  this.deckHandler_.listen(deck.getMainCardList(),
+      yugi.model.CardList.EventType.CARDS_CHANGED,
+      this.update_);
+  this.deckHandler_.listen(deck.getExtraCardList(),
+      yugi.model.CardList.EventType.CARDS_CHANGED,
+      this.update_);
+  this.deckHandler_.listen(deck.getSideCardList(),
+      yugi.model.CardList.EventType.CARDS_CHANGED,
+      this.update_);
+
+  this.update_();
 };
 
 
 /**
  * Updates the button text according to the given deck.
- * @param {!yugi.model.Deck} deck The deck on which to base the button text.
  * @private
  */
-yugi.deck.editor.ui.Editor.prototype.setButtonText_ = function(deck) {
+yugi.deck.editor.ui.Editor.prototype.update_ = function() {
+  var deck = this.constructor_.getDeck();
   this.mainButtonElement_.innerHTML =
       'Main (' + deck.getMainCards().length + ')';
   this.extraButtonElement_.innerHTML =

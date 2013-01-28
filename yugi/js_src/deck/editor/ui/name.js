@@ -104,11 +104,11 @@ yugi.deck.editor.ui.Name.prototype.enterDocument = function() {
 
   // Listen for when the deck changes so the deck listener can be updated.
   this.getHandler().listen(this.constructor_,
-      yugi.deck.editor.model.Constructor.EventType.DECK_CHANGED,
-      this.onDeckChanged_);
+      yugi.deck.editor.model.Constructor.EventType.DECK_LOADED,
+      this.listenToDeck_);
 
   // Sync up the UI with the current deck.
-  this.onDeckChanged_();
+  this.listenToDeck_();
 };
 
 
@@ -117,7 +117,7 @@ yugi.deck.editor.ui.Name.prototype.enterDocument = function() {
  * deck.
  * @private
  */
-yugi.deck.editor.ui.Name.prototype.onDeckChanged_ = function() {
+yugi.deck.editor.ui.Name.prototype.listenToDeck_ = function() {
   this.deckHandler_.removeAll();
 
   // Listen for when the name changes on the new deck.

@@ -6,6 +6,7 @@ goog.provide('yugi.deck.editor.ui.DeckBrowser');
 
 goog.require('goog.debug.Logger');
 goog.require('goog.dom.classes');
+goog.require('goog.events.EventHandler');
 goog.require('goog.soy');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.Component');
@@ -14,6 +15,7 @@ goog.require('yugi.deck.editor.model.CoverAction');
 goog.require('yugi.deck.editor.model.RemoveAction');
 goog.require('yugi.deck.editor.model.UiState');
 goog.require('yugi.deck.editor.ui.soy');
+goog.require('yugi.model.CardList');
 goog.require('yugi.ui.browser.CardBrowser');
 
 
@@ -26,6 +28,12 @@ goog.require('yugi.ui.browser.CardBrowser');
  */
 yugi.deck.editor.ui.DeckBrowser = function(deckType) {
   goog.base(this);
+
+  /**
+   * @type {!goog.debug.Logger}
+   * @protected
+   */
+  this.logger = goog.debug.Logger.getLogger('yugi.deck.editor.ui.DeckBrowser');
 
   /**
    * @type {!yugi.model.Deck.Type}
@@ -59,16 +67,15 @@ yugi.deck.editor.ui.DeckBrowser = function(deckType) {
    */
   this.addCardsButton_ = new goog.ui.Button(null);
   this.addChild(this.addCardsButton_);
+
+  /**
+   * @type {!goog.events.EventHandler}
+   * @private
+   */
+  this.deckHandler_ = new goog.events.EventHandler(this);
+  this.registerDisposable(this.deckHandler_);
 };
 goog.inherits(yugi.deck.editor.ui.DeckBrowser, goog.ui.Component);
-
-
-/**
- * @type {!goog.debug.Logger}
- * @protected
- */
-yugi.deck.editor.ui.DeckBrowser.prototype.logger = goog.debug.Logger.getLogger(
-    'yugi.deck.editor.ui.DeckBrowser');
 
 
 /**
@@ -89,6 +96,14 @@ yugi.deck.editor.ui.DeckBrowser.Id_ = {
  */
 yugi.deck.editor.ui.DeckBrowser.Css_ = {
   DECK_BROWSER: goog.getCssName('yugi-deck-browser')
+};
+
+
+/**
+ * @return {!yugi.model.Deck.Type} The type of deck this browser is browsing.
+ */
+yugi.deck.editor.ui.DeckBrowser.prototype.getDeckType = function() {
+  return this.deckType_;
 };
 
 
@@ -126,18 +141,26 @@ yugi.deck.editor.ui.DeckBrowser.prototype.enterDocument = function() {
 
   // Listen for when to refresh the UI.
   this.getHandler().listen(this.constructor_,
-      yugi.deck.editor.model.Constructor.EventType.CARDS_CHANGED,
-      this.updateCards_);
+      yugi.deck.editor.model.Constructor.EventType.DECK_LOADED,
+      this.listenToDeck_);
 
-  this.updateCards_();
+  this.listenToDeck_();
 };
 
 
 /**
- * @return {!yugi.model.Deck.Type} The type of deck this browser is browsing.
+ * Starts listening to the deck's card lists for changes.
+ * @private
  */
-yugi.deck.editor.ui.DeckBrowser.prototype.getDeckType = function() {
-  return this.deckType_;
+yugi.deck.editor.ui.DeckBrowser.prototype.listenToDeck_ = function() {
+  this.deckHandler_.removeAll();
+
+  this.deckHandler_.listen(
+      this.constructor_.getDeck().getCardList(this.deckType_),
+      yugi.model.CardList.EventType.CARDS_CHANGED,
+      this.updateCards_);
+
+  this.updateCards_();
 };
 
 
