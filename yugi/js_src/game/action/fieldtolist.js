@@ -17,7 +17,7 @@ goog.require('yugi.model.Area');
  * @param {!yugi.model.Card} card The card.
  * @param {number} zone The zone from which to remove the card.  It is ignored
  *     for the field card.
- * @param {!yugi.game.model.Player} player The player.
+ * @param {!yugi.game.model.player.Player} player The player.
  * @param {!yugi.model.CardList} destination The destination list.
  * @param {string} chatText The text to chat after the action is performed.
  * @param {boolean=} opt_front True if adding to the front of the list or not.
@@ -42,7 +42,7 @@ yugi.game.action.FieldToList = function(title, card, zone, player, destination,
   this.zone_ = zone;
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;

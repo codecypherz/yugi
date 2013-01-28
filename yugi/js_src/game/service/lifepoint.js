@@ -11,7 +11,7 @@ goog.require('goog.i18n.NumberFormat');
 
 /**
  * Service for updating chat and setting life points for a player.
- * @param {!yugi.game.model.Player} player The player model.
+ * @param {!yugi.game.model.player.Player} player The player model.
  * @param {!yugi.game.model.Chat} chat The chat model.
  * @param {!yugi.game.service.Sync} syncService The sync service.
  * @constructor
@@ -21,7 +21,7 @@ yugi.game.service.LifePoint = function(player, chat, syncService) {
   goog.base(this);
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;
@@ -57,7 +57,7 @@ yugi.game.service.LifePoint.instance_;
 
 /**
  * Registers the life point service.
- * @param {!yugi.game.model.Player} player The player model.
+ * @param {!yugi.game.model.player.Player} player The player model.
  * @param {!yugi.game.model.Chat} chat The chat model.
  * @param {!yugi.game.service.Sync} syncService The sync service.
  * @return {!yugi.game.service.LifePoint} The registered instance.

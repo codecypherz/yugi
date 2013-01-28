@@ -9,7 +9,7 @@ goog.require('goog.debug.Logger');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('yugi.game.data.GameData');
-goog.require('yugi.game.model.Player');
+goog.require('yugi.game.model.player.Player');
 
 
 
@@ -25,17 +25,19 @@ yugi.game.model.Game = function(deckService, cardCache) {
 
   /**
    * The "self" player or this client's player.
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
-  this.player_ = new yugi.game.model.Player(deckService, cardCache, false);
+  this.player_ = new yugi.game.model.player.Player(
+      deckService, cardCache, false);
 
   /**
    * The player's opponent.
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
-  this.opponent_ = new yugi.game.model.Player(deckService, cardCache, true);
+  this.opponent_ = new yugi.game.model.player.Player(
+      deckService, cardCache, true);
 };
 goog.inherits(yugi.game.model.Game, goog.events.EventTarget);
 
@@ -128,7 +130,7 @@ yugi.game.model.Game.prototype.setKey = function(key) {
 
 
 /**
- * @return {!yugi.game.model.Player} The player.
+ * @return {!yugi.game.model.player.Player} The player.
  */
 yugi.game.model.Game.prototype.getPlayer = function() {
   return this.player_;
@@ -136,7 +138,7 @@ yugi.game.model.Game.prototype.getPlayer = function() {
 
 
 /**
- * @param {!yugi.game.model.Player} player The player.
+ * @param {!yugi.game.model.player.Player} player The player.
  */
 yugi.game.model.Game.prototype.setPlayer = function(player) {
   this.player_ = player;
@@ -144,7 +146,7 @@ yugi.game.model.Game.prototype.setPlayer = function(player) {
 
 
 /**
- * @return {!yugi.game.model.Player} The player's opponent.
+ * @return {!yugi.game.model.player.Player} The player's opponent.
  */
 yugi.game.model.Game.prototype.getOpponent = function() {
   return this.opponent_;
@@ -152,7 +154,7 @@ yugi.game.model.Game.prototype.getOpponent = function() {
 
 
 /**
- * @param {!yugi.game.model.Player} opponent The player's opponent.
+ * @param {!yugi.game.model.player.Player} opponent The player's opponent.
  */
 yugi.game.model.Game.prototype.setOpponent = function(opponent) {
   this.opponent_ = opponent;

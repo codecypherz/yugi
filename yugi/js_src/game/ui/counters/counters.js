@@ -16,7 +16,7 @@ goog.require('yugi.model.Card');
 /**
  * The UI for displaying all of a card's counters.
  * @param {!yugi.model.Card} card The card with the counters.
- * @param {!yugi.game.model.Player} player The player model.
+ * @param {!yugi.game.model.player.Player} player The player model.
  * @constructor
  * @extends {goog.ui.Component}
  */
@@ -30,7 +30,7 @@ yugi.game.ui.counters.Counters = function(card, player) {
   this.card_ = card;
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;

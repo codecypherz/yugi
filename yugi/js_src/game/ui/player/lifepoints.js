@@ -10,7 +10,7 @@ goog.require('goog.dom.classes');
 goog.require('goog.i18n.NumberFormat');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.Component');
-goog.require('yugi.game.model.Player');
+goog.require('yugi.game.model.player.Player');
 goog.require('yugi.game.ui.Css');
 goog.require('yugi.game.ui.player.LifePointModifier');
 
@@ -18,8 +18,8 @@ goog.require('yugi.game.ui.player.LifePointModifier');
 
 /**
  * This is the UI for displaying and manipulating life points.
- * @param {!yugi.game.model.Player} player The player for which to show life
- *     points.
+ * @param {!yugi.game.model.player.Player} player The player for which to show
+ *     life points.
  * @constructor
  * @extends {goog.ui.Component}
  */
@@ -27,7 +27,7 @@ yugi.game.ui.player.LifePoints = function(player) {
   goog.base(this);
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;
@@ -135,7 +135,7 @@ yugi.game.ui.player.LifePoints.prototype.enterDocument = function() {
   }
 
   this.getHandler().listen(this.player_,
-      yugi.game.model.Player.EventType.LIFE_POINTS_CHANGED,
+      yugi.game.model.player.Player.EventType.LIFE_POINTS_CHANGED,
       this.updateLifePoints_);
 
   this.updateLifePoints_();

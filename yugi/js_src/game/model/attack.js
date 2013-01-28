@@ -78,7 +78,7 @@ yugi.game.model.Attack = function(chat, channel) {
 
   /**
    * The targeted player.
-   * @type {yugi.game.model.Player}
+   * @type {yugi.game.model.player.Player}
    * @private
    */
   this.targetPlayer_ = null;
@@ -270,7 +270,7 @@ yugi.game.model.Attack.prototype.declareCard = function(card, zone, element) {
 
 /**
  * Declares the player to be the target of the attack.
- * @param {!yugi.game.model.Player} player The targeted player.
+ * @param {!yugi.game.model.player.Player} player The targeted player.
  * @param {!Element} element The target element.  In this case the player's hand
  *     container.
  */

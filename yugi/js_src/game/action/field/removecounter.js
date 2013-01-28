@@ -13,7 +13,7 @@ goog.require('yugi.model.Action');
 /**
  * Action for removing a counter from a card.
  * @param {!yugi.model.Card} card The card.
- * @param {!yugi.game.model.Player} player The player model.
+ * @param {!yugi.game.model.player.Player} player The player model.
  * @param {!yugi.model.Counter} counter The model for the counter.
  * @constructor
  * @extends {yugi.model.Action}
@@ -28,7 +28,7 @@ yugi.game.action.field.RemoveCounter = function(card, player, counter) {
   this.card_ = card;
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;

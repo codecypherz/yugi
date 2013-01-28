@@ -19,7 +19,7 @@ goog.require('yugi.ui.menu.ActionContainer');
 /**
  * The UI for displaying a single card counter.
  * @param {!yugi.model.Card} card The card with the counters.
- * @param {!yugi.game.model.Player} player The player model.
+ * @param {!yugi.game.model.player.Player} player The player model.
  * @param {!yugi.model.Counter} counterModel The model for the counter.
  * @constructor
  * @extends {goog.ui.Component}
@@ -28,7 +28,7 @@ yugi.game.ui.counters.Counter = function(card, player, counterModel) {
   goog.base(this);
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;

@@ -13,7 +13,7 @@ goog.require('yugi.model.Action');
 /**
  * Action for setting a spell or trap card on the field again.
  * @param {!yugi.model.Card} card The card.
- * @param {!yugi.game.model.Player} player The player model.
+ * @param {!yugi.game.model.player.Player} player The player model.
  * @constructor
  * @extends {yugi.model.Action}
  */
@@ -27,7 +27,7 @@ yugi.game.action.field.Set = function(card, player) {
   this.card_ = card;
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;

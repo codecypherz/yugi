@@ -8,8 +8,8 @@ goog.provide('yugi.game.model.SynchronizationTest');
 goog.require('goog.testing.MockControl');
 goog.require('yugi.game.data.GameData');
 goog.require('yugi.game.model.Game');
-goog.require('yugi.game.model.Player');
 goog.require('yugi.game.model.Synchronization');
+goog.require('yugi.game.model.player.Player');
 goog.require('yugi.model.CardCache');
 goog.require('yugi.model.Deck');
 goog.require('yugi.service.DeckService');
@@ -84,8 +84,8 @@ function testSync_opponentDeckSelection() {
       yugi.game.model.Synchronization.State.STARTED,
       synchronization.getState());
 
-  var mockOpponent = mc.createLooseMock(yugi.game.model.Player);
-  var mockPlayer = mc.createLooseMock(yugi.game.model.Player);
+  var mockOpponent = mc.createLooseMock(yugi.game.model.player.Player);
+  var mockPlayer = mc.createLooseMock(yugi.game.model.player.Player);
 
   // Expect the game data to be set and synchronization finished.
   var opponentDeck = new yugi.model.Deck();
@@ -128,8 +128,8 @@ function testSync_playerDeckSelection() {
       yugi.game.model.Synchronization.State.STARTED,
       synchronization.getState());
 
-  var mockOpponent = mc.createLooseMock(yugi.game.model.Player);
-  var mockPlayer = mc.createLooseMock(yugi.game.model.Player);
+  var mockOpponent = mc.createLooseMock(yugi.game.model.player.Player);
+  var mockPlayer = mc.createLooseMock(yugi.game.model.player.Player);
 
   // Expect the game data to be set and synchronization finished.
   var playerDeck = new yugi.model.Deck();
@@ -176,8 +176,8 @@ function testSync_bothDecksSelected() {
       yugi.game.model.Synchronization.State.STARTED,
       synchronization.getState());
 
-  var mockOpponent = mc.createLooseMock(yugi.game.model.Player);
-  var mockPlayer = mc.createLooseMock(yugi.game.model.Player);
+  var mockOpponent = mc.createLooseMock(yugi.game.model.player.Player);
+  var mockPlayer = mc.createLooseMock(yugi.game.model.player.Player);
 
   // Load just the opponent deck.
   var opponentDeck = new yugi.model.Deck();

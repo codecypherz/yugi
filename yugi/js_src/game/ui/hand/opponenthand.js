@@ -24,7 +24,7 @@ goog.require('yugi.ui.Image');
 
 /**
  * This UI for a opponent's hand.
- * @param {!yugi.game.model.Player} player The player.
+ * @param {!yugi.game.model.player.Player} player The player.
  * @constructor
  * @extends {goog.ui.Component}
  */
@@ -38,7 +38,7 @@ yugi.game.ui.hand.OpponentHand = function(player) {
   this.logger = goog.debug.Logger.getLogger('yugi.game.ui.hand.OpponentHand');
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;

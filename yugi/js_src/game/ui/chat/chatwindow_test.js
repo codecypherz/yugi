@@ -12,7 +12,7 @@ goog.require('goog.testing.mockmatchers');
 goog.require('yugi.game.message.Chat');
 goog.require('yugi.game.model.Chat');
 goog.require('yugi.game.model.Game');
-goog.require('yugi.game.model.Player');
+goog.require('yugi.game.model.player.Player');
 goog.require('yugi.game.ui.chat.ChatWindow');
 goog.require('yugi.model.Card');
 goog.require('yugi.model.CardCache');
@@ -38,8 +38,8 @@ function setUp() {
   mockGame = yugi.test.mock(mc, yugi.game.model.Game);
   mockSelection = yugi.test.mock(mc, yugi.model.Selection);
 
-  mockPlayer = mc.createLooseMock(yugi.game.model.Player);
-  mockOpponent = mc.createLooseMock(yugi.game.model.Player);
+  mockPlayer = mc.createLooseMock(yugi.game.model.player.Player);
+  mockOpponent = mc.createLooseMock(yugi.game.model.player.Player);
 
   cardCache = yugi.model.CardCache.register();
 

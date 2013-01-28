@@ -131,7 +131,7 @@ yugi.game.ui.zone.Monster = function(area) {
   }
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;

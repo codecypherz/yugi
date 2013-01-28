@@ -17,7 +17,7 @@ goog.require('yugi.model.SpellCard');
  * Action for moving a card from a list to the field.
  * @param {string} title The name of the action.
  * @param {!yugi.model.Card} card The card.
- * @param {!yugi.game.model.Player} player The player.
+ * @param {!yugi.game.model.player.Player} player The player.
  * @param {!yugi.model.CardList} source The source list.
  * @param {string} chatText The text to chat after the action is performed.
  * @param {boolean=} opt_faceUp True if face up or not after action fires.
@@ -38,7 +38,7 @@ yugi.game.action.ListToField = function(title, card, player, source, chatText,
   this.card_ = card;
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;

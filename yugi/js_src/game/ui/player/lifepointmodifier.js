@@ -22,7 +22,7 @@ goog.require('yugi.game.service.LifePoint');
 
 /**
  * A UI component that allows the modification of life points.
- * @param {!yugi.game.model.Player} player The player.
+ * @param {!yugi.game.model.player.Player} player The player.
  * @constructor
  * @extends {goog.ui.Component}
  */
@@ -37,7 +37,7 @@ yugi.game.ui.player.LifePointModifier = function(player) {
       'yugi.game.ui.player.LifePointModifier');
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;

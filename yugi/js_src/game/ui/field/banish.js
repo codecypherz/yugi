@@ -19,7 +19,7 @@ goog.require('yugi.model.util');
 
 /**
  * This is the UI for a banish pile.
- * @param {!yugi.game.model.Player} player The player.
+ * @param {!yugi.game.model.player.Player} player The player.
  * @constructor
  * @extends {yugi.game.ui.field.Stack}
  */
@@ -27,7 +27,7 @@ yugi.game.ui.field.Banish = function(player) {
   goog.base(this, true, player.isOpponent());
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;

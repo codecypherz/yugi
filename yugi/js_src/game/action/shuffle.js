@@ -14,7 +14,7 @@ goog.require('yugi.model.Action');
  * Action for shuffling a deck.
  * @param {string} actionText The action text.
  * @param {!yugi.model.CardList} cardList The list to shuffle.
- * @param {!yugi.game.model.Player} player The player model.
+ * @param {!yugi.game.model.player.Player} player The player model.
  * @param {string} chatText The chat text.
  * @constructor
  * @extends {yugi.model.Action}
@@ -29,7 +29,7 @@ yugi.game.action.Shuffle = function(actionText, cardList, player, chatText) {
   this.cardList_ = cardList;
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;

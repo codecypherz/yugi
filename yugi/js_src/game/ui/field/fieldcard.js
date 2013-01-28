@@ -27,7 +27,8 @@ goog.require('yugi.ui.menu.Menu');
 
 /**
  * This is the UI for a spell or trap card in play.
- * @param {!yugi.game.model.Player} player The player to which the card belongs.
+ * @param {!yugi.game.model.player.Player} player The player to which the card
+ *     belongs.
  * @constructor
  * @extends {goog.ui.Component}
  */
@@ -41,7 +42,7 @@ yugi.game.ui.field.FieldCard = function(player) {
   this.logger = goog.debug.Logger.getLogger('yugi.game.ui.field.FieldCard');
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;

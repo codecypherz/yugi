@@ -14,8 +14,8 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('yugi.game.model.Chat');
 goog.require('yugi.game.model.Game');
-goog.require('yugi.game.model.Player');
 goog.require('yugi.game.model.Synchronization');
+goog.require('yugi.game.model.player.Player');
 
 
 
@@ -63,16 +63,16 @@ yugi.game.ui.State = function() {
   // If the player selects their deck, start waiting.
   var player = this.game_.getPlayer();
   handler.listen(player,
-      yugi.game.model.Player.EventType.DECK_SELECTED,
+      yugi.game.model.player.Player.EventType.DECK_SELECTED,
       this.onPlayerDeckSelected_);
 
   // Listen for when the players' decks have loaded to know when to switch to
   // the in-game UI.
   handler.listen(player,
-      yugi.game.model.Player.EventType.DECK_LOADED,
+      yugi.game.model.player.Player.EventType.DECK_LOADED,
       this.setModeBasedOnDeckAndSyncState_);
   handler.listen(this.game_.getOpponent(),
-      yugi.game.model.Player.EventType.DECK_LOADED,
+      yugi.game.model.player.Player.EventType.DECK_LOADED,
       this.setModeBasedOnDeckAndSyncState_);
 
   // TODO Listen for when the opponent joins and maybe switch to a different

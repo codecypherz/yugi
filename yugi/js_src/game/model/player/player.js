@@ -2,7 +2,7 @@
  * Keeps state for a given player.
  */
 
-goog.provide('yugi.game.model.Player');
+goog.provide('yugi.game.model.player.Player');
 
 goog.require('goog.array');
 goog.require('goog.debug.Logger');
@@ -31,14 +31,14 @@ goog.require('yugi.service.DeckService');
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-yugi.game.model.Player = function(deckService, cardCache, isOpponent) {
+yugi.game.model.player.Player = function(deckService, cardCache, isOpponent) {
   goog.base(this);
 
   /**
    * @type {!goog.debug.Logger}
    * @protected
    */
-  this.logger = goog.debug.Logger.getLogger('yugi.game.model.Player');
+  this.logger = goog.debug.Logger.getLogger('yugi.game.model.player.Player');
 
   /**
    * This will be used to fetch the full contents of the deck the player chose.
@@ -148,7 +148,7 @@ yugi.game.model.Player = function(deckService, cardCache, isOpponent) {
    * @type {number}
    * @private
    */
-  this.lifePoints_ = yugi.game.model.Player.STARTING_LIFE_POINTS_;
+  this.lifePoints_ = yugi.game.model.player.Player.STARTING_LIFE_POINTS_;
 
   var handler = new goog.events.EventHandler(this);
   this.registerDisposable(handler);
@@ -158,14 +158,14 @@ yugi.game.model.Player = function(deckService, cardCache, isOpponent) {
       yugi.service.DeckService.EventType.LOADED,
       this.onDeckLoaded_);
 };
-goog.inherits(yugi.game.model.Player, goog.events.EventTarget);
+goog.inherits(yugi.game.model.player.Player, goog.events.EventTarget);
 
 
 /**
  * The set of events dispatched by this model.
  * @enum {string}
  */
-yugi.game.model.Player.EventType = {
+yugi.game.model.player.Player.EventType = {
   DECK_CHANGED: goog.events.getUniqueId('deck-changed'),
   DECK_LOADED: goog.events.getUniqueId('deck-loaded'),
   DECK_SELECTED: goog.events.getUniqueId('deck-selected'),
@@ -181,7 +181,8 @@ yugi.game.model.Player.EventType = {
  * @const
  * @private
  */
-yugi.game.model.Player.LIFE_POINT_RANGE_ = new goog.math.Range(0, 1000000);
+yugi.game.model.player.Player.LIFE_POINT_RANGE_ = new goog.math.Range(
+    0, 1000000);
 
 
 /**
@@ -190,13 +191,13 @@ yugi.game.model.Player.LIFE_POINT_RANGE_ = new goog.math.Range(0, 1000000);
  * @const
  * @private
  */
-yugi.game.model.Player.STARTING_LIFE_POINTS_ = 8000;
+yugi.game.model.player.Player.STARTING_LIFE_POINTS_ = 8000;
 
 
 /**
  * @param {string} name The name of the player.
  */
-yugi.game.model.Player.prototype.setName = function(name) {
+yugi.game.model.player.Player.prototype.setName = function(name) {
   this.name_ = name;
 };
 
@@ -204,7 +205,7 @@ yugi.game.model.Player.prototype.setName = function(name) {
 /**
  * @return {string} The player's name.
  */
-yugi.game.model.Player.prototype.getName = function() {
+yugi.game.model.player.Player.prototype.getName = function() {
   return this.name_;
 };
 
@@ -212,7 +213,7 @@ yugi.game.model.Player.prototype.getName = function() {
 /**
  * @return {boolean} True if this player is the opponent or not.
  */
-yugi.game.model.Player.prototype.isOpponent = function() {
+yugi.game.model.player.Player.prototype.isOpponent = function() {
   return this.isOpponent_;
 };
 
@@ -221,7 +222,7 @@ yugi.game.model.Player.prototype.isOpponent = function() {
  * Selects the deck with the given key.
  * @param {string} deckKey The key of the deck to select.
  */
-yugi.game.model.Player.prototype.selectDeck = function(deckKey) {
+yugi.game.model.player.Player.prototype.selectDeck = function(deckKey) {
   // Make sure the deck wasn't already loaded.
   if (this.deckSelected_) {
     throw new Error(this.name_ + '\'s deck was already selected.');
@@ -232,7 +233,7 @@ yugi.game.model.Player.prototype.selectDeck = function(deckKey) {
 
   // Set the deck as selected, but not loaded.
   this.deckSelected_ = true;
-  this.dispatchEvent(yugi.game.model.Player.EventType.DECK_SELECTED);
+  this.dispatchEvent(yugi.game.model.player.Player.EventType.DECK_SELECTED);
 
   // Start loading the deck.
   this.deckLoadId_ = this.deckService_.load(deckKey);
@@ -245,7 +246,8 @@ yugi.game.model.Player.prototype.selectDeck = function(deckKey) {
  * transfers.
  * @param {!yugi.model.Deck} originalDeck The original deck.
  */
-yugi.game.model.Player.prototype.setOriginalDeck = function(originalDeck) {
+yugi.game.model.player.Player.prototype.setOriginalDeck = function(
+    originalDeck) {
   this.originalDeckReadOnly_ = originalDeck;
 };
 
@@ -253,7 +255,7 @@ yugi.game.model.Player.prototype.setOriginalDeck = function(originalDeck) {
 /**
  * @return {!yugi.model.Deck} The player's deck.
  */
-yugi.game.model.Player.prototype.getDeck = function() {
+yugi.game.model.player.Player.prototype.getDeck = function() {
   return this.deck_;
 };
 
@@ -261,7 +263,7 @@ yugi.game.model.Player.prototype.getDeck = function() {
 /**
  * @return {boolean} True if this player has selected their deck or not.
  */
-yugi.game.model.Player.prototype.isDeckSelected = function() {
+yugi.game.model.player.Player.prototype.isDeckSelected = function() {
   return this.deckSelected_;
 };
 
@@ -269,9 +271,9 @@ yugi.game.model.Player.prototype.isDeckSelected = function() {
 /**
  * Marks this player's deck as having been loaded.
  */
-yugi.game.model.Player.prototype.markDeckLoaded = function() {
+yugi.game.model.player.Player.prototype.markDeckLoaded = function() {
   this.deckLoaded_ = true;
-  this.dispatchEvent(yugi.game.model.Player.EventType.DECK_LOADED);
+  this.dispatchEvent(yugi.game.model.player.Player.EventType.DECK_LOADED);
 };
 
 
@@ -281,7 +283,7 @@ yugi.game.model.Player.prototype.markDeckLoaded = function() {
  * downloaded to this client.
  * @return {boolean} True if the deck has loaded or not.
  */
-yugi.game.model.Player.prototype.isDeckLoaded = function() {
+yugi.game.model.player.Player.prototype.isDeckLoaded = function() {
   return this.deckLoaded_;
 };
 
@@ -289,7 +291,7 @@ yugi.game.model.Player.prototype.isDeckLoaded = function() {
 /**
  * @return {!yugi.model.CardList} The player's hand.
  */
-yugi.game.model.Player.prototype.getHand = function() {
+yugi.game.model.player.Player.prototype.getHand = function() {
   return this.hand_;
 };
 
@@ -297,7 +299,7 @@ yugi.game.model.Player.prototype.getHand = function() {
 /**
  * @return {!yugi.game.model.player.Graveyard} The graveyard.
  */
-yugi.game.model.Player.prototype.getGraveyard = function() {
+yugi.game.model.player.Player.prototype.getGraveyard = function() {
   return this.graveyard_;
 };
 
@@ -305,7 +307,7 @@ yugi.game.model.Player.prototype.getGraveyard = function() {
 /**
  * @return {!yugi.game.model.player.Banish} The banished cards.
  */
-yugi.game.model.Player.prototype.getBanish = function() {
+yugi.game.model.player.Player.prototype.getBanish = function() {
   return this.banish_;
 };
 
@@ -313,7 +315,7 @@ yugi.game.model.Player.prototype.getBanish = function() {
 /**
  * @return {!yugi.game.model.player.Field} The player's field.
  */
-yugi.game.model.Player.prototype.getField = function() {
+yugi.game.model.player.Player.prototype.getField = function() {
   return this.field_;
 };
 
@@ -321,7 +323,7 @@ yugi.game.model.Player.prototype.getField = function() {
 /**
  * @param {boolean} connected True if the player is connected or not.
  */
-yugi.game.model.Player.prototype.setConnected = function(connected) {
+yugi.game.model.player.Player.prototype.setConnected = function(connected) {
   this.connected_ = connected;
 };
 
@@ -329,7 +331,7 @@ yugi.game.model.Player.prototype.setConnected = function(connected) {
 /**
  * @return {boolean} True if the player is connected or not.
  */
-yugi.game.model.Player.prototype.isConnected = function() {
+yugi.game.model.player.Player.prototype.isConnected = function() {
   return this.connected_;
 };
 
@@ -340,17 +342,18 @@ yugi.game.model.Player.prototype.isConnected = function() {
  * @param {number} lifePoints The life points for the player.
  * @return {number} The life point value after any action is taken.
  */
-yugi.game.model.Player.prototype.setLifePoints = function(lifePoints) {
+yugi.game.model.player.Player.prototype.setLifePoints = function(lifePoints) {
 
   // Bound the life points within the allowed range.
   lifePoints = goog.math.clamp(lifePoints,
-      yugi.game.model.Player.LIFE_POINT_RANGE_.start,
-      yugi.game.model.Player.LIFE_POINT_RANGE_.end);
+      yugi.game.model.player.Player.LIFE_POINT_RANGE_.start,
+      yugi.game.model.player.Player.LIFE_POINT_RANGE_.end);
 
   // Dispatch an event if the life points changed.
   if (this.lifePoints_ != lifePoints) {
     this.lifePoints_ = lifePoints;
-    this.dispatchEvent(yugi.game.model.Player.EventType.LIFE_POINTS_CHANGED);
+    this.dispatchEvent(
+        yugi.game.model.player.Player.EventType.LIFE_POINTS_CHANGED);
   }
 
   // Always return the current life point value.
@@ -361,7 +364,7 @@ yugi.game.model.Player.prototype.setLifePoints = function(lifePoints) {
 /**
  * @return {number} The life points for the player.
  */
-yugi.game.model.Player.prototype.getLifePoints = function() {
+yugi.game.model.player.Player.prototype.getLifePoints = function() {
   return this.lifePoints_;
 };
 
@@ -370,10 +373,10 @@ yugi.game.model.Player.prototype.getLifePoints = function() {
  * Resets the player's card state by putting everything back into the deck and
  * shuffling.
  */
-yugi.game.model.Player.prototype.reset = function() {
+yugi.game.model.player.Player.prototype.reset = function() {
   this.logger.info('Resetting this player\'s state.');
 
-  this.setLifePoints(yugi.game.model.Player.STARTING_LIFE_POINTS_);
+  this.setLifePoints(yugi.game.model.player.Player.STARTING_LIFE_POINTS_);
 
   this.hand_.removeAll();
   this.graveyard_.removeAll();
@@ -383,7 +386,7 @@ yugi.game.model.Player.prototype.reset = function() {
   this.deck_ = this.originalDeckReadOnly_.clone();
   this.deck_.shuffle();
 
-  this.dispatchEvent(yugi.game.model.Player.EventType.DECK_CHANGED);
+  this.dispatchEvent(yugi.game.model.player.Player.EventType.DECK_CHANGED);
 };
 
 
@@ -393,7 +396,7 @@ yugi.game.model.Player.prototype.reset = function() {
  * @param {!yugi.model.Card} card The card to remove.
  * @return {boolean} True if the card was removed or not.
  */
-yugi.game.model.Player.prototype.removeCard = function(card) {
+yugi.game.model.player.Player.prototype.removeCard = function(card) {
   return this.field_.removeCard(card) ||
       this.hand_.remove(card) ||
       this.graveyard_.remove(card) ||
@@ -409,7 +412,7 @@ yugi.game.model.Player.prototype.removeCard = function(card) {
  * @param {!yugi.service.DeckService.LoadEvent} e The load event.
  * @private
  */
-yugi.game.model.Player.prototype.onDeckLoaded_ = function(e) {
+yugi.game.model.player.Player.prototype.onDeckLoaded_ = function(e) {
   // Make sure this deck load was for this player.
   if (!goog.isDefAndNotNull(this.deckLoadId_) || this.deckLoadId_ != e.id) {
     var name = this.name_ || 'opponent';
@@ -438,7 +441,7 @@ yugi.game.model.Player.prototype.onDeckLoaded_ = function(e) {
  * Converts this object to a data object.
  * @return {!yugi.game.data.PlayerData} The converted data object.
  */
-yugi.game.model.Player.prototype.toData = function() {
+yugi.game.model.player.Player.prototype.toData = function() {
   var playerData = new yugi.game.data.PlayerData();
 
   var deckData = new yugi.game.data.DeckData();
@@ -466,7 +469,8 @@ yugi.game.model.Player.prototype.toData = function() {
  * @param {!yugi.game.data.PlayerData} playerData The data.
  * @param {!yugi.model.CardCache} cardCache The cache of cards.
  */
-yugi.game.model.Player.prototype.setFromData = function(playerData, cardCache) {
+yugi.game.model.player.Player.prototype.setFromData = function(
+    playerData, cardCache) {
 
   // Only set the name if it is unknown.
   if (!this.name_) {
@@ -482,7 +486,7 @@ yugi.game.model.Player.prototype.setFromData = function(playerData, cardCache) {
   deck.getSideCardList().setFromData(deckData.getSideCardData(), cardCache);
   this.deck_.setFromDeck(deck);
   this.deckSelected_ = playerData.isDeckSelected();
-  this.dispatchEvent(yugi.game.model.Player.EventType.DECK_CHANGED);
+  this.dispatchEvent(yugi.game.model.player.Player.EventType.DECK_CHANGED);
 
   // Synchronize the hand.
   this.hand_.setFromData(playerData.getHandData(), cardCache);
@@ -510,7 +514,7 @@ yugi.game.model.Player.prototype.setFromData = function(playerData, cardCache) {
  * Updates the deck area based on if this player is the opponent or not.
  * @private
  */
-yugi.game.model.Player.prototype.setDeckArea_ = function() {
+yugi.game.model.player.Player.prototype.setDeckArea_ = function() {
   if (this.isOpponent_) {
     this.deck_.getMainCardList().setArea(yugi.model.Area.OPP_DECK);
     this.deck_.getExtraCardList().setArea(yugi.model.Area.OPP_EXTRA_DECK);

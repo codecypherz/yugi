@@ -13,7 +13,7 @@ goog.require('yugi.model.Action');
 /**
  * Action for adding a counter to a card.
  * @param {!yugi.model.Card} card The card.
- * @param {!yugi.game.model.Player} player The player model.
+ * @param {!yugi.game.model.player.Player} player The player model.
  * @constructor
  * @extends {yugi.model.Action}
  */
@@ -27,7 +27,7 @@ yugi.game.action.field.AddCounter = function(card, player) {
   this.card_ = card;
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;

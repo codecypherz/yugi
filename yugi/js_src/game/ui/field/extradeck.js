@@ -9,7 +9,7 @@ goog.require('yugi.game.action.Browse');
 goog.require('yugi.game.action.ListToField');
 goog.require('yugi.game.action.ListToList');
 goog.require('yugi.game.model.Browser');
-goog.require('yugi.game.model.Player');
+goog.require('yugi.game.model.player.Player');
 goog.require('yugi.game.ui.field.Stack');
 goog.require('yugi.model.CardList');
 goog.require('yugi.model.MonsterCard');
@@ -18,8 +18,8 @@ goog.require('yugi.model.MonsterCard');
 
 /**
  * This is the UI for rendering and interacting with the extra deck in the game.
- * @param {!yugi.game.model.Player} player The player from which to get the
- *     deck.
+ * @param {!yugi.game.model.player.Player} player The player from which to get
+ *     the deck.
  * @constructor
  * @extends {yugi.game.ui.field.Stack}
  */
@@ -30,7 +30,7 @@ yugi.game.ui.field.ExtraDeck = function(player) {
   goog.base(this, false, player.isOpponent(), infoText);
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;
@@ -53,8 +53,8 @@ yugi.game.ui.field.ExtraDeck.prototype.enterDocument = function() {
 
   // Listen to changes in the deck overall.
   this.getHandler().listen(this.player_,
-      [yugi.game.model.Player.EventType.DECK_CHANGED,
-       yugi.game.model.Player.EventType.DECK_LOADED],
+      [yugi.game.model.player.Player.EventType.DECK_CHANGED,
+       yugi.game.model.player.Player.EventType.DECK_LOADED],
       this.onDeckChanged_);
 
   this.onDeckChanged_();

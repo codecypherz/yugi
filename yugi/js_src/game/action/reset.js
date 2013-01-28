@@ -22,7 +22,7 @@ yugi.game.action.Reset = function() {
   var game = yugi.game.model.Game.get();
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = game.getPlayer();

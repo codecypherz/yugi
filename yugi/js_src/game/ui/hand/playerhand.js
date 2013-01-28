@@ -30,7 +30,7 @@ goog.require('yugi.ui.menu.Menu');
 
 /**
  * This UI for a player's hand.
- * @param {!yugi.game.model.Player} player The player.
+ * @param {!yugi.game.model.player.Player} player The player.
  * @constructor
  * @extends {goog.ui.Component}
  */
@@ -38,7 +38,7 @@ yugi.game.ui.hand.PlayerHand = function(player) {
   goog.base(this);
 
   /**
-   * @type {!yugi.game.model.Player}
+   * @type {!yugi.game.model.player.Player}
    * @private
    */
   this.player_ = player;
